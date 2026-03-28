@@ -8,9 +8,12 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/akshatgg/ROBOAI/XRF/own_sim/sim.cc" "CMakeFiles/sim.dir/sim.cc.o" "gcc" "CMakeFiles/sim.dir/sim.cc.o.d"
-  "/home/akshatgg/ROBOAI/XRF/own_sim/src/PMDetectorConstruction.cc" "CMakeFiles/sim.dir/src/PMDetectorConstruction.cc.o" "gcc" "CMakeFiles/sim.dir/src/PMDetectorConstruction.cc.o.d"
-  "/home/akshatgg/ROBOAI/XRF/own_sim/src/PMPhysicsList.cc" "CMakeFiles/sim.dir/src/PMPhysicsList.cc.o" "gcc" "CMakeFiles/sim.dir/src/PMPhysicsList.cc.o.d"
+  "/home/akshatgg/ROBOAI/XRF/own_sim/src/ActionInitialization.cc" "CMakeFiles/sim.dir/src/ActionInitialization.cc.o" "gcc" "CMakeFiles/sim.dir/src/ActionInitialization.cc.o.d"
+  "/home/akshatgg/ROBOAI/XRF/own_sim/src/DetectorConstruction.cc" "CMakeFiles/sim.dir/src/DetectorConstruction.cc.o" "gcc" "CMakeFiles/sim.dir/src/DetectorConstruction.cc.o.d"
+  "/home/akshatgg/ROBOAI/XRF/own_sim/src/DetectorSD.cc" "CMakeFiles/sim.dir/src/DetectorSD.cc.o" "gcc" "CMakeFiles/sim.dir/src/DetectorSD.cc.o.d"
+  "/home/akshatgg/ROBOAI/XRF/own_sim/src/PrimaryGeneratorAction.cc" "CMakeFiles/sim.dir/src/PrimaryGeneratorAction.cc.o" "gcc" "CMakeFiles/sim.dir/src/PrimaryGeneratorAction.cc.o.d"
+  "/home/akshatgg/ROBOAI/XRF/own_sim/src/RunAction.cc" "CMakeFiles/sim.dir/src/RunAction.cc.o" "gcc" "CMakeFiles/sim.dir/src/RunAction.cc.o.d"
+  "/home/akshatgg/ROBOAI/XRF/own_sim/src/main.cc" "CMakeFiles/sim.dir/src/main.cc.o" "gcc" "CMakeFiles/sim.dir/src/main.cc.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

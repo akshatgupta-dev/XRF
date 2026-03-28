@@ -69,60 +69,108 @@ include CMakeFiles/sim.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/sim.dir/flags.make
 
-CMakeFiles/sim.dir/sim.cc.o: CMakeFiles/sim.dir/flags.make
-CMakeFiles/sim.dir/sim.cc.o: /home/akshatgg/ROBOAI/XRF/own_sim/sim.cc
-CMakeFiles/sim.dir/sim.cc.o: CMakeFiles/sim.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/akshatgg/ROBOAI/XRF/own_sim/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/sim.dir/sim.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/sim.dir/sim.cc.o -MF CMakeFiles/sim.dir/sim.cc.o.d -o CMakeFiles/sim.dir/sim.cc.o -c /home/akshatgg/ROBOAI/XRF/own_sim/sim.cc
+CMakeFiles/sim.dir/src/main.cc.o: CMakeFiles/sim.dir/flags.make
+CMakeFiles/sim.dir/src/main.cc.o: /home/akshatgg/ROBOAI/XRF/own_sim/src/main.cc
+CMakeFiles/sim.dir/src/main.cc.o: CMakeFiles/sim.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/akshatgg/ROBOAI/XRF/own_sim/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/sim.dir/src/main.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/sim.dir/src/main.cc.o -MF CMakeFiles/sim.dir/src/main.cc.o.d -o CMakeFiles/sim.dir/src/main.cc.o -c /home/akshatgg/ROBOAI/XRF/own_sim/src/main.cc
 
-CMakeFiles/sim.dir/sim.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/sim.dir/sim.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akshatgg/ROBOAI/XRF/own_sim/sim.cc > CMakeFiles/sim.dir/sim.cc.i
+CMakeFiles/sim.dir/src/main.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/sim.dir/src/main.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akshatgg/ROBOAI/XRF/own_sim/src/main.cc > CMakeFiles/sim.dir/src/main.cc.i
 
-CMakeFiles/sim.dir/sim.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/sim.dir/sim.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akshatgg/ROBOAI/XRF/own_sim/sim.cc -o CMakeFiles/sim.dir/sim.cc.s
+CMakeFiles/sim.dir/src/main.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/sim.dir/src/main.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akshatgg/ROBOAI/XRF/own_sim/src/main.cc -o CMakeFiles/sim.dir/src/main.cc.s
 
-CMakeFiles/sim.dir/src/PMDetectorConstruction.cc.o: CMakeFiles/sim.dir/flags.make
-CMakeFiles/sim.dir/src/PMDetectorConstruction.cc.o: /home/akshatgg/ROBOAI/XRF/own_sim/src/PMDetectorConstruction.cc
-CMakeFiles/sim.dir/src/PMDetectorConstruction.cc.o: CMakeFiles/sim.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/akshatgg/ROBOAI/XRF/own_sim/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/sim.dir/src/PMDetectorConstruction.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/sim.dir/src/PMDetectorConstruction.cc.o -MF CMakeFiles/sim.dir/src/PMDetectorConstruction.cc.o.d -o CMakeFiles/sim.dir/src/PMDetectorConstruction.cc.o -c /home/akshatgg/ROBOAI/XRF/own_sim/src/PMDetectorConstruction.cc
+CMakeFiles/sim.dir/src/ActionInitialization.cc.o: CMakeFiles/sim.dir/flags.make
+CMakeFiles/sim.dir/src/ActionInitialization.cc.o: /home/akshatgg/ROBOAI/XRF/own_sim/src/ActionInitialization.cc
+CMakeFiles/sim.dir/src/ActionInitialization.cc.o: CMakeFiles/sim.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/akshatgg/ROBOAI/XRF/own_sim/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/sim.dir/src/ActionInitialization.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/sim.dir/src/ActionInitialization.cc.o -MF CMakeFiles/sim.dir/src/ActionInitialization.cc.o.d -o CMakeFiles/sim.dir/src/ActionInitialization.cc.o -c /home/akshatgg/ROBOAI/XRF/own_sim/src/ActionInitialization.cc
 
-CMakeFiles/sim.dir/src/PMDetectorConstruction.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/sim.dir/src/PMDetectorConstruction.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akshatgg/ROBOAI/XRF/own_sim/src/PMDetectorConstruction.cc > CMakeFiles/sim.dir/src/PMDetectorConstruction.cc.i
+CMakeFiles/sim.dir/src/ActionInitialization.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/sim.dir/src/ActionInitialization.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akshatgg/ROBOAI/XRF/own_sim/src/ActionInitialization.cc > CMakeFiles/sim.dir/src/ActionInitialization.cc.i
 
-CMakeFiles/sim.dir/src/PMDetectorConstruction.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/sim.dir/src/PMDetectorConstruction.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akshatgg/ROBOAI/XRF/own_sim/src/PMDetectorConstruction.cc -o CMakeFiles/sim.dir/src/PMDetectorConstruction.cc.s
+CMakeFiles/sim.dir/src/ActionInitialization.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/sim.dir/src/ActionInitialization.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akshatgg/ROBOAI/XRF/own_sim/src/ActionInitialization.cc -o CMakeFiles/sim.dir/src/ActionInitialization.cc.s
 
-CMakeFiles/sim.dir/src/PMPhysicsList.cc.o: CMakeFiles/sim.dir/flags.make
-CMakeFiles/sim.dir/src/PMPhysicsList.cc.o: /home/akshatgg/ROBOAI/XRF/own_sim/src/PMPhysicsList.cc
-CMakeFiles/sim.dir/src/PMPhysicsList.cc.o: CMakeFiles/sim.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/akshatgg/ROBOAI/XRF/own_sim/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/sim.dir/src/PMPhysicsList.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/sim.dir/src/PMPhysicsList.cc.o -MF CMakeFiles/sim.dir/src/PMPhysicsList.cc.o.d -o CMakeFiles/sim.dir/src/PMPhysicsList.cc.o -c /home/akshatgg/ROBOAI/XRF/own_sim/src/PMPhysicsList.cc
+CMakeFiles/sim.dir/src/DetectorConstruction.cc.o: CMakeFiles/sim.dir/flags.make
+CMakeFiles/sim.dir/src/DetectorConstruction.cc.o: /home/akshatgg/ROBOAI/XRF/own_sim/src/DetectorConstruction.cc
+CMakeFiles/sim.dir/src/DetectorConstruction.cc.o: CMakeFiles/sim.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/akshatgg/ROBOAI/XRF/own_sim/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/sim.dir/src/DetectorConstruction.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/sim.dir/src/DetectorConstruction.cc.o -MF CMakeFiles/sim.dir/src/DetectorConstruction.cc.o.d -o CMakeFiles/sim.dir/src/DetectorConstruction.cc.o -c /home/akshatgg/ROBOAI/XRF/own_sim/src/DetectorConstruction.cc
 
-CMakeFiles/sim.dir/src/PMPhysicsList.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/sim.dir/src/PMPhysicsList.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akshatgg/ROBOAI/XRF/own_sim/src/PMPhysicsList.cc > CMakeFiles/sim.dir/src/PMPhysicsList.cc.i
+CMakeFiles/sim.dir/src/DetectorConstruction.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/sim.dir/src/DetectorConstruction.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akshatgg/ROBOAI/XRF/own_sim/src/DetectorConstruction.cc > CMakeFiles/sim.dir/src/DetectorConstruction.cc.i
 
-CMakeFiles/sim.dir/src/PMPhysicsList.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/sim.dir/src/PMPhysicsList.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akshatgg/ROBOAI/XRF/own_sim/src/PMPhysicsList.cc -o CMakeFiles/sim.dir/src/PMPhysicsList.cc.s
+CMakeFiles/sim.dir/src/DetectorConstruction.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/sim.dir/src/DetectorConstruction.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akshatgg/ROBOAI/XRF/own_sim/src/DetectorConstruction.cc -o CMakeFiles/sim.dir/src/DetectorConstruction.cc.s
+
+CMakeFiles/sim.dir/src/DetectorSD.cc.o: CMakeFiles/sim.dir/flags.make
+CMakeFiles/sim.dir/src/DetectorSD.cc.o: /home/akshatgg/ROBOAI/XRF/own_sim/src/DetectorSD.cc
+CMakeFiles/sim.dir/src/DetectorSD.cc.o: CMakeFiles/sim.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/akshatgg/ROBOAI/XRF/own_sim/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/sim.dir/src/DetectorSD.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/sim.dir/src/DetectorSD.cc.o -MF CMakeFiles/sim.dir/src/DetectorSD.cc.o.d -o CMakeFiles/sim.dir/src/DetectorSD.cc.o -c /home/akshatgg/ROBOAI/XRF/own_sim/src/DetectorSD.cc
+
+CMakeFiles/sim.dir/src/DetectorSD.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/sim.dir/src/DetectorSD.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akshatgg/ROBOAI/XRF/own_sim/src/DetectorSD.cc > CMakeFiles/sim.dir/src/DetectorSD.cc.i
+
+CMakeFiles/sim.dir/src/DetectorSD.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/sim.dir/src/DetectorSD.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akshatgg/ROBOAI/XRF/own_sim/src/DetectorSD.cc -o CMakeFiles/sim.dir/src/DetectorSD.cc.s
+
+CMakeFiles/sim.dir/src/PrimaryGeneratorAction.cc.o: CMakeFiles/sim.dir/flags.make
+CMakeFiles/sim.dir/src/PrimaryGeneratorAction.cc.o: /home/akshatgg/ROBOAI/XRF/own_sim/src/PrimaryGeneratorAction.cc
+CMakeFiles/sim.dir/src/PrimaryGeneratorAction.cc.o: CMakeFiles/sim.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/akshatgg/ROBOAI/XRF/own_sim/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/sim.dir/src/PrimaryGeneratorAction.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/sim.dir/src/PrimaryGeneratorAction.cc.o -MF CMakeFiles/sim.dir/src/PrimaryGeneratorAction.cc.o.d -o CMakeFiles/sim.dir/src/PrimaryGeneratorAction.cc.o -c /home/akshatgg/ROBOAI/XRF/own_sim/src/PrimaryGeneratorAction.cc
+
+CMakeFiles/sim.dir/src/PrimaryGeneratorAction.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/sim.dir/src/PrimaryGeneratorAction.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akshatgg/ROBOAI/XRF/own_sim/src/PrimaryGeneratorAction.cc > CMakeFiles/sim.dir/src/PrimaryGeneratorAction.cc.i
+
+CMakeFiles/sim.dir/src/PrimaryGeneratorAction.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/sim.dir/src/PrimaryGeneratorAction.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akshatgg/ROBOAI/XRF/own_sim/src/PrimaryGeneratorAction.cc -o CMakeFiles/sim.dir/src/PrimaryGeneratorAction.cc.s
+
+CMakeFiles/sim.dir/src/RunAction.cc.o: CMakeFiles/sim.dir/flags.make
+CMakeFiles/sim.dir/src/RunAction.cc.o: /home/akshatgg/ROBOAI/XRF/own_sim/src/RunAction.cc
+CMakeFiles/sim.dir/src/RunAction.cc.o: CMakeFiles/sim.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/akshatgg/ROBOAI/XRF/own_sim/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/sim.dir/src/RunAction.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/sim.dir/src/RunAction.cc.o -MF CMakeFiles/sim.dir/src/RunAction.cc.o.d -o CMakeFiles/sim.dir/src/RunAction.cc.o -c /home/akshatgg/ROBOAI/XRF/own_sim/src/RunAction.cc
+
+CMakeFiles/sim.dir/src/RunAction.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/sim.dir/src/RunAction.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/akshatgg/ROBOAI/XRF/own_sim/src/RunAction.cc > CMakeFiles/sim.dir/src/RunAction.cc.i
+
+CMakeFiles/sim.dir/src/RunAction.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/sim.dir/src/RunAction.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/akshatgg/ROBOAI/XRF/own_sim/src/RunAction.cc -o CMakeFiles/sim.dir/src/RunAction.cc.s
 
 # Object files for target sim
 sim_OBJECTS = \
-"CMakeFiles/sim.dir/sim.cc.o" \
-"CMakeFiles/sim.dir/src/PMDetectorConstruction.cc.o" \
-"CMakeFiles/sim.dir/src/PMPhysicsList.cc.o"
+"CMakeFiles/sim.dir/src/main.cc.o" \
+"CMakeFiles/sim.dir/src/ActionInitialization.cc.o" \
+"CMakeFiles/sim.dir/src/DetectorConstruction.cc.o" \
+"CMakeFiles/sim.dir/src/DetectorSD.cc.o" \
+"CMakeFiles/sim.dir/src/PrimaryGeneratorAction.cc.o" \
+"CMakeFiles/sim.dir/src/RunAction.cc.o"
 
 # External object files for target sim
 sim_EXTERNAL_OBJECTS =
 
-sim: CMakeFiles/sim.dir/sim.cc.o
-sim: CMakeFiles/sim.dir/src/PMDetectorConstruction.cc.o
-sim: CMakeFiles/sim.dir/src/PMPhysicsList.cc.o
+sim: CMakeFiles/sim.dir/src/main.cc.o
+sim: CMakeFiles/sim.dir/src/ActionInitialization.cc.o
+sim: CMakeFiles/sim.dir/src/DetectorConstruction.cc.o
+sim: CMakeFiles/sim.dir/src/DetectorSD.cc.o
+sim: CMakeFiles/sim.dir/src/PrimaryGeneratorAction.cc.o
+sim: CMakeFiles/sim.dir/src/RunAction.cc.o
 sim: CMakeFiles/sim.dir/build.make
 sim: /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/lib/libG4Tree.so
 sim: /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/lib/libG4FR.so
@@ -162,7 +210,7 @@ sim: /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/lib/libG4c
 sim: /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/lib/libG4ptl.so.3.0.0
 sim: /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/lib/libG4zlib.so
 sim: CMakeFiles/sim.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/akshatgg/ROBOAI/XRF/own_sim/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable sim"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/akshatgg/ROBOAI/XRF/own_sim/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable sim"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/sim.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

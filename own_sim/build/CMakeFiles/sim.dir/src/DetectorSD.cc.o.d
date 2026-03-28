@@ -1,14 +1,11 @@
-CMakeFiles/sim.dir/src/PMPhysicsList.cc.o: \
- /home/akshatgg/ROBOAI/XRF/own_sim/src/PMPhysicsList.cc \
+CMakeFiles/sim.dir/src/DetectorSD.cc.o: \
+ /home/akshatgg/ROBOAI/XRF/own_sim/src/DetectorSD.cc \
  /usr/include/stdc-predef.h \
- /home/akshatgg/ROBOAI/XRF/own_sim/include/PMPhysicsList.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4VModularPhysicsList.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4VPhysicsConstructor.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4ParticleTable.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4ParticleDefinition.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4PDefManager.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4AutoLock.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4Threading.hh \
+ /home/akshatgg/ROBOAI/XRF/own_sim/include/DetectorSD.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4VSensitiveDetector.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4CollectionNameVector.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/globals.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4ios.hh \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4Types.hh \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4GlobalConfig.hh \
  /usr/include/c++/13/complex \
@@ -185,8 +182,6 @@ CMakeFiles/sim.dir/src/PMPhysicsList.cc.o: \
  /usr/include/c++/13/bits/istream.tcc \
  /usr/include/c++/13/bits/sstream.tcc \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/tls.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/globals.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4ios.hh \
  /usr/include/c++/13/iostream /usr/include/c++/13/algorithm \
  /usr/include/c++/13/bits/stl_algo.h \
  /usr/include/c++/13/bits/algorithmfwd.h \
@@ -232,8 +227,44 @@ CMakeFiles/sim.dir/src/PMPhysicsList.cc.o: \
  /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
  /usr/include/c++/13/bits/parse_numbers.h \
  /usr/include/c++/13/bits/std_mutex.h \
- /usr/include/c++/13/bits/unique_lock.h /usr/include/c++/13/chrono \
- /usr/include/c++/13/condition_variable \
+ /usr/include/c++/13/bits/unique_lock.h /usr/include/c++/13/vector \
+ /usr/include/c++/13/bits/stl_uninitialized.h \
+ /usr/include/c++/13/bits/stl_vector.h \
+ /usr/include/c++/13/bits/stl_bvector.h \
+ /usr/include/c++/13/bits/vector.tcc \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4HCofThisEvent.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4Allocator.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4AllocatorPool.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4VHitsCollection.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4Step.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4ThreeVector.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/ThreeVector.h \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Utility/defs.h \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/ThreeVector.icc \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4VPhysicalVolume.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/geomdefs.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4RotationMatrix.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/Rotation.h \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/RotationInterfaces.h \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/LorentzVector.h \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/LorentzVector.icc \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/AxisAngle.h \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/AxisAngle.icc \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/RotationInterfaces.icc \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/RotationX.h \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/RotationX.icc \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Units/PhysicalConstants.h \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Units/SystemOfUnits.h \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/RotationY.h \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/RotationY.icc \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/RotationZ.h \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/RotationZ.icc \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/Rotation.icc \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4GeomSplitter.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/geomwdefs.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4AutoLock.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4Threading.hh \
+ /usr/include/c++/13/chrono /usr/include/c++/13/condition_variable \
  /usr/include/c++/13/bits/shared_ptr.h \
  /usr/include/c++/13/bits/shared_ptr_base.h \
  /usr/include/c++/13/bits/allocated_ptr.h \
@@ -244,41 +275,100 @@ CMakeFiles/sim.dir/src/PMPhysicsList.cc.o: \
  /usr/include/c++/13/bits/atomic_futex.h /usr/include/c++/13/atomic \
  /usr/include/c++/13/bits/std_function.h \
  /usr/include/c++/13/bits/std_thread.h /usr/include/c++/13/thread \
- /usr/include/c++/13/bits/this_thread_sleep.h /usr/include/c++/13/vector \
- /usr/include/c++/13/bits/stl_uninitialized.h \
- /usr/include/c++/13/bits/stl_vector.h \
- /usr/include/c++/13/bits/stl_bvector.h \
- /usr/include/c++/13/bits/vector.tcc \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/pwdefs.hh \
- /usr/include/c++/13/stdlib.h \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Units/PhysicalConstants.h \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Units/SystemOfUnits.h \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4ParticleDefinition.icc \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4ParticleTableIterator.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4ParticleTable.icc \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4PhysicsListHelper.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4PhysicsListOrderingParameter.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4ThreadLocalSingleton.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4Cache.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4CacheDetails.hh \
- /usr/include/c++/13/list /usr/include/c++/13/bits/stl_list.h \
- /usr/include/c++/13/bits/list.tcc /usr/include/c++/13/functional \
- /usr/include/c++/13/unordered_map \
- /usr/include/c++/13/bits/unordered_map.h \
- /usr/include/c++/13/bits/hashtable.h \
- /usr/include/c++/13/bits/hashtable_policy.h \
- /usr/include/c++/13/bits/enable_special_members.h \
- /usr/include/c++/13/array /usr/include/c++/13/compare \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4VUPLSplitter.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/rundefs.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4VUserPhysicsList.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4PhysicsModelCatalog.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4ProductionCutsTable.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4MaterialCutsCouple.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4ProductionCuts.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4MCCIndexConversionTable.hh \
+ /usr/include/c++/13/bits/this_thread_sleep.h \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4VPhysicalVolume.icc \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4StepPoint.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4SteppingControl.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4StepStatus.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4TouchableHandle.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4VTouchable.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4TouchableHistory.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4NavigationHistory.hh \
+ /usr/include/assert.h \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4AffineTransform.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4Transform3D.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Geometry/Transform3D.h \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Geometry/Transform3D.icc \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Geometry/Point3D.h \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Geometry/BasicVector3D.h \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Geometry/Vector3D.h \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Geometry/Normal3D.h \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4AffineTransform.icc \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4NavigationLevel.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4NavigationLevelRep.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4NavigationLevelRep.icc \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4NavigationLevel.icc \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4NavigationHistoryPool.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4NavigationHistory.icc \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4LogicalVolume.hh \
+ /usr/include/c++/13/memory \
+ /usr/include/c++/13/bits/stl_raw_storage_iter.h \
+ /usr/include/c++/13/bits/align.h \
+ /usr/include/c++/13/bits/shared_ptr_atomic.h \
+ /usr/include/c++/13/backward/auto_ptr.h \
+ /usr/include/c++/13/pstl/glue_memory_defs.h \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4Region.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4GeomSplitter.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/geomwdefs.hh \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4Region.icc \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4EmStandardPhysics.hh
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4LogicalVolume.icc \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4TouchableHistory.icc \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4ReferenceCountedHandle.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4Material.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4Element.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4ElementTable.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4ElementVector.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4IonisParamElm.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4Isotope.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4IsotopeVector.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4IonisParamMat.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4DensityEffectCalculator.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4MaterialPropertiesTable.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4MaterialPropertiesIndex.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4MaterialPropertyVector.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4PhysicsFreeVector.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4PhysicsVector.hh \
+ /usr/include/c++/13/fstream \
+ /usr/include/x86_64-linux-gnu/c++/13/bits/basic_file.h \
+ /usr/include/x86_64-linux-gnu/c++/13/bits/c++io.h \
+ /usr/include/c++/13/bits/fstream.tcc \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4Log.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4IEEE754.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4PhysicsVectorType.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4PhysicsVector.icc \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4MaterialTable.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4SandiaTable.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4OrderedTable.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4DataVector.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4DataVector.icc \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4StepPoint.icc \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4TrackVector.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4Step.icc \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4Track.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/trkdefs.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4DynamicParticle.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4ElectronOccupancy.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/pwdefs.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4LorentzVector.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4ParticleDefinition.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4PDefManager.hh \
+ /usr/include/c++/13/stdlib.h \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4ParticleDefinition.icc \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4ParticleMomentum.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4DynamicParticle.icc \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4TrackStatus.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4VUserTrackInformation.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4PhysicsModelCatalog.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4Track.icc \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4VHit.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4VReadOutGeometry.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4SensitiveVolumeList.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4VSDFilter.hh \
+ /home/akshatgg/ROBOAI/XRF/own_sim/include/RunAction.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4UserRunAction.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/globals.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4SystemOfUnits.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4Gamma.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4Step.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4StepPoint.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4Track.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4TouchableHandle.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4VPhysicalVolume.hh

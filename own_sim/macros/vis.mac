@@ -1,0 +1,18 @@
+/control/verbose 2
+/run/verbose 1
+/event/verbose 0
+/tracking/verbose 0
+
+/vis/open OGL
+/vis/viewer/set/style surface
+/vis/drawVolume
+/vis/scene/add/axes 0 0 0 30 mm
+/vis/viewer/set/autoRefresh true
+/vis/viewer/zoom 1.4
+
+# trajectories for test shots
+/tracking/storeTrajectory 1
+/vis/scene/add/trajectories smooth
+
+# optional camera tweak
+/vis/viewer/set/viewpointThetaPhi 70 30
