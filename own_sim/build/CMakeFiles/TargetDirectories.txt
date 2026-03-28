@@ -1,3 +1,0 @@
-/home/akshatgg/ROBOAI/XRF/own_sim/build/CMakeFiles/sim.dir
-/home/akshatgg/ROBOAI/XRF/own_sim/build/CMakeFiles/edit_cache.dir
-/home/akshatgg/ROBOAI/XRF/own_sim/build/CMakeFiles/rebuild_cache.dir

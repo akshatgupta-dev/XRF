@@ -33,7 +33,10 @@ std::string SimulationConfig::BuildRunLabel() const
       << "_E"    << Sanitize(Format1(beamEnergy / keV)) << "keV"
       << "_In"   << Sanitize(Format1(incidentAngleDeg)) << "deg"
       << "_Take" << Sanitize(Format1(nominalTakeoffDeg)) << "deg"
-      << "_Det"  << Sanitize(Format1(detectorDistance / mm)) << "mm";
+      << "_Det"  << Sanitize(Format1(detectorDistance / mm)) << "mm"
+      << "_Src"  << Sanitize(Format1(sourceDistance / mm)) << "mm"
+<< "_Spr"  << Sanitize(Format1(detectorSpreadDeg)) << "deg"
+<< "_Step" << Sanitize(Format1(detectorStepDeg)) << "deg";
   return oss.str();
 }
 
