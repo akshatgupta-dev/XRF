@@ -1,5 +1,6 @@
 #include "PrimaryGeneratorAction.hh"
 #include "DetectorConstruction.hh"
+#include "SimulationConfig.hh"
 
 #include "G4Event.hh"
 #include "G4Gamma.hh"
@@ -8,14 +9,15 @@
 
 PrimaryGeneratorAction* PrimaryGeneratorAction::fgInstance = nullptr;
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(const DetectorConstruction* det)
-  : fDet(det)
+PrimaryGeneratorAction::PrimaryGeneratorAction(const DetectorConstruction* det,
+                                               SimulationConfig* config)
+  : fDet(det), fConfig(config)
 {
   fgInstance = this;
 
-  fGun = new G4ParticleGun(1);   // one primary per event
+  fGun = new G4ParticleGun(1);
   fGun->SetParticleDefinition(G4Gamma::Gamma());
-  SetBeamEnergy(20.0 * keV);
+  SetBeamEnergy(fConfig->beamEnergy);
 }
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
@@ -33,6 +35,7 @@ PrimaryGeneratorAction* PrimaryGeneratorAction::Instance()
 
 void PrimaryGeneratorAction::SetBeamEnergy(G4double e)
 {
+  fConfig->beamEnergy = e;
   fBeamEnergy = e;
   fGun->SetParticleEnergy(fBeamEnergy);
 }

@@ -235,7 +235,10 @@ CMakeFiles/sim.dir/src/DetectorConstruction.cc.o: \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/ThreeVector.h \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Utility/defs.h \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/ThreeVector.icc \
+ /home/akshatgg/ROBOAI/XRF/own_sim/include/SimulationConfig.hh \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/globals.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4SystemOfUnits.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Units/SystemOfUnits.h \
  /home/akshatgg/ROBOAI/XRF/own_sim/include/DetectorSD.hh \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4VSensitiveDetector.hh \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4CollectionNameVector.hh \
@@ -258,7 +261,6 @@ CMakeFiles/sim.dir/src/DetectorConstruction.cc.o: \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/RotationX.h \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/RotationX.icc \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Units/PhysicalConstants.h \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Units/SystemOfUnits.h \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/RotationY.h \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/RotationY.icc \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/RotationZ.h \
@@ -366,6 +368,7 @@ CMakeFiles/sim.dir/src/DetectorConstruction.cc.o: \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4VReadOutGeometry.hh \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4SensitiveVolumeList.hh \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4VSDFilter.hh \
+ /home/akshatgg/ROBOAI/XRF/own_sim/include/SimulationConfig.hh \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4Box.hh \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4GeomTypes.hh \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4GeomConfig.hh \
@@ -395,4 +398,9 @@ CMakeFiles/sim.dir/src/DetectorConstruction.cc.o: \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4HCtable.hh \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4SDStructure.hh \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4VSensitiveDetector.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4SystemOfUnits.hh
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4VisAttributes.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/graphics_reps_defs.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4Colour.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4Color.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4VisAttributes.icc \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4Colour.hh

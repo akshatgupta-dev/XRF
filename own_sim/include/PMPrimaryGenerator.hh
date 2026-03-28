@@ -7,16 +7,25 @@
 #include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
 
+// Forward declarations
+class DetectorConstruction;
+class SimulationConfig;
+
 class PMPrimaryGenerator : public G4VUserPrimaryGeneratorAction
 {
     public:
-        PMPrimaryGenerator();
-        ~PMPrimaryGenerator();
+        // Updated constructor to take the detector and config pointers
+        explicit PMPrimaryGenerator(const DetectorConstruction* det, SimulationConfig* config);
+        ~PMPrimaryGenerator() override;
 
-        virtual void GeneratePrimaries(G4Event *);
+        void GeneratePrimaries(G4Event* event) override;
 
-private:
-    G4ParticleGun *fParticleGun;    
+    private:
+        G4ParticleGun* fParticleGun = nullptr;
+        
+        // Added member variables
+        const DetectorConstruction* fDetector = nullptr;
+        SimulationConfig* fConfig = nullptr;
 };
 
 #endif

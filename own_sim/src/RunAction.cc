@@ -1,5 +1,6 @@
 #include "RunAction.hh"
 #include "DetectorConstruction.hh"
+#include "SimulationConfig.hh" // <-- Added
 
 #include "G4Run.hh"
 #include "G4SystemOfUnits.hh"
@@ -10,8 +11,10 @@
 
 RunAction* RunAction::fgInstance = nullptr;
 
-RunAction::RunAction(const DetectorConstruction* det)
-  : fDet(det)
+// Updated constructor to take the SimulationConfig pointer
+RunAction::RunAction(const DetectorConstruction* det,
+                     const SimulationConfig* config)
+  : G4UserRunAction(), fDet(det), fConfig(config)
 {
   fgInstance = this;
   fBinWidth = (fEmax - fEmin) / fNBins;
@@ -67,20 +70,23 @@ void RunAction::ScorePhoton(G4int detId, G4double energy)
 
 void RunAction::WriteCheckpoint(long long cumulativeEvents) const
 {
-  std::ostringstream name;
-  name << "checkpoint_" << cumulativeEvents << ".csv";
-
-  std::ofstream out(name.str());
+  // Updated filename creation using the config builder
+  const std::string filename = fConfig->BuildCheckpointFilename(cumulativeEvents);
+  std::ofstream out(filename);
+  
   out << std::fixed << std::setprecision(6);
 
-  out << "# processed_events,"      << cumulativeEvents << "\n";
-  out << "# sample_material,"       << fDet->GetSampleMaterial() << "\n";
-  out << "# incident_angle_deg,"    << fDet->GetIncidentAngleDeg() << "\n";
-  out << "# source_distance_mm,"    << fDet->GetSourceDistance() << "\n";
-  out << "# detector_distance_mm,"  << fDet->GetDetectorDistance() << "\n";
-  out << "# nominal_takeoff_deg,"   << fDet->GetNominalTakeoffDeg() << "\n";
-  out << "# detector_spread_deg,"   << fDet->GetDetectorSpreadDeg() << "\n";
-  out << "# detector_step_deg,"     << fDet->GetDetectorStepDeg() << "\n";
+  // Updated header to include beam energy and fixed distance units
+  out << "# run_label,"              << fConfig->BuildRunLabel() << "\n";
+  out << "# processed_events,"       << cumulativeEvents << "\n";
+  out << "# sample_material,"        << fConfig->sampleMaterial << "\n";
+  out << "# beam_energy_keV,"        << fConfig->beamEnergy / keV << "\n";
+  out << "# incident_angle_deg,"     << fDet->GetIncidentAngleDeg() << "\n";
+  out << "# source_distance_mm,"     << fDet->GetSourceDistance() / mm << "\n";
+  out << "# detector_distance_mm,"   << fDet->GetDetectorDistance() / mm << "\n";
+  out << "# nominal_takeoff_deg,"    << fDet->GetNominalTakeoffDeg() << "\n";
+  out << "# detector_spread_deg,"    << fDet->GetDetectorSpreadDeg() << "\n";
+  out << "# detector_step_deg,"      << fDet->GetDetectorStepDeg() << "\n";
   out << "# columns: det_id,det_angle_deg,bin_idx,bin_low_keV,bin_high_keV,count\n";
 
   const auto& angles = fDet->GetDetectorAnglesDeg();

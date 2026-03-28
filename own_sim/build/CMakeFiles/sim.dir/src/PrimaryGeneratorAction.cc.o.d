@@ -238,6 +238,10 @@ CMakeFiles/sim.dir/src/PrimaryGeneratorAction.cc.o: \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/ThreeVector.h \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Utility/defs.h \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/ThreeVector.icc \
+ /home/akshatgg/ROBOAI/XRF/own_sim/include/SimulationConfig.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4SystemOfUnits.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Units/SystemOfUnits.h \
+ /home/akshatgg/ROBOAI/XRF/own_sim/include/SimulationConfig.hh \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4Event.hh \
  /usr/include/c++/13/set /usr/include/c++/13/bits/stl_set.h \
  /usr/include/c++/13/bits/stl_multiset.h \
@@ -279,9 +283,7 @@ CMakeFiles/sim.dir/src/PrimaryGeneratorAction.cc.o: \
  /usr/include/c++/13/bits/this_thread_sleep.h \
  /usr/include/c++/13/stdlib.h \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Units/PhysicalConstants.h \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Units/SystemOfUnits.h \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4ParticleDefinition.icc \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4ParticleGun.hh \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4VPrimaryGenerator.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4ParticleMomentum.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4SystemOfUnits.hh
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4ParticleMomentum.hh

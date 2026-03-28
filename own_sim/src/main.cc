@@ -3,6 +3,8 @@
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 
+#include "SimulationConfig.hh" // <-- Added Config header
+
 #include "FTFP_BERT.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmParameters.hh"
@@ -45,9 +47,10 @@ namespace
     }
   }
 
+  // Updated to pass SimulationConfig instead of DetectorConstruction
   void RunSweep(G4RunManager* runManager,
-                DetectorConstruction* detector,
-                RunAction* runAction)
+                RunAction* runAction,
+                SimulationConfig& config) 
   {
     auto* gun = PrimaryGeneratorAction::Instance();
     if (!gun) {
@@ -67,20 +70,23 @@ namespace
       20.0 * keV
     };
 
-    const long long totalEvents = 100000;
-    const int chunkSize = 10000;
+    // Pulling events and chunks from config
+    const long long totalEvents = config.totalEvents;
+    const int chunkSize = config.chunkSize;
 
     for (const auto& material : materials) {
-      detector->SetSampleMaterial(material);
+      // Update config directly instead of calling detector->Set...
+      config.sampleMaterial = material;
       runManager->ReinitializeGeometry(true);
 
       for (const auto& energy : energies) {
-        gun->SetBeamEnergy(energy);
+        config.beamEnergy = energy;
+        gun->SetBeamEnergy(energy); // Ensure gun updates its internal state
 
         G4cout << "\n========================================\n";
         G4cout << "Running configuration:\n";
-        G4cout << "  Material = " << material << "\n";
-        G4cout << "  Beam energy = " << energy / keV << " keV\n";
+        G4cout << "  Material = " << config.sampleMaterial << "\n";
+        G4cout << "  Beam energy = " << config.beamEnergy / keV << " keV\n";
         G4cout << "========================================\n";
 
         RunOneCheckpointedJob(runManager, runAction, totalEvents, chunkSize);
@@ -93,17 +99,21 @@ int main(int argc, char** argv)
 {
   auto* runManager = new G4RunManager();
 
-  auto* detector = new DetectorConstruction();
+  // Centralized Configuration Setup
+  SimulationConfig config;
+  config.sampleMaterial    = "G4_Fe";
+  config.beamEnergy        = 20.0 * keV;
+  config.incidentAngleDeg  = 45.0;
+  config.sourceDistance    = 50.0 * mm;
+  config.detectorDistance  = 20.0 * mm;
+  config.nominalTakeoffDeg = 45.0;
+  config.detectorSpreadDeg = 4.0;
+  config.detectorStepDeg   = 2.0;
+  config.totalEvents       = 100000;
+  config.chunkSize         = 10000;
 
-  // Current validated geometry
-  detector->SetSampleMaterial("G4_Fe");
-  detector->SetIncidentAngleDeg(45.0);
-  detector->SetSourceDistance(50.0);      // mm
-  detector->SetDetectorDistance(150.0);    // mm
-  detector->SetNominalTakeoffDeg(45.0);
-  detector->SetDetectorSpreadDeg(4.0);
-  detector->SetDetectorStepDeg(2.0);
-
+  // Pass config pointer to detector
+  auto* detector = new DetectorConstruction(&config);
   runManager->SetUserInitialization(detector);
 
   auto* physics = new FTFP_BERT();
@@ -116,7 +126,8 @@ int main(int argc, char** argv)
   em->SetPixe(true);
   em->SetDeexcitationIgnoreCut(true);
 
-  runManager->SetUserInitialization(new ActionInitialization(detector));
+  // Pass config pointer to ActionInitialization
+  runManager->SetUserInitialization(new ActionInitialization(detector, &config));
   runManager->Initialize();
 
   auto* runAction = RunAction::Instance();
@@ -138,7 +149,8 @@ int main(int argc, char** argv)
     const std::string arg1 = argv[1];
 
     if (arg1 == "--sweep") {
-      RunSweep(runManager, detector, runAction);
+      // Pass the config down to the sweep routine
+      RunSweep(runManager, runAction, config);
     }
     else {
       // Batch macro mode

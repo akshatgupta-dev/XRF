@@ -1,40 +1,48 @@
-#include "PMPrimaryGenerator.hh"
-#include "G4ParticleTable.hh"
-PMPrimaryGenerator::PMPrimaryGenerator()
+#include "PrimaryGeneratorAction.hh"
+#include "DetectorConstruction.hh"
+#include "SimulationConfig.hh"
+
+#include "G4Event.hh"
+#include "G4Gamma.hh"
+#include "G4ParticleGun.hh"
+#include "G4SystemOfUnits.hh"
+
+PrimaryGeneratorAction* PrimaryGeneratorAction::fgInstance = nullptr;
+
+PrimaryGeneratorAction::PrimaryGeneratorAction(const DetectorConstruction* det,
+                                               SimulationConfig* config)
+  : fDet(det), fConfig(config)
 {
-    fParticleGun = new G4ParticleGun(1);
+  fgInstance = this;
 
-    // Particle position
-    G4double x = 0. * m;
-    G4double y = 0. * m;
-    G4double z = 0. * m;
-
-    G4ThreeVector pos(x, y, z);
-
-    // Particle direction
-    G4double px = 0.;
-    G4double py = 0.;
-    G4double pz = 1.; 
-    
-    G4ThreeVector mom(px, py, pz);
-
-    // Particle type
-    G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-    G4ParticleDefinition* particle = particleTable->FindParticle("gamma");
-
-    fParticleGun->SetParticlePosition(pos);
-    fParticleGun->SetParticleMomentumDirection(mom);
-    fParticleGun->SetParticleEnergy(1. * MeV);
-    fParticleGun->SetParticleDefinition(particle);
+  fGun = new G4ParticleGun(1);
+  fGun->SetParticleDefinition(G4Gamma::Gamma());
+  SetBeamEnergy(fConfig->beamEnergy);
 }
 
-PMPrimaryGenerator::~PMPrimaryGenerator()
+PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
-    delete fParticleGun;
+  if (fgInstance == this) {
+    fgInstance = nullptr;
+  }
+  delete fGun;
 }
 
-void PMPrimaryGenerator::GeneratePrimaries(G4Event* anEvent)
+PrimaryGeneratorAction* PrimaryGeneratorAction::Instance()
 {
-    // Create vertex
-    fParticleGun->GeneratePrimaryVertex(anEvent);
+  return fgInstance;
+}
+
+void PrimaryGeneratorAction::SetBeamEnergy(G4double e)
+{
+  fConfig->beamEnergy = e;
+  fBeamEnergy = e;
+  fGun->SetParticleEnergy(fBeamEnergy);
+}
+
+void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
+{
+  fGun->SetParticlePosition(fDet->GetSourcePosition());
+  fGun->SetParticleMomentumDirection(fDet->GetSourceDirection());
+  fGun->GeneratePrimaryVertex(event);
 }

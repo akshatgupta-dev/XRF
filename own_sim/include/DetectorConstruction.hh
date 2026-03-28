@@ -3,6 +3,7 @@
 
 #include "G4VUserDetectorConstruction.hh"
 #include "G4ThreeVector.hh"
+#include "SimulationConfig.hh"
 #include "globals.hh"
 
 #include <string>
@@ -10,11 +11,13 @@
 
 class G4LogicalVolume;
 class G4VPhysicalVolume;
+class SimulationConfig; // Forward declaration added
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-    DetectorConstruction();
+    // Updated constructor
+    explicit DetectorConstruction(SimulationConfig* config);
     ~DetectorConstruction() override = default;
 
     G4VPhysicalVolume* Construct() override;
@@ -29,14 +32,14 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     void SetDetectorSpreadDeg(G4double val);
     void SetDetectorStepDeg(G4double val);
 
-    // Accessors
-    const std::string& GetSampleMaterial() const { return fSampleMaterial; }
-    G4double GetIncidentAngleDeg() const { return fIncidentAngleDeg; }
-    G4double GetSourceDistance() const { return fSourceDistance; }
-    G4double GetDetectorDistance() const { return fDetectorDistance; }
-    G4double GetNominalTakeoffDeg() const { return fNominalTakeoffDeg; }
-    G4double GetDetectorSpreadDeg() const { return fDetectorSpreadDeg; }
-    G4double GetDetectorStepDeg() const { return fDetectorStepDeg; }
+    // Accessors updated to read from fConfig
+    const std::string& GetSampleMaterial() const { return fConfig->sampleMaterial; }
+    G4double GetIncidentAngleDeg() const { return fConfig->incidentAngleDeg; }
+    G4double GetSourceDistance() const { return fConfig->sourceDistance; }
+    G4double GetDetectorDistance() const { return fConfig->detectorDistance; }
+    G4double GetNominalTakeoffDeg() const { return fConfig->nominalTakeoffDeg; }
+    G4double GetDetectorSpreadDeg() const { return fConfig->detectorSpreadDeg; }
+    G4double GetDetectorStepDeg() const { return fConfig->detectorStepDeg; }
 
     const std::vector<G4double>& GetDetectorAnglesDeg() const { return fDetectorAnglesDeg; }
     G4int GetNumberOfDetectors() const { return static_cast<G4int>(fDetectorAnglesDeg.size()); }
@@ -47,19 +50,10 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   private:
     void UpdateAngleList();
 
-    std::string fSampleMaterial = "G4_SILICON_DIOXIDE";
-
-    // Angles measured from sample plane
-    G4double fIncidentAngleDeg   = 45.0;
-    G4double fNominalTakeoffDeg  = 45.0;
-    G4double fDetectorSpreadDeg  = 4.0;
-    G4double fDetectorStepDeg    = 1.0;
-
-    G4double fSourceDistance     = 50.0;  // mm
-    G4double fDetectorDistance   = 50.0;  // mm
+    // Config pointer added; hardcoded defaults removed
+    SimulationConfig* fConfig = nullptr;
 
     std::vector<G4double> fDetectorAnglesDeg;
-
     G4LogicalVolume* fDetectorLV = nullptr;
 };
 

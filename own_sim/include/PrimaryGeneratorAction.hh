@@ -5,13 +5,14 @@
 #include "globals.hh"
 
 class DetectorConstruction;
+class SimulationConfig;
 class G4Event;
 class G4ParticleGun;
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    explicit PrimaryGeneratorAction(const DetectorConstruction* det);
+    PrimaryGeneratorAction(const DetectorConstruction* det, SimulationConfig* config);
     ~PrimaryGeneratorAction() override;
 
     static PrimaryGeneratorAction* Instance();
@@ -25,8 +26,9 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     static PrimaryGeneratorAction* fgInstance;
 
     const DetectorConstruction* fDet = nullptr;
+    SimulationConfig* fConfig = nullptr;
     G4ParticleGun* fGun = nullptr;
-    G4double fBeamEnergy = 20.0;
+    G4double fBeamEnergy = 0.0;
 };
 
 #endif

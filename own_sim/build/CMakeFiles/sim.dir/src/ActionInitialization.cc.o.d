@@ -237,10 +237,12 @@ CMakeFiles/sim.dir/src/ActionInitialization.cc.o: \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/ThreeVector.h \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Utility/defs.h \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/ThreeVector.icc \
+ /home/akshatgg/ROBOAI/XRF/own_sim/include/SimulationConfig.hh \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/globals.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4SystemOfUnits.hh \
+ /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Units/SystemOfUnits.h \
  /home/akshatgg/ROBOAI/XRF/own_sim/include/PrimaryGeneratorAction.hh \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4VUserPrimaryGeneratorAction.hh \
  /home/akshatgg/ROBOAI/XRF/own_sim/include/RunAction.hh \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4UserRunAction.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4SystemOfUnits.hh \
- /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Units/SystemOfUnits.h
+ /home/akshatgg/ROBOAI/XRF/own_sim/include/SimulationConfig.hh

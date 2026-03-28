@@ -240,6 +240,8 @@ CMakeFiles/sim.dir/src/RunAction.cc.o: \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/ThreeVector.h \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Utility/defs.h \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/CLHEP/Vector/ThreeVector.icc \
+ /home/akshatgg/ROBOAI/XRF/own_sim/include/SimulationConfig.hh \
+ /home/akshatgg/ROBOAI/XRF/own_sim/include/SimulationConfig.hh \
  /home/akshatgg/ROBOAI/XRF/Software/Geant4/geant4-v11.4.0-install/include/Geant4/G4Run.hh \
  /usr/include/c++/13/fstream \
  /usr/include/x86_64-linux-gnu/c++/13/bits/basic_file.h \

@@ -2,19 +2,28 @@
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
+#include "SimulationConfig.hh"       // <-- Added to include the config structure
 
-ActionInitialization::ActionInitialization(const DetectorConstruction* det)
-  : fDet(det)
+// Updated constructor to take the config pointer
+ActionInitialization::ActionInitialization(const DetectorConstruction* det,
+                                           SimulationConfig* config)
+  : G4VUserActionInitialization(), 
+    fDet(det), 
+    fConfig(config)
 {
 }
 
 void ActionInitialization::BuildForMaster() const
 {
-  SetUserAction(new RunAction(fDet));
+  // Pass the config pointer to RunAction
+  SetUserAction(new RunAction(fDet, fConfig));
 }
 
 void ActionInitialization::Build() const
 {
-  SetUserAction(new RunAction(fDet));
-  SetUserAction(new PrimaryGeneratorAction(fDet));
+  // Pass the config pointer to both RunAction and PrimaryGeneratorAction
+  SetUserAction(new RunAction(fDet, fConfig));
+  
+  // Change to "new PMPrimaryGenerator(fDet, fConfig)" if that is your class name
+  SetUserAction(new PrimaryGeneratorAction(fDet, fConfig)); 
 }

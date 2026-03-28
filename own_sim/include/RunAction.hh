@@ -8,12 +8,14 @@
 #include <vector>
 
 class DetectorConstruction;
+class SimulationConfig; // Added forward declaration
 class G4Run;
 
 class RunAction : public G4UserRunAction
 {
   public:
-    explicit RunAction(const DetectorConstruction* det);
+    // Updated constructor to take the config pointer
+    explicit RunAction(const DetectorConstruction* det, const SimulationConfig* config);
     ~RunAction() override;
 
     static RunAction* Instance();
@@ -29,6 +31,9 @@ class RunAction : public G4UserRunAction
     static RunAction* fgInstance;
 
     const DetectorConstruction* fDet = nullptr;
+    
+    // Added member variable for the configuration
+    const SimulationConfig* fConfig = nullptr;
 
     G4int fNBins = 2048;
     G4double fEmin = 0.0;

@@ -249,6 +249,30 @@ src/RunAction.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/sim.dir/build.make CMakeFiles/sim.dir/src/RunAction.cc.s
 .PHONY : src/RunAction.cc.s
 
+src/SimulationConfig.o: src/SimulationConfig.cc.o
+.PHONY : src/SimulationConfig.o
+
+# target to build an object file
+src/SimulationConfig.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sim.dir/build.make CMakeFiles/sim.dir/src/SimulationConfig.cc.o
+.PHONY : src/SimulationConfig.cc.o
+
+src/SimulationConfig.i: src/SimulationConfig.cc.i
+.PHONY : src/SimulationConfig.i
+
+# target to preprocess a source file
+src/SimulationConfig.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sim.dir/build.make CMakeFiles/sim.dir/src/SimulationConfig.cc.i
+.PHONY : src/SimulationConfig.cc.i
+
+src/SimulationConfig.s: src/SimulationConfig.cc.s
+.PHONY : src/SimulationConfig.s
+
+# target to generate assembly for a file
+src/SimulationConfig.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sim.dir/build.make CMakeFiles/sim.dir/src/SimulationConfig.cc.s
+.PHONY : src/SimulationConfig.cc.s
+
 src/main.o: src/main.cc.o
 .PHONY : src/main.o
 
@@ -297,6 +321,9 @@ help:
 	@echo "... src/RunAction.o"
 	@echo "... src/RunAction.i"
 	@echo "... src/RunAction.s"
+	@echo "... src/SimulationConfig.o"
+	@echo "... src/SimulationConfig.i"
+	@echo "... src/SimulationConfig.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
