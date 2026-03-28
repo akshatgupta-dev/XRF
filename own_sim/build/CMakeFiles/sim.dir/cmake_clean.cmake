@@ -11,6 +11,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/sim.dir/src/RunAction.cc.o.d"
   "CMakeFiles/sim.dir/src/SimulationConfig.cc.o"
   "CMakeFiles/sim.dir/src/SimulationConfig.cc.o.d"
+  "CMakeFiles/sim.dir/src/XRFMessenger.cc.o"
+  "CMakeFiles/sim.dir/src/XRFMessenger.cc.o.d"
   "CMakeFiles/sim.dir/src/main.cc.o"
   "CMakeFiles/sim.dir/src/main.cc.o.d"
   "sim"

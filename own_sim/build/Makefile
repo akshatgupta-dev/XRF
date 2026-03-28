@@ -273,6 +273,30 @@ src/SimulationConfig.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/sim.dir/build.make CMakeFiles/sim.dir/src/SimulationConfig.cc.s
 .PHONY : src/SimulationConfig.cc.s
 
+src/XRFMessenger.o: src/XRFMessenger.cc.o
+.PHONY : src/XRFMessenger.o
+
+# target to build an object file
+src/XRFMessenger.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sim.dir/build.make CMakeFiles/sim.dir/src/XRFMessenger.cc.o
+.PHONY : src/XRFMessenger.cc.o
+
+src/XRFMessenger.i: src/XRFMessenger.cc.i
+.PHONY : src/XRFMessenger.i
+
+# target to preprocess a source file
+src/XRFMessenger.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sim.dir/build.make CMakeFiles/sim.dir/src/XRFMessenger.cc.i
+.PHONY : src/XRFMessenger.cc.i
+
+src/XRFMessenger.s: src/XRFMessenger.cc.s
+.PHONY : src/XRFMessenger.s
+
+# target to generate assembly for a file
+src/XRFMessenger.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sim.dir/build.make CMakeFiles/sim.dir/src/XRFMessenger.cc.s
+.PHONY : src/XRFMessenger.cc.s
+
 src/main.o: src/main.cc.o
 .PHONY : src/main.o
 
@@ -324,6 +348,9 @@ help:
 	@echo "... src/SimulationConfig.o"
 	@echo "... src/SimulationConfig.i"
 	@echo "... src/SimulationConfig.s"
+	@echo "... src/XRFMessenger.o"
+	@echo "... src/XRFMessenger.i"
+	@echo "... src/XRFMessenger.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

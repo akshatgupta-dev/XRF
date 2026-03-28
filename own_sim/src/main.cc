@@ -5,6 +5,7 @@
 
 #include "SimulationConfig.hh" // <-- Added Config header
 
+#include "XRFMessenger.hh"
 #include "FTFP_BERT.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmParameters.hh"
@@ -23,15 +24,15 @@ namespace
 {
   void RunOneCheckpointedJob(G4RunManager* runManager,
                              RunAction* runAction,
-                             long long totalEvents,
-                             int chunkSize)
+                             const SimulationConfig& config)
   {
     runAction->ResetAll();
-
-    long long processed = 0;
-    while (processed < totalEvents) {
+long long processed = 0;
+    // Update: Use config.totalEvents
+    while (processed < config.totalEvents) {
+      // Update: Use config.chunkSize and config.totalEvents
       const int thisChunk =
-          static_cast<int>(std::min<long long>(chunkSize, totalEvents - processed));
+          static_cast<int>(std::min<long long>(config.chunkSize, config.totalEvents - processed));
 
       G4cout << "Starting chunk with " << thisChunk
              << " events. Processed so far = " << processed << G4endl;
@@ -43,7 +44,7 @@ namespace
              << processed << G4endl;
 
       runAction->WriteCheckpoint(processed);
-      G4cout << "Wrote checkpoint_" << processed << ".csv" << G4endl;
+      G4cout << "Wrote " << config.BuildCheckpointFilename(processed) << G4endl;
     }
   }
 
@@ -59,14 +60,14 @@ namespace
     }
 
     const std::vector<std::string> materials = {
-      "G4_Fe",
-      "G4_Cu",
-      "G4_Al"
+      "G4_Fe"
+      // "G4_Cu",
+      // "G4_Al"
     };
 
     const std::vector<G4double> energies = {
-      10.0 * keV,
-      15.0 * keV,
+      // 10.0 * keV,
+      // 15.0 * keV,
       20.0 * keV
     };
 
@@ -89,7 +90,7 @@ namespace
         G4cout << "  Beam energy = " << config.beamEnergy / keV << " keV\n";
         G4cout << "========================================\n";
 
-        RunOneCheckpointedJob(runManager, runAction, totalEvents, chunkSize);
+        RunOneCheckpointedJob(runManager, runAction, config);
       }
     }
   }
@@ -109,8 +110,8 @@ int main(int argc, char** argv)
   config.nominalTakeoffDeg = 45.0;
   config.detectorSpreadDeg = 4.0;
   config.detectorStepDeg   = 2.0;
-  config.totalEvents       = 100000;
-  config.chunkSize         = 10000;
+  config.totalEvents       = 10000;
+  config.chunkSize         = 1000;
 
   // Pass config pointer to detector
   auto* detector = new DetectorConstruction(&config);
@@ -132,6 +133,17 @@ int main(int argc, char** argv)
 
   auto* runAction = RunAction::Instance();
 
+  auto* xrfMessenger = new XRFMessenger(
+    &config,
+    detector,
+    [&]() {
+      runManager->ReinitializeGeometry(true);
+      auto* gun = PrimaryGeneratorAction::Instance();
+      if (gun) {
+        gun->SetBeamEnergy(config.beamEnergy);
+      }
+      RunOneCheckpointedJob(runManager, runAction, config);
+    });
   // Visualization manager
   auto* visManager = new G4VisExecutive(argc, argv);
   visManager->Initialize();
@@ -159,6 +171,7 @@ int main(int argc, char** argv)
   }
 
   delete visManager;
+  delete xrfMessenger;
   delete runManager;
   return 0;
 }

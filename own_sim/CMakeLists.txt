@@ -14,6 +14,7 @@ set(SOURCES
     ${PROJECT_SOURCE_DIR}/src/PrimaryGeneratorAction.cc
     ${PROJECT_SOURCE_DIR}/src/RunAction.cc
     ${PROJECT_SOURCE_DIR}/src/SimulationConfig.cc # <-- Added here
+    ${PROJECT_SOURCE_DIR}/src/XRFMessenger.cc
 )
 
 file(GLOB MACRO_FILES ${PROJECT_SOURCE_DIR}/macros/*.mac)
