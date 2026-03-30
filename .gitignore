@@ -1,9 +1,26 @@
+# IDEs and Editors
 .vscode/
+spek.ipynb
+
+# CMake / Build artifacts
+build/
 CMakeCache.txt
 CMakeFiles/
+Makefile
+cmake_install.cmake
+
+# Executables (Assuming your compiled sim is named 'sim')
+sim
+
+# Simulation Output & Data
+output/
+*.csv
+# If you only want to ignore specific CSVs but keep others, use these instead:
+# incident_spectrum.csv
+# build/output/*
+
+# Local / Scratch Directories
 Software/
 XRF-simulation/
-incident_spectrum.csv
 min_xrf2/
-spek.ipynb
 xrf-v0/

@@ -106,7 +106,7 @@ int main(int argc, char** argv)
   config.beamEnergy        = 20.0 * keV;
   config.incidentAngleDeg  = 45.0;
   config.sourceDistance    = 50.0 * mm;
-  config.detectorDistance  = 20.0 * mm;
+  config.detectorDistance  = 150.0 * mm;
   config.nominalTakeoffDeg = 45.0;
   config.detectorSpreadDeg = 4.0;
   config.detectorStepDeg   = 2.0;

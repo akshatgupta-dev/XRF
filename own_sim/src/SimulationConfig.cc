@@ -32,17 +32,18 @@ std::string SimulationConfig::BuildRunLabel() const
   oss << Sanitize(sampleMaterial)
       << "_E"    << Sanitize(Format1(beamEnergy / keV)) << "keV"
       << "_In"   << Sanitize(Format1(incidentAngleDeg)) << "deg"
+      << "_Src"  << Sanitize(Format1(sourceDistance / mm)) << "mm"
       << "_Take" << Sanitize(Format1(nominalTakeoffDeg)) << "deg"
       << "_Det"  << Sanitize(Format1(detectorDistance / mm)) << "mm"
-      << "_Src"  << Sanitize(Format1(sourceDistance / mm)) << "mm"
-<< "_Spr"  << Sanitize(Format1(detectorSpreadDeg)) << "deg"
-<< "_Step" << Sanitize(Format1(detectorStepDeg)) << "deg";
+      << "_Spr"  << Sanitize(Format1(detectorSpreadDeg)) << "deg"
+      << "_Step" << Sanitize(Format1(detectorStepDeg)) << "deg";
   return oss.str();
 }
 
 std::string SimulationConfig::BuildCheckpointFilename(long long processedEvents) const
 {
   std::ostringstream oss;
-  oss << "output/" << BuildRunLabel() << "_N" << processedEvents << ".csv";
+  oss << "output/" << sampleMaterial << "/"
+      << BuildRunLabel() << "_N" << processedEvents << ".csv";
   return oss.str();
 }
