@@ -1,6 +1,6 @@
 #include "DetectorConstruction.hh"
 #include "DetectorSD.hh"
-#include "SimulationConfig.hh" // <-- Added to include the config structure
+#include "SimulationConfig.hh" 
 
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
@@ -9,8 +9,8 @@
 #include "G4RotationMatrix.hh"
 #include "G4SDManager.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4VisAttributes.hh"  // <-- Added for visualization
-#include "G4Colour.hh"         // <-- Added for colors
+#include "G4VisAttributes.hh"  
+#include "G4Colour.hh"         
 
 #include <cmath>
 
@@ -121,37 +121,61 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   sampleVis->SetVisibility(true);
   logicSample->SetVisAttributes(sampleVis);
 
-  // Virtual detector: thin plate that records incoming gammas
-  auto* solidDet = new G4Box("VirtualDetector", 2.375*mm, 2.375*mm, 0.25*mm);
-  fDetectorLV = new G4LogicalVolume(solidDet, detMat, "VirtualDetectorLV");
+  // =========================================================================
+  // 2D PIXEL GRID DETECTOR ARRAY
+  // =========================================================================
 
-  // Set Detector Visualization Attributes
-  auto* detVis = new G4VisAttributes(G4Colour(0.0, 1.0, 0.0));     // green
+  const G4double theta0 = fConfig->nominalTakeoffDeg * deg;
+  const G4double D      = fConfig->detectorDistance;
+  const G4double maxOff = 4.0 * deg;
+
+  const G4double capRadius = D * std::tan(maxOff);
+  const G4double pixelSize = 1.5 * mm;   // choose resolution
+  const G4double halfT     = 0.05 * mm;
+
+  auto* solidPix = new G4Box("Pixel", pixelSize/2.0, pixelSize/2.0, halfT);
+  fDetectorLV = new G4LogicalVolume(solidPix, detMat, "PixelLV");
+
+  auto* detVis = new G4VisAttributes(G4Colour(0.0, 1.0, 0.0));
   detVis->SetVisibility(true);
   fDetectorLV->SetVisAttributes(detVis);
 
-  for (G4int i = 0; i < GetNumberOfDetectors(); ++i) {
-    const G4double thetaDeg = fDetectorAnglesDeg[i];
-    const G4double theta    = thetaDeg * deg;
+  G4ThreeVector detCenter(
+      D * std::cos(theta0),
+      0.0,
+      D * std::sin(theta0)
+  );
 
-    // Reading detector distance from fConfig
-    const G4ThreeVector pos(
-        fConfig->detectorDistance * std::cos(theta),
-        0.0,
-        fConfig->detectorDistance * std::sin(theta));
+  G4RotationMatrix rot0;
+  rot0.rotateY(-(90.0 * deg + theta0));
 
-    auto* rot = new G4RotationMatrix();
-    rot->rotateY((90.0*deg + theta)); // face the origin
+G4RotationMatrix placeRot = rot0.inverse(); 
 
-    new G4PVPlacement(
-        rot,
-        pos,
-        fDetectorLV,
-        "VirtualDetectorPV",
-        logicWorld,
-        false,
-        i,     // copy number = detector ID
-        true);
+  const int n = static_cast<int>(std::ceil((2.0 * capRadius) / pixelSize));
+
+  int copyNo = 0;
+  for (int ix = 0; ix < n; ++ix) {
+      G4double x = -capRadius + (ix + 0.5) * pixelSize;
+
+      for (int iy = 0; iy < n; ++iy) {
+          G4double y = -capRadius + (iy + 0.5) * pixelSize;
+
+          if (x*x + y*y > capRadius*capRadius) continue;
+
+          G4ThreeVector local(x, y, 0.0);
+          G4ThreeVector global = detCenter + rot0 * local; // Uses active rotation for position
+
+          new G4PVPlacement(
+              new G4RotationMatrix(placeRot), // <-- Use the INVERSE rotation here
+              global,
+              fDetectorLV,
+              "PixelPV",
+              logicWorld,
+              false,
+              copyNo++,
+              true
+          );
+      }
   }
 
   return physWorld;
