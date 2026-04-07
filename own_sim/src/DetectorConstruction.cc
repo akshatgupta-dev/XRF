@@ -130,7 +130,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   const G4double maxOff = 4.0 * deg;
 
   const G4double capRadius = D * std::tan(maxOff);
-  const G4double pixelSize = 1.5 * mm;   // choose resolution
+  const G4double pixelSize = 2 * mm;   // choose resolution
   const G4double halfT     = 0.05 * mm;
 
   auto* solidPix = new G4Box("Pixel", pixelSize/2.0, pixelSize/2.0, halfT);
