@@ -1,7 +1,7 @@
 .vscode/
 spek.ipynb
 
-build/
+build/output/
 CMakeCache.txt
 CMakeFiles/
 Makefile
