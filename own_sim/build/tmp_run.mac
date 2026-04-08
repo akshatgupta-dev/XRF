@@ -8,6 +8,6 @@
 /xrf/setNominalTakeoff 47 deg
 /xrf/setSpread 4 deg
 /xrf/setStep 2 deg
-/xrf/setTotalEvents 10000
+/xrf/setTotalEvents 100000
 /xrf/setChunkSize 1000
 /xrf/run

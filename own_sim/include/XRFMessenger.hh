@@ -1,6 +1,8 @@
 #ifndef XRFMessenger_h
 #define XRFMessenger_h 1
 
+#include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithoutParameter.hh"
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
@@ -31,20 +33,25 @@ class XRFMessenger : public G4UImessenger
 
     G4UIdirectory* fXrfDir = nullptr;
 
-    G4UIcmdWithAString*        fSetMaterialCmd = nullptr;
+    G4UIcmdWithAString* fSetMaterialCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fSetBeamEnergyCmd = nullptr;
-    G4UIcmdWithAString*        fSetTotalEventsCmd = nullptr;
-    G4UIcmdWithAnInteger*      fSetChunkSizeCmd = nullptr;
+    G4UIcmdWithAString* fSetTotalEventsCmd = nullptr;
+    G4UIcmdWithAnInteger* fSetChunkSizeCmd = nullptr;
 
     G4UIcmdWithADoubleAndUnit* fSetDetectorDistanceCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fSetNominalTakeoffCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fSetSpreadCmd = nullptr;
-G4UIcmdWithADoubleAndUnit* fSetIncidentAngleCmd = nullptr;
-G4UIcmdWithADoubleAndUnit* fSetSourceDistanceCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fSetIncidentAngleCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fSetSourceDistanceCmd = nullptr;
 
     G4UIcmdWithADoubleAndUnit* fSetStepCmd = nullptr;
 
-    G4UIcmdWithoutParameter*   fRunCmd = nullptr;
+    G4UIcmdWithoutParameter* fRunCmd = nullptr;
+
+    // --- Added combo commands ---
+    G4UIcmdWithAString* fComboSizesCmd = nullptr;
+    G4UIcmdWithAString* fAddComboCmd = nullptr;
+    G4UIcmdWithoutParameter* fClearCustomCombosCmd = nullptr;
 };
 
 #endif

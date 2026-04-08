@@ -9,21 +9,29 @@
 #include <string>
 #include <vector>
 
+struct DetectorElement {
+    G4int id = -1;
+    G4ThreeVector center;
+    G4double thetaDeg = 0.0;
+    G4double phiDeg = 0.0;
+    G4double width = 0.0;
+    G4double height = 0.0;
+    G4bool enabled = true;
+};
+
 class G4LogicalVolume;
 class G4VPhysicalVolume;
-class SimulationConfig; // Forward declaration added
+class SimulationConfig;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-    // Updated constructor
     explicit DetectorConstruction(SimulationConfig* config);
     ~DetectorConstruction() override = default;
 
     G4VPhysicalVolume* Construct() override;
     void ConstructSDandField() override;
 
-    // Geometry config
     void SetSampleMaterial(const std::string& name);
     void SetIncidentAngleDeg(G4double val);
     void SetSourceDistance(G4double val);
@@ -32,7 +40,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     void SetDetectorSpreadDeg(G4double val);
     void SetDetectorStepDeg(G4double val);
 
-    // Accessors updated to read from fConfig
     const std::string& GetSampleMaterial() const { return fConfig->sampleMaterial; }
     G4double GetIncidentAngleDeg() const { return fConfig->incidentAngleDeg; }
     G4double GetSourceDistance() const { return fConfig->sourceDistance; }
@@ -41,19 +48,33 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4double GetDetectorSpreadDeg() const { return fConfig->detectorSpreadDeg; }
     G4double GetDetectorStepDeg() const { return fConfig->detectorStepDeg; }
 
-    const std::vector<G4double>& GetDetectorAnglesDeg() const { return fDetectorAnglesDeg; }
-    G4int GetNumberOfDetectors() const { return static_cast<G4int>(fDetectorAnglesDeg.size()); }
+    const std::vector<DetectorElement>& GetDetectorElements() const { return fDetectorElements; }
+
+    const DetectorElement& GetDetectorElement(G4int id) const {
+        return fDetectorElements.at(id);
+    }
+
+    G4int GetNumberOfDetectors() const {
+        return static_cast<G4int>(fDetectorElements.size());
+    }
 
     G4ThreeVector GetSourcePosition() const;
     G4ThreeVector GetSourceDirection() const;
 
+    // NEW: force metadata rebuild from current config
+    void RefreshDetectorLayout();
+
   private:
-    void UpdateAngleList();
+    void RebuildDetectorElements();
+    G4double ComputeThetaDeg(const G4ThreeVector& p) const;
+    G4double ComputePhiDeg(const G4ThreeVector& p) const;
 
-    // Config pointer added; hardcoded defaults removed
+    // NEW: keep geometry formulas consistent in one place
+    G4double GetDetectorCapRadius() const;
+    G4double GetDetectorPixelSize() const;
+
     SimulationConfig* fConfig = nullptr;
-
-    std::vector<G4double> fDetectorAnglesDeg;
+    std::vector<DetectorElement> fDetectorElements;
     G4LogicalVolume* fDetectorLV = nullptr;
 };
 

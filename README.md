@@ -39,3 +39,18 @@ make
 ## Notes
 - Parameters such as energy, angles, and number of events can be modified in the source files
 - Make sure Geant4 environment variables are properly set before building
+
+
+example
+
+
+```bash
+/xrf/clearCustomCombos
+/xrf/addCombo center_only 6
+/xrf/addCombo center_3 5 6 7
+/xrf/addCombo center_5 4 5 6 7 8
+/xrf/addCombo upper_row 9 10 11 12
+/xrf/addCombo lower_row 0 1 2 3
+/xrf/addCombo left_side 1 4 5 9
+/xrf/addCombo right_side 3 7 8 11
+```

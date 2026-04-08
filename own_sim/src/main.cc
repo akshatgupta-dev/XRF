@@ -23,11 +23,15 @@
 namespace
 {
   void RunOneCheckpointedJob(G4RunManager* runManager,
-                             RunAction* runAction,
-                             const SimulationConfig& config)
-  {
+                           DetectorConstruction* detector,
+                           RunAction* runAction,
+                           const SimulationConfig& config)
+    {
+    detector->RefreshDetectorLayout();
+    runAction->SyncWithDetectorLayout();
     runAction->ResetAll();
-long long processed = 0;
+
+    long long processed = 0;
     // Update: Use config.totalEvents
     while (processed < config.totalEvents) {
       // Update: Use config.chunkSize and config.totalEvents
@@ -50,8 +54,9 @@ long long processed = 0;
 
   // Updated to pass SimulationConfig instead of DetectorConstruction
   void RunSweep(G4RunManager* runManager,
-                RunAction* runAction,
-                SimulationConfig& config) 
+              DetectorConstruction* detector,
+              RunAction* runAction,
+              SimulationConfig& config) 
   {
     auto* gun = PrimaryGeneratorAction::Instance();
     if (!gun) {
@@ -90,7 +95,7 @@ long long processed = 0;
         G4cout << "  Beam energy = " << config.beamEnergy / keV << " keV\n";
         G4cout << "========================================\n";
 
-        RunOneCheckpointedJob(runManager, runAction, config);
+        RunOneCheckpointedJob(runManager, detector, runAction, config);
       }
     }
   }
@@ -142,7 +147,7 @@ int main(int argc, char** argv)
       if (gun) {
         gun->SetBeamEnergy(config.beamEnergy);
       }
-      RunOneCheckpointedJob(runManager, runAction, config);
+      RunOneCheckpointedJob(runManager, detector, runAction, config);
     });
   // Visualization manager
   auto* visManager = new G4VisExecutive(argc, argv);
@@ -162,7 +167,7 @@ int main(int argc, char** argv)
 
     if (arg1 == "--sweep") {
       // Pass the config down to the sweep routine
-      RunSweep(runManager, runAction, config);
+      RunSweep(runManager, detector, runAction, config);
     }
     else {
       // Batch macro mode

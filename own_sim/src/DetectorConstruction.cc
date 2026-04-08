@@ -14,14 +14,13 @@
 
 #include <cmath>
 
-// Updated constructor to take the config pointer
 DetectorConstruction::DetectorConstruction(SimulationConfig* config)
   : fConfig(config)
 {
-  UpdateAngleList();
+  RebuildDetectorElements();
 }
 
-// Setters now update fConfig directly
+// Setters now update fConfig directly without updating the old angle list
 void DetectorConstruction::SetSampleMaterial(const std::string& name)
 {
   fConfig->sampleMaterial = name;
@@ -37,40 +36,141 @@ void DetectorConstruction::SetSourceDistance(G4double val)
   fConfig->sourceDistance = val;
 }
 
+// void DetectorConstruction::SetDetectorDistance(G4double val)
+// {
+//   fConfig->detectorDistance = val;
+// }
+
+// void DetectorConstruction::SetNominalTakeoffDeg(G4double val)
+// {
+//   fConfig->nominalTakeoffDeg = val;
+// }
+
+// void DetectorConstruction::SetDetectorSpreadDeg(G4double val)
+// {
+//   fConfig->detectorSpreadDeg = val;
+// }
+
+// void DetectorConstruction::SetDetectorStepDeg(G4double val)
+// {
+//   fConfig->detectorStepDeg = val;
+// }
+
 void DetectorConstruction::SetDetectorDistance(G4double val)
 {
   fConfig->detectorDistance = val;
+  RebuildDetectorElements();
 }
 
 void DetectorConstruction::SetNominalTakeoffDeg(G4double val)
 {
   fConfig->nominalTakeoffDeg = val;
-  UpdateAngleList();
+  RebuildDetectorElements();
 }
 
 void DetectorConstruction::SetDetectorSpreadDeg(G4double val)
 {
   fConfig->detectorSpreadDeg = val;
-  UpdateAngleList();
+  RebuildDetectorElements();
 }
 
 void DetectorConstruction::SetDetectorStepDeg(G4double val)
 {
   fConfig->detectorStepDeg = val;
-  UpdateAngleList();
+  RebuildDetectorElements();
+}
+G4double DetectorConstruction::GetDetectorCapRadius() const
+{
+  const G4double D = fConfig->detectorDistance;
+  const G4double spreadDeg = std::max(0.0, fConfig->detectorSpreadDeg);
+  return D * std::tan(spreadDeg * deg);
 }
 
-void DetectorConstruction::UpdateAngleList()
+G4double DetectorConstruction::GetDetectorPixelSize() const
 {
-  fDetectorAnglesDeg.clear();
-  
-  // Reading from fConfig
-  const G4double start = fConfig->nominalTakeoffDeg - fConfig->detectorSpreadDeg;
-  const G4double stop  = fConfig->nominalTakeoffDeg + fConfig->detectorSpreadDeg;
+  const G4double D = fConfig->detectorDistance;
 
-  for (G4double a = start; a <= stop + 1e-9; a += fConfig->detectorStepDeg) {
-    fDetectorAnglesDeg.push_back(a);
-  }
+  // Use detectorStepDeg as angular spacing between element centers.
+  const G4double stepDeg = std::max(0.1, fConfig->detectorStepDeg);
+
+  // Linear size/pitch corresponding to that angular step
+  return 2.0 * D * std::tan(0.5 * stepDeg * deg);
+}
+
+void DetectorConstruction::RefreshDetectorLayout()
+{
+  RebuildDetectorElements();
+}
+void DetectorConstruction::RebuildDetectorElements()
+{
+    fDetectorElements.clear();
+
+    const G4double theta0 = fConfig->nominalTakeoffDeg * deg;
+    const G4double D = fConfig->detectorDistance;
+    const G4double capRadius = GetDetectorCapRadius();
+    const G4double pixelSize = GetDetectorPixelSize();
+
+    G4ThreeVector detCenter(
+        D * std::cos(theta0),
+        0.0,
+        D * std::sin(theta0)
+    );
+
+    G4RotationMatrix rot0;
+    rot0.rotateY(-(90.0 * deg + theta0));
+
+    const int n = std::max(0, static_cast<int>(std::ceil(capRadius / pixelSize)));
+
+    for (int ix = -n; ix <= n; ++ix) {
+        const G4double x = ix * pixelSize;
+
+        for (int iy = -n; iy <= n; ++iy) {
+            const G4double y = iy * pixelSize;
+
+            if (x*x + y*y > capRadius*capRadius) {
+                continue;
+            }
+
+            G4ThreeVector local(x, y, 0.0);
+            G4ThreeVector global = detCenter + rot0 * local;
+
+            DetectorElement elem;
+            elem.id = static_cast<G4int>(fDetectorElements.size());
+            elem.center = global;
+            elem.thetaDeg = ComputeThetaDeg(global);
+            elem.phiDeg = ComputePhiDeg(global);
+            elem.width = pixelSize;
+            elem.height = pixelSize;
+            elem.enabled = true;
+
+            fDetectorElements.push_back(elem);
+        }
+    }
+
+    // Guarantee at least one detector element
+    if (fDetectorElements.empty()) {
+        DetectorElement elem;
+        elem.id = 0;
+        elem.center = detCenter;
+        elem.thetaDeg = ComputeThetaDeg(detCenter);
+        elem.phiDeg = ComputePhiDeg(detCenter);
+        elem.width = pixelSize;
+        elem.height = pixelSize;
+        elem.enabled = true;
+        fDetectorElements.push_back(elem);
+    }
+
+    G4cout << "DEBUG RebuildDetectorElements: built "
+           << fDetectorElements.size() << " detector elements." << G4endl;
+}
+
+G4double DetectorConstruction::ComputeThetaDeg(const G4ThreeVector& p) const {
+    const G4double rho = std::sqrt(p.x()*p.x() + p.y()*p.y());
+    return std::atan2(p.z(), rho) / deg;
+}
+
+G4double DetectorConstruction::ComputePhiDeg(const G4ThreeVector& p) const {
+    return std::atan2(p.y(), p.x()) / deg;
 }
 
 G4ThreeVector DetectorConstruction::GetSourcePosition() const
@@ -91,6 +191,8 @@ G4ThreeVector DetectorConstruction::GetSourceDirection() const
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
+  RebuildDetectorElements();
+  
   auto* nist = G4NistManager::Instance();
 
   auto* worldMat  = nist->FindOrBuildMaterial("G4_Galactic");
@@ -125,12 +227,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // 2D PIXEL GRID DETECTOR ARRAY
   // =========================================================================
 
-  const G4double theta0 = fConfig->nominalTakeoffDeg * deg;
-  const G4double D      = fConfig->detectorDistance;
-  const G4double maxOff = 4.0 * deg;
-
-  const G4double capRadius = D * std::tan(maxOff);
-  const G4double pixelSize = 2 * mm;   // choose resolution
+const G4double pixelSize = GetDetectorPixelSize();
   const G4double halfT     = 0.05 * mm;
 
   auto* solidPix = new G4Box("Pixel", pixelSize/2.0, pixelSize/2.0, halfT);
@@ -140,42 +237,22 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   detVis->SetVisibility(true);
   fDetectorLV->SetVisAttributes(detVis);
 
-  G4ThreeVector detCenter(
-      D * std::cos(theta0),
-      0.0,
-      D * std::sin(theta0)
-  );
-
+  const G4double theta0 = fConfig->nominalTakeoffDeg * deg;
   G4RotationMatrix rot0;
   rot0.rotateY(-(90.0 * deg + theta0));
+  G4RotationMatrix placeRot = rot0.inverse(); 
 
-G4RotationMatrix placeRot = rot0.inverse(); 
-
-  const int n = static_cast<int>(std::ceil((2.0 * capRadius) / pixelSize));
-
-  int copyNo = 0;
-  for (int ix = 0; ix < n; ++ix) {
-      G4double x = -capRadius + (ix + 0.5) * pixelSize;
-
-      for (int iy = 0; iy < n; ++iy) {
-          G4double y = -capRadius + (iy + 0.5) * pixelSize;
-
-          if (x*x + y*y > capRadius*capRadius) continue;
-
-          G4ThreeVector local(x, y, 0.0);
-          G4ThreeVector global = detCenter + rot0 * local; // Uses active rotation for position
-
-          new G4PVPlacement(
-              new G4RotationMatrix(placeRot), // <-- Use the INVERSE rotation here
-              global,
-              fDetectorLV,
-              "PixelPV",
-              logicWorld,
-              false,
-              copyNo++,
-              true
-          );
-      }
+  for (const auto& elem : fDetectorElements) {
+      new G4PVPlacement(
+          new G4RotationMatrix(placeRot),
+          elem.center,
+          fDetectorLV,
+          "PixelPV",
+          logicWorld,
+          false,
+          elem.id,
+          true
+      );
   }
 
   return physWorld;

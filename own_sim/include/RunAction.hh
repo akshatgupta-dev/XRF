@@ -8,13 +8,17 @@
 #include <vector>
 
 class DetectorConstruction;
-class SimulationConfig; // Added forward declaration
+class SimulationConfig;
 class G4Run;
+
+struct DetectorCombo {
+    std::string name;
+    std::vector<G4int> detIds;
+};
 
 class RunAction : public G4UserRunAction
 {
   public:
-    // Updated constructor to take the config pointer
     explicit RunAction(const DetectorConstruction* det, const SimulationConfig* config);
     ~RunAction() override;
 
@@ -26,13 +30,12 @@ class RunAction : public G4UserRunAction
     void ResetAll();
     void ScorePhoton(G4int detId, G4double energy);
     void WriteCheckpoint(long long cumulativeEvents) const;
+    void SyncWithDetectorLayout();
 
   private:
     static RunAction* fgInstance;
 
     const DetectorConstruction* fDet = nullptr;
-    
-    // Added member variable for the configuration
     const SimulationConfig* fConfig = nullptr;
 
     G4int fNBins = 2048;
@@ -41,6 +44,12 @@ class RunAction : public G4UserRunAction
     G4double fBinWidth = 0.0;
 
     std::vector<std::vector<G4double>> fSpectra;
+    std::vector<DetectorCombo> fCombos;
+
+    void RebuildCombos();
+    std::vector<G4double> SumSpectrum(const std::vector<G4int>& detIds) const;
+    void WriteComboCheckpoint(long long cumulativeEvents) const;
+    std::string BuildComboFilename(long long cumulativeEvents) const;
 };
 
 #endif

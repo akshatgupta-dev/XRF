@@ -6,6 +6,8 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithoutParameter.hh"
+
+#include <sstream>
 #include "G4SystemOfUnits.hh"
 
 // 1. Fixed constructor signature to include DetectorConstruction*
@@ -23,6 +25,15 @@ XRFMessenger::XRFMessenger(SimulationConfig* config,
   fSetMaterialCmd = new G4UIcmdWithAString("/xrf/setMaterial", this);
   fSetMaterialCmd->SetGuidance("Set sample material, e.g. G4_Fe.");
   fSetMaterialCmd->SetParameterName("material", false);
+
+fComboSizesCmd = new G4UIcmdWithAString("/xrf/comboSizes", this);
+fComboSizesCmd->SetGuidance("Set automatic combo sizes, e.g. '1 3 5 9'");
+
+fAddComboCmd = new G4UIcmdWithAString("/xrf/addCombo", this);
+fAddComboCmd->SetGuidance("Add a custom combo: <name> <id1> <id2> ...");
+
+fClearCustomCombosCmd = new G4UIcmdWithoutParameter("/xrf/clearCustomCombos", this);
+fClearCustomCombosCmd->SetGuidance("Clear all custom detector combos");
 
   fSetBeamEnergyCmd = new G4UIcmdWithADoubleAndUnit("/xrf/setBeamEnergy", this);
   fSetBeamEnergyCmd->SetGuidance("Set beam energy.");
@@ -81,7 +92,9 @@ delete fSetIncidentAngleCmd;
   delete fSetSpreadCmd;
   delete fSetNominalTakeoffCmd;
   delete fSetDetectorDistanceCmd;
-  
+  delete fComboSizesCmd;
+delete fAddComboCmd;
+delete fClearCustomCombosCmd;
   delete fSetChunkSizeCmd;
   delete fSetTotalEventsCmd;
   delete fSetBeamEnergyCmd;
@@ -112,6 +125,43 @@ void XRFMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   const auto v = fSetIncidentAngleCmd->GetNewDoubleValue(newValue);
   fDetector->SetIncidentAngleDeg(v / deg);
 }
+
+
+else if (command == fComboSizesCmd) {
+  fConfig->comboSizes.clear();
+
+  std::istringstream iss(newValue);
+  G4int n;
+  while (iss >> n) {
+    if (n > 0) {
+      fConfig->comboSizes.push_back(n);
+    }
+  }
+}
+else if (command == fAddComboCmd) {
+  std::istringstream iss(newValue);
+
+  std::string name;
+  iss >> name;
+
+  if (!name.empty()) {
+    NamedComboConfig combo;
+    combo.name = name;
+
+    G4int detId;
+    while (iss >> detId) {
+      combo.detIds.push_back(detId);
+    }
+
+    if (!combo.detIds.empty()) {
+      fConfig->customCombos.push_back(combo);
+    }
+  }
+}
+else if (command == fClearCustomCombosCmd) {
+  fConfig->customCombos.clear();
+}
+
 else if (command == fSetSourceDistanceCmd) {
   const auto v = fSetSourceDistanceCmd->GetNewDoubleValue(newValue);
   fDetector->SetSourceDistance(v);
