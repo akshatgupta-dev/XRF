@@ -35,27 +35,6 @@ void DetectorConstruction::SetSourceDistance(G4double val)
 {
   fConfig->sourceDistance = val;
 }
-
-// void DetectorConstruction::SetDetectorDistance(G4double val)
-// {
-//   fConfig->detectorDistance = val;
-// }
-
-// void DetectorConstruction::SetNominalTakeoffDeg(G4double val)
-// {
-//   fConfig->nominalTakeoffDeg = val;
-// }
-
-// void DetectorConstruction::SetDetectorSpreadDeg(G4double val)
-// {
-//   fConfig->detectorSpreadDeg = val;
-// }
-
-// void DetectorConstruction::SetDetectorStepDeg(G4double val)
-// {
-//   fConfig->detectorStepDeg = val;
-// }
-
 void DetectorConstruction::SetDetectorDistance(G4double val)
 {
   fConfig->detectorDistance = val;

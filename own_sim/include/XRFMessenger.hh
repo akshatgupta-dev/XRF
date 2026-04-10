@@ -1,6 +1,6 @@
 #ifndef XRFMessenger_h
 #define XRFMessenger_h 1
-
+#include "G4RunManager.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UImessenger.hh"
