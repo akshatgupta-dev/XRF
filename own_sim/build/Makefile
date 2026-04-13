@@ -201,6 +201,30 @@ src/DetectorSD.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/sim.dir/build.make CMakeFiles/sim.dir/src/DetectorSD.cc.s
 .PHONY : src/DetectorSD.cc.s
 
+src/PMSensitiveDetector.o: src/PMSensitiveDetector.cc.o
+.PHONY : src/PMSensitiveDetector.o
+
+# target to build an object file
+src/PMSensitiveDetector.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sim.dir/build.make CMakeFiles/sim.dir/src/PMSensitiveDetector.cc.o
+.PHONY : src/PMSensitiveDetector.cc.o
+
+src/PMSensitiveDetector.i: src/PMSensitiveDetector.cc.i
+.PHONY : src/PMSensitiveDetector.i
+
+# target to preprocess a source file
+src/PMSensitiveDetector.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sim.dir/build.make CMakeFiles/sim.dir/src/PMSensitiveDetector.cc.i
+.PHONY : src/PMSensitiveDetector.cc.i
+
+src/PMSensitiveDetector.s: src/PMSensitiveDetector.cc.s
+.PHONY : src/PMSensitiveDetector.s
+
+# target to generate assembly for a file
+src/PMSensitiveDetector.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sim.dir/build.make CMakeFiles/sim.dir/src/PMSensitiveDetector.cc.s
+.PHONY : src/PMSensitiveDetector.cc.s
+
 src/PrimaryGeneratorAction.o: src/PrimaryGeneratorAction.cc.o
 .PHONY : src/PrimaryGeneratorAction.o
 
@@ -339,6 +363,9 @@ help:
 	@echo "... src/DetectorSD.o"
 	@echo "... src/DetectorSD.i"
 	@echo "... src/DetectorSD.s"
+	@echo "... src/PMSensitiveDetector.o"
+	@echo "... src/PMSensitiveDetector.i"
+	@echo "... src/PMSensitiveDetector.s"
 	@echo "... src/PrimaryGeneratorAction.o"
 	@echo "... src/PrimaryGeneratorAction.i"
 	@echo "... src/PrimaryGeneratorAction.s"

@@ -1,0 +1,29 @@
+/physics_lists/em/ReplacePhysics G4EmStandardPhysics_option4
+
+/xrf/setMaterial G4_Fe
+/xrf/setBeamEnergy 20 keV
+/xrf/setSourceDistance 50 mm
+/xrf/setDetectorDistance 20 mm
+/xrf/setIncidentAngle 45 deg
+/xrf/setNominalTakeoff 45 deg
+/xrf/setSpread 10 deg
+/xrf/setStep 1 deg
+/xrf/clearShieldLayers
+/xrf/setShieldEnabled false
+
+/run/initialize
+
+/process/em/fluo true
+/process/em/auger true
+/process/em/pixe true
+/process/em/fluoDirectory ANSTO
+/process/em/pixeXSmodel ECPSSR_ANSTO
+/process/em/deexcitationIgnoreCut true
+
+/run/setCut 0.001 mm
+
+# Example source: 50 keV photon beam hitting your sample
+/gps/particle gamma
+/gps/energy 50 keV
+/gps/number 1000
+/run/beamOn 200

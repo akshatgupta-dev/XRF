@@ -12,6 +12,9 @@
 #include "G4SystemOfUnits.hh"
 #include "G4RunManager.hh"
 #include "G4StateManager.hh"
+#include "G4VModularPhysicsList.hh"
+#include "G4EmStandardPhysics_option4.hh"
+#include "G4EmLivermorePhysics.hh"
 
 // 1. Fixed constructor signature to include DetectorConstruction*
 XRFMessenger::XRFMessenger(SimulationConfig* config,
@@ -99,11 +102,17 @@ XRFMessenger::XRFMessenger(SimulationConfig* config,
 
   fRunCmd = new G4UIcmdWithoutParameter("/xrf/run", this);
   fRunCmd->SetGuidance("Run the checkpointed XRF job with current config.");
+
+  fReplaceEmPhysicsCmd = new G4UIcmdWithAString("/physics_lists/em/ReplacePhysics", this);
+  fReplaceEmPhysicsCmd->SetGuidance("Replace EM physics constructor before /run/initialize.");
+  fReplaceEmPhysicsCmd->SetParameterName("physicsName", false);
+  fReplaceEmPhysicsCmd->SetCandidates("G4EmStandardPhysics_option4 G4EmLivermorePhysics");
 }
 
 XRFMessenger::~XRFMessenger()
 {
   delete fRunCmd;
+  delete fReplaceEmPhysicsCmd;
   
   // 3. Added missing deletions for the new commands to prevent memory leaks
   delete fSetSourceDistanceCmd;
@@ -245,6 +254,33 @@ void XRFMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   else if (command == fRunCmd) {
     if (fRunCallback) {
       fRunCallback();
+    }
+  }
+  else if (command == fReplaceEmPhysicsCmd) {
+    if (G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit) {
+      G4cerr << "/physics_lists/em/ReplacePhysics must be called before /run/initialize" << G4endl;
+      return;
+    }
+
+    auto* rm = G4RunManager::GetRunManager();
+    const auto* physicsListConst = rm ? dynamic_cast<const G4VModularPhysicsList*>(rm->GetUserPhysicsList()) : nullptr;
+    auto* physicsList = const_cast<G4VModularPhysicsList*>(physicsListConst);
+    if (!physicsList) {
+      G4cerr << "No modular physics list available for replacement." << G4endl;
+      return;
+    }
+
+    if (newValue == "G4EmStandardPhysics_option4") {
+      physicsList->ReplacePhysics(new G4EmStandardPhysics_option4());
+      G4cout << "EM physics replaced with G4EmStandardPhysics_option4" << G4endl;
+    }
+    else if (newValue == "G4EmLivermorePhysics") {
+      physicsList->ReplacePhysics(new G4EmLivermorePhysics());
+      G4cout << "EM physics replaced with G4EmLivermorePhysics" << G4endl;
+    }
+    else {
+      G4cerr << "Unsupported EM physics: " << newValue
+             << ". Supported: G4EmStandardPhysics_option4, G4EmLivermorePhysics" << G4endl;
     }
   }
 }

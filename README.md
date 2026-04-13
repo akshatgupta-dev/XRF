@@ -171,3 +171,25 @@ layer order is inner to outward
 
 # ========== EXECUTE ==========
 /xrf/run
+
+
+
+
+## **for the ansto library**
+
+/physics_lists/em/ReplacePhysics G4EmStandardPhysics_option4
+/run/initialize
+
+/process/em/fluo true
+/process/em/auger true
+/process/em/pixe true
+/process/em/fluoDirectory ansto
+/process/em/pixeXSmodel ECPSSR_ANSTO
+/process/em/deexcitationIgnoreCut true
+
+/run/setCut 0.001 mm
+
+# Example source: 50 keV photon beam hitting your sample
+/gps/particle gamma
+/gps/energy 50 keV
+/run/beamOn 100000

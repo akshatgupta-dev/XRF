@@ -1,5 +1,6 @@
 #include "DetectorConstruction.hh"
 #include "DetectorSD.hh"
+#include "PMSensitiveDetector.hh"
 #include "SimulationConfig.hh"
 
 #include "G4Box.hh"
@@ -706,7 +707,7 @@ const G4double pixelSize = GetDetectorPixelSize();
 
 void DetectorConstruction::ConstructSDandField()
 {
-  auto* sd = new DetectorSD("DetectorSD");
+  auto* sd = new PMSensitiveDetector("PMSensitiveDetector");
   G4SDManager::GetSDMpointer()->AddNewDetector(sd);
   SetSensitiveDetector(fDetectorLV, sd);
 }

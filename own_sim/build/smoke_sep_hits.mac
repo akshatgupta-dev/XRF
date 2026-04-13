@@ -1,0 +1,15 @@
+/run/numberOfThreads 15
+/xrf/setMaterial G4_Fe
+/xrf/setBeamEnergy 20 keV
+/xrf/setTotalEvents 1
+/xrf/setSourceDistance 50 mm
+/xrf/setDetectorDistance 20 mm
+/xrf/setIncidentAngle 45 deg
+/xrf/setNominalTakeoff 45 deg
+/xrf/setSpread 10 deg
+/xrf/setStep 1 deg
+/xrf/clearShieldLayers
+/xrf/setShieldEnabled true
+/run/initialize
+/gps/number 2000000
+/xrf/run

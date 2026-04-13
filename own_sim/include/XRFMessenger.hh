@@ -52,6 +52,7 @@ class XRFMessenger : public G4UImessenger
     G4UIcmdWithoutParameter* fClearShieldLayersCmd = nullptr;
 
     G4UIcmdWithoutParameter* fRunCmd = nullptr;
+    G4UIcmdWithAString* fReplaceEmPhysicsCmd = nullptr;
 
     // --- Added combo commands ---
     G4UIcmdWithAString* fComboSizesCmd = nullptr;
