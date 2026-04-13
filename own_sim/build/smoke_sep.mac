@@ -27,3 +27,4 @@
 /gps/energy 50 keV
 /gps/number 1000
 /run/beamOn 200
+/xrf/run
