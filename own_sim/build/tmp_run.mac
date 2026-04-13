@@ -1,13 +1,36 @@
-/control/verbose 1
-/run/verbose 1
-/xrf/setMaterial G4_Cu
+# ========== MATERIAL & BEAM ==========
+/xrf/setMaterial G4_Fe
 /xrf/setBeamEnergy 20 keV
-/xrf/setIncidentAngle 50 deg
-/xrf/setSourceDistance 60 mm
-/xrf/setDetectorDistance 30 mm
-/xrf/setNominalTakeoff 47 deg
-/xrf/setSpread 4 deg
-/xrf/setStep 2 deg
-/xrf/setTotalEvents 100000
-/xrf/setChunkSize 1000
+/run/numberOfThreads 1
+
+# ========== SIMULATION ==========
+/xrf/setTotalEvents 1
+
+/run/initialize
+/gps/number 1000000
+
+# ========== DETECTOR POSITIONING ==========
+/xrf/setSourceDistance 100 mm
+/xrf/setDetectorDistance 50 mm
+/xrf/setIncidentAngle 45 deg
+
+# ========== DETECTOR ANGLES ==========
+/xrf/setNominalTakeoff 35 deg
+/xrf/setSpread 10 deg
+/xrf/setStep 1 deg
+
+# ========== SHIELD SETUP ==========
+/xrf/clearShieldLayers
+/xrf/setShieldEnabled true
+/xrf/setShieldDetectorGap 2 mm
+/xrf/addShieldLayer G4_Pb 2 mm 1 mm
+/xrf/addShieldLayer G4_Sn 1 mm 0.5 mm
+
+# ========== DETECTOR COMBOS ==========
+/xrf/comboSizes 1 3 5
+/xrf/clearCustomCombos
+/xrf/addCombo custom_pair 0 2
+/xrf/addCombo custom_trio 1 3 5
+
+# ========== EXECUTE ==========
 /xrf/run

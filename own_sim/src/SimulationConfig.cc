@@ -37,6 +37,20 @@ std::string SimulationConfig::BuildRunLabel() const
       << "_Det"  << Sanitize(Format1(detectorDistance / mm)) << "mm"
       << "_Spr"  << Sanitize(Format1(detectorSpreadDeg)) << "deg"
       << "_Step" << Sanitize(Format1(detectorStepDeg)) << "deg";
+
+  if (!shield.enabled || shield.layers.empty()) {
+    oss << "_ShieldOff";
+  }
+  else {
+    oss << "_ShGap" << Sanitize(Format1(shield.detectorGap / mm)) << "mm";
+    for (const auto& layer : shield.layers) {
+        oss << "_" << Sanitize(layer.material)
+            << "x" << Sanitize(Format1(layer.thickness / mm)) << "mm";
+        if (layer.gapBefore > 0.0) {
+            oss << "g" << Sanitize(Format1(layer.gapBefore / mm)) << "mm";
+        }
+    }
+  }
   return oss.str();
 }
 

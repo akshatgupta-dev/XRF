@@ -3,6 +3,7 @@
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
+#include "G4GeneralParticleSource.hh"
 
 class DetectorConstruction;
 class SimulationConfig;
@@ -29,6 +30,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     SimulationConfig* fConfig = nullptr;
     G4ParticleGun* fGun = nullptr;
     G4double fBeamEnergy = 0.0;
+    G4GeneralParticleSource* fparticlegun = nullptr;
 };
 
 #endif

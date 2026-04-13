@@ -40,6 +40,16 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     void SetDetectorSpreadDeg(G4double val);
     void SetDetectorStepDeg(G4double val);
 
+
+
+    void SetShieldEnabled(G4bool val);
+void SetShieldDetectorGap(G4double val);
+void ClearShieldLayers();
+void AddShieldLayer(const std::string& material,
+                    G4double thickness,
+                    G4double gapBefore = 0.0);
+
+
     const std::string& GetSampleMaterial() const { return fConfig->sampleMaterial; }
     G4double GetIncidentAngleDeg() const { return fConfig->incidentAngleDeg; }
     G4double GetSourceDistance() const { return fConfig->sourceDistance; }

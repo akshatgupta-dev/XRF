@@ -15,6 +15,7 @@
 #include "G4UIExecutive.hh"
 #include "G4VisExecutive.hh"
 #include "G4ios.hh"
+#include "G4StateManager.hh"
 
 #include <algorithm>
 #include <string>
@@ -134,14 +135,24 @@ int main(int argc, char** argv)
 
   // Pass config pointer to ActionInitialization
   runManager->SetUserInitialization(new ActionInitialization(detector, &config));
-  runManager->Initialize();
 
-  auto* runAction = RunAction::Instance();
+  auto ensureInitialized = [&]() -> RunAction* {
+    if (G4StateManager::GetStateManager()->GetCurrentState() == G4State_PreInit) {
+      runManager->Initialize();
+    }
+    return RunAction::Instance();
+  };
 
   auto* xrfMessenger = new XRFMessenger(
     &config,
     detector,
     [&]() {
+      auto* runAction = ensureInitialized();
+      if (!runAction) {
+        G4cout << "RunAction instance not available." << G4endl;
+        return;
+      }
+
       runManager->ReinitializeGeometry(true);
       auto* gun = PrimaryGeneratorAction::Instance();
       if (gun) {
@@ -167,7 +178,13 @@ int main(int argc, char** argv)
 
     if (arg1 == "--sweep") {
       // Pass the config down to the sweep routine
+      auto* runAction = ensureInitialized();
+      if (!runAction) {
+        G4cout << "RunAction instance not available." << G4endl;
+      }
+      else {
       RunSweep(runManager, detector, runAction, config);
+      }
     }
     else {
       // Batch macro mode

@@ -46,6 +46,11 @@ class XRFMessenger : public G4UImessenger
 
     G4UIcmdWithADoubleAndUnit* fSetStepCmd = nullptr;
 
+    G4UIcmdWithABool* fSetShieldEnabledCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fSetShieldDetectorGapCmd = nullptr;
+    G4UIcmdWithAString* fAddShieldLayerCmd = nullptr;
+    G4UIcmdWithoutParameter* fClearShieldLayersCmd = nullptr;
+
     G4UIcmdWithoutParameter* fRunCmd = nullptr;
 
     // --- Added combo commands ---
