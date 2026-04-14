@@ -1,4 +1,5 @@
 .vscode/
+
 spek.ipynb
 
 build/output/
@@ -6,12 +7,18 @@ CMakeCache.txt
 CMakeFiles/
 Makefile
 cmake_install.cmake
-
 sim
 
 output/
 *.csv
+
 Software/
 XRF-simulation/
 min_xrf2/
 xrf-v0/
+
+build/extreme.mac
+build/run_one.mac
+build/smoke_sep_hits.mac
+build/one_big.mac
+build/smoke_sep_liv.mac
