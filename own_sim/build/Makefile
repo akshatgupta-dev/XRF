@@ -297,6 +297,30 @@ src/SimulationConfig.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/sim.dir/build.make CMakeFiles/sim.dir/src/SimulationConfig.cc.s
 .PHONY : src/SimulationConfig.cc.s
 
+src/SteppingAction.o: src/SteppingAction.cc.o
+.PHONY : src/SteppingAction.o
+
+# target to build an object file
+src/SteppingAction.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sim.dir/build.make CMakeFiles/sim.dir/src/SteppingAction.cc.o
+.PHONY : src/SteppingAction.cc.o
+
+src/SteppingAction.i: src/SteppingAction.cc.i
+.PHONY : src/SteppingAction.i
+
+# target to preprocess a source file
+src/SteppingAction.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sim.dir/build.make CMakeFiles/sim.dir/src/SteppingAction.cc.i
+.PHONY : src/SteppingAction.cc.i
+
+src/SteppingAction.s: src/SteppingAction.cc.s
+.PHONY : src/SteppingAction.s
+
+# target to generate assembly for a file
+src/SteppingAction.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sim.dir/build.make CMakeFiles/sim.dir/src/SteppingAction.cc.s
+.PHONY : src/SteppingAction.cc.s
+
 src/XRFMessenger.o: src/XRFMessenger.cc.o
 .PHONY : src/XRFMessenger.o
 
@@ -375,6 +399,9 @@ help:
 	@echo "... src/SimulationConfig.o"
 	@echo "... src/SimulationConfig.i"
 	@echo "... src/SimulationConfig.s"
+	@echo "... src/SteppingAction.o"
+	@echo "... src/SteppingAction.i"
+	@echo "... src/SteppingAction.s"
 	@echo "... src/XRFMessenger.o"
 	@echo "... src/XRFMessenger.i"
 	@echo "... src/XRFMessenger.s"

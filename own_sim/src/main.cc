@@ -110,10 +110,10 @@ int main(int argc, char** argv)
   SimulationConfig config;
   config.sampleMaterial    = "G4_Fe";
   config.beamEnergy        = 20.0 * keV;
-  config.incidentAngleDeg  = 45.0;
-  config.sourceDistance    = 50.0 * mm;
-  config.detectorDistance  = 150.0 * mm;
-  config.nominalTakeoffDeg = 45.0;
+  config.incidentAngleDeg  = 50.0;
+  config.sourceDistance    = 60.0 * mm;
+  config.detectorDistance  = 30.0 * mm;
+  config.nominalTakeoffDeg = 47.0;
   config.detectorSpreadDeg = 4.0;
   config.detectorStepDeg   = 2.0;
   config.totalEvents       = 10000;

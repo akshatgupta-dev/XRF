@@ -8,7 +8,8 @@
 #include "G4Run.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ios.hh" 
-
+#include "G4SystemOfUnits.hh"
+#include "G4ios.hh"
 #include <fstream>
 #include <iomanip>
 #include <sstream>
@@ -63,6 +64,7 @@ RunAction* RunAction::Instance()
 
 void RunAction::BeginOfRunAction(const G4Run*)
 {
+  ResetShieldLayerDebug();
   // Intentionally no reset here:
   // chunked BeamOn() calls should accumulate.
 }
@@ -79,6 +81,26 @@ void RunAction::SyncWithDetectorLayout()
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
+
+  G4cout << G4endl;
+G4cout << "==== Shield layer debug summary ====" << G4endl;
+
+if (fShieldLayerEntries.empty()) {
+    G4cout << "No shield layer entries recorded." << G4endl;
+} else {
+    for (const auto& kv : fShieldLayerEntries) {
+        const G4int layer = kv.first;
+        const G4long entries = kv.second;
+        const G4double edep = fShieldLayerEdep[layer];
+
+        G4cout << "Layer " << layer
+               << " : entries = " << entries
+               << ", edep = " << edep / keV << " keV"
+               << G4endl;
+    }
+}
+
+G4cout << "====================================" << G4endl;
   // No-op; checkpoint writing is triggered from main().
 }
 
@@ -197,6 +219,18 @@ std::vector<G4double> RunAction::SumSpectrum(const std::vector<G4int>& detIds) c
   }
 
   return summed;
+}
+
+void RunAction::ResetShieldLayerDebug()
+{
+    fShieldLayerEntries.clear();
+    fShieldLayerEdep.clear();
+}
+
+void RunAction::RecordShieldLayerEntry(G4int layer, G4double edep)
+{
+    fShieldLayerEntries[layer]++;
+    fShieldLayerEdep[layer] += edep;
 }
 
 void RunAction::ScorePhoton(G4int detId, G4double energy)

@@ -11,6 +11,7 @@ set(SOURCES
     ${PROJECT_SOURCE_DIR}/src/ActionInitialization.cc
     ${PROJECT_SOURCE_DIR}/src/DetectorConstruction.cc
     ${PROJECT_SOURCE_DIR}/src/DetectorSD.cc
+    ${PROJECT_SOURCE_DIR}/src/SteppingAction.cc
     ${PROJECT_SOURCE_DIR}/src/PMSensitiveDetector.cc
     ${PROJECT_SOURCE_DIR}/src/PrimaryGeneratorAction.cc
     ${PROJECT_SOURCE_DIR}/src/RunAction.cc

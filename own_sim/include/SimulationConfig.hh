@@ -29,7 +29,7 @@ struct ShieldConfig {
 
     ShieldConfig()
       : enabled(true),
-        detectorGap(10.0 * mm),
+        detectorGap(0.5 * mm),
         layers{
             ShieldLayerConfig("G4_Al", 0.25 * mm, 0.0 * mm),
             ShieldLayerConfig("G4_Cu", 0.25 * mm, 0.0 * mm),
@@ -49,8 +49,8 @@ struct SimulationConfig
   G4double detectorDistance  = 20.0 * mm;
 
   G4double nominalTakeoffDeg = 45.0;
-  G4double detectorSpreadDeg = 4.0;
-  G4double detectorStepDeg   = 2.0;
+  G4double detectorSpreadDeg = 8.0;
+  G4double detectorStepDeg   = 3.0;
 
   long long totalEvents      = 100000;
   int chunkSize              = 10000;

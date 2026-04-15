@@ -9,6 +9,7 @@
 #include "G4PVPlacement.hh"
 #include "G4RotationMatrix.hh"
 #include "G4SDManager.hh"
+#include "G4SubtractionSolid.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
@@ -269,248 +270,6 @@ const G4double pixelSize = GetDetectorPixelSize();
 //  inner Al (0.25 mm) -> Cu (0.25 mm) -> Sn (0.5 mm) -> Pb/W (2.0 mm) outward
 
 
-   
-//     // auto* heavyMat = nist->FindOrBuildMaterial("G4_W");   // tungsten
-//     auto* heavyMat = nist->FindOrBuildMaterial("G4_Pb");     // lead
-
-//     auto* snMat = nist->FindOrBuildMaterial("G4_Sn");
-//     auto* cuMat = nist->FindOrBuildMaterial("G4_Cu");
-//     auto* alMat = nist->FindOrBuildMaterial("G4_Al");
-
-//     const G4double pixelSize   = GetDetectorPixelSize();
-//     const G4double detHalfT    = 0.05 * mm;   // same as detector half thickness
-//     const G4double airGap      = 10.0 * mm;   // requested distance from detector to innermost layer
-
-//     const G4double capRadius   = GetDetectorCapRadius();
-
-//     const G4double innerHalfX  = capRadius + 0.5 * pixelSize + airGap;
-//     const G4double innerHalfY  = capRadius + 0.5 * pixelSize + airGap;
-
-//     const G4double innerBackGap = airGap;
-
-//     struct ShieldLayer {
-//         G4String name;
-//         G4Material* mat;
-//         G4double thickness;
-//         G4Colour colour;
-//     };
-
-//     std::vector<ShieldLayer> layers = {
-//         {"Al",    alMat,    0.25 * mm, G4Colour(0.80, 0.80, 0.85)},
-//         {"Cu",    cuMat,    0.25 * mm, G4Colour(0.80, 0.45, 0.20)},
-//         {"Sn",    snMat,    0.50 * mm, G4Colour(0.60, 0.60, 0.70)},
-//         {"Heavy", heavyMat, 2.00 * mm, G4Colour(0.30, 0.30, 0.35)}
-//     };
-
-//     const G4double D = fConfig->detectorDistance;
-//     G4ThreeVector detCenter(
-//         D * std::cos(theta0),
-//         0.0,
-//         D * std::sin(theta0)
-//     );
-
-//     const G4RotationMatrix shieldRot = placeRot;
-
-//     G4double currentHalfX = innerHalfX;
-//     G4double currentHalfY = innerHalfY;
-//     G4double currentBack  = innerBackGap;
-
-//     for (size_t i = 0; i < layers.size(); ++i) {
-//         const auto& layer = layers[i];
-//         const G4double t = layer.thickness;
-
-//         const G4double outerHalfX = currentHalfX + t;
-//         const G4double outerHalfY = currentHalfY + t;
-//         const G4double outerBack  = currentBack  + t;
-
-//         {
-//             auto* solid = new G4Box(
-//                 layer.name + "_Back_Solid",
-//                 outerHalfX,
-//                 outerHalfY,
-//                 t / 2.0
-//             );
-
-//             auto* logic = new G4LogicalVolume(
-//                 solid,
-//                 layer.mat,
-//                 layer.name + "_Back_LV"
-//             );
-
-//             auto* vis = new G4VisAttributes(layer.colour);
-//             vis->SetVisibility(true);
-//             logic->SetVisAttributes(vis);
-
-//             G4ThreeVector localPos(0, 0, -(detHalfT + currentBack + t / 2.0));
-//             G4ThreeVector globalPos = detCenter + rot0 * localPos;
-
-//             new G4PVPlacement(
-//                 new G4RotationMatrix(shieldRot),
-//                 globalPos,
-//                 logic,
-//                 layer.name + "_Back_PV",
-//                 logicWorld,
-//                 false,
-//                 static_cast<G4int>(100 + i * 10 + 0),
-//                 true
-//             );
-//         }
-
-//         {
-//             auto* solid = new G4Box(
-//                 layer.name + "_Left_Solid",
-//                 t / 2.0,
-//                 outerHalfY,
-//                 outerBack
-//             );
-
-//             auto* logic = new G4LogicalVolume(
-//                 solid,
-//                 layer.mat,
-//                 layer.name + "_Left_LV"
-//             );
-
-//             auto* vis = new G4VisAttributes(layer.colour);
-//             vis->SetVisibility(true);
-//             logic->SetVisAttributes(vis);
-
-//             G4ThreeVector localPos(
-//                 -(currentHalfX + t / 2.0),
-//                 0,
-//                 -(detHalfT + outerBack / 2.0)
-//             );
-//             G4ThreeVector globalPos = detCenter + rot0 * localPos;
-
-//             new G4PVPlacement(
-//                 new G4RotationMatrix(shieldRot),
-//                 globalPos,
-//                 logic,
-//                 layer.name + "_Left_PV",
-//                 logicWorld,
-//                 false,
-//                 static_cast<G4int>(100 + i * 10 + 1),
-//                 true
-//             );
-//         }
-
-//         {
-//             auto* solid = new G4Box(
-//                 layer.name + "_Right_Solid",
-//                 t / 2.0,
-//                 outerHalfY,
-//                 outerBack
-//             );
-
-//             auto* logic = new G4LogicalVolume(
-//                 solid,
-//                 layer.mat,
-//                 layer.name + "_Right_LV"
-//             );
-
-//             auto* vis = new G4VisAttributes(layer.colour);
-//             vis->SetVisibility(true);
-//             logic->SetVisAttributes(vis);
-
-//             G4ThreeVector localPos(
-//                 +(currentHalfX + t / 2.0),
-//                 0,
-//                 -(detHalfT + outerBack / 2.0)
-//             );
-//             G4ThreeVector globalPos = detCenter + rot0 * localPos;
-
-//             new G4PVPlacement(
-//                 new G4RotationMatrix(shieldRot),
-//                 globalPos,
-//                 logic,
-//                 layer.name + "_Right_PV",
-//                 logicWorld,
-//                 false,
-//                 static_cast<G4int>(100 + i * 10 + 2),
-//                 true
-//             );
-//         }
-
-//         {
-//             auto* solid = new G4Box(
-//                 layer.name + "_Bottom_Solid",
-//                 currentHalfX,
-//                 t / 2.0,
-//                 outerBack
-//             );
-
-//             auto* logic = new G4LogicalVolume(
-//                 solid,
-//                 layer.mat,
-//                 layer.name + "_Bottom_LV"
-//             );
-
-//             auto* vis = new G4VisAttributes(layer.colour);
-//             vis->SetVisibility(true);
-//             logic->SetVisAttributes(vis);
-
-//             G4ThreeVector localPos(
-//                 0,
-//                 -(currentHalfY + t / 2.0),
-//                 -(detHalfT + outerBack / 2.0)
-//             );
-//             G4ThreeVector globalPos = detCenter + rot0 * localPos;
-
-//             new G4PVPlacement(
-//                 new G4RotationMatrix(shieldRot),
-//                 globalPos,
-//                 logic,
-//                 layer.name + "_Bottom_PV",
-//                 logicWorld,
-//                 false,
-//                 static_cast<G4int>(100 + i * 10 + 3),
-//                 true
-//             );
-//         }
-
-//         {
-//             auto* solid = new G4Box(
-//                 layer.name + "_Top_Solid",
-//                 currentHalfX,
-//                 t / 2.0,
-//                 outerBack
-//             );
-
-//             auto* logic = new G4LogicalVolume(
-//                 solid,
-//                 layer.mat,
-//                 layer.name + "_Top_LV"
-//             );
-
-//             auto* vis = new G4VisAttributes(layer.colour);
-//             vis->SetVisibility(true);
-//             logic->SetVisAttributes(vis);
-
-//             G4ThreeVector localPos(
-//                 0,
-//                 +(currentHalfY + t / 2.0),
-//                 -(detHalfT + outerBack / 2.0)
-//             );
-//             G4ThreeVector globalPos = detCenter + rot0 * localPos;
-
-//             new G4PVPlacement(
-//                 new G4RotationMatrix(shieldRot),
-//                 globalPos,
-//                 logic,
-//                 layer.name + "_Top_PV",
-//                 logicWorld,
-//                 false,
-//                 static_cast<G4int>(100 + i * 10 + 4),
-//                 true
-//             );
-//         }
-
-//         currentHalfX = outerHalfX;
-//         currentHalfY = outerHalfY;
-//         currentBack  = outerBack;
-//     }
-// }
-
-//   return physWorld;
 
   
     const auto& shield = fConfig->shield;
@@ -547,160 +306,77 @@ const G4double pixelSize = GetDetectorPixelSize();
         G4double currentBack  = detectorGap;
 
         for (size_t i = 0; i < shield.layers.size(); ++i) {
-            const auto& layer = shield.layers[i];
+          const auto& layer = shield.layers[i];
+          G4cout << "Building shield layer " << i
+               << " material=" << layer.material
+               << " thickness=" << layer.thickness / mm << " mm"
+               << " gapBefore=" << layer.gapBefore / mm << " mm"
+               << G4endl;
 
-            auto* mat = nist->FindOrBuildMaterial(layer.material);
-            if (!mat) {
-                G4cout << "WARNING: shield material not found: "
-                       << layer.material << G4endl;
-                continue;
-            }
+          auto* mat = nist->FindOrBuildMaterial(layer.material);
+          if (!mat) {
+            G4cout << "WARNING: shield material not found: "
+                 << layer.material << G4endl;
+            continue;
+          }
 
-            const G4double gap = std::max(0.0, layer.gapBefore);
-            const G4double t   = layer.thickness;
+          const G4double gap = std::max(0.0, layer.gapBefore);
+          const G4double t   = layer.thickness;
 
-            currentHalfX += gap;
-            currentHalfY += gap;
-            currentBack  += gap;
+          currentHalfX += gap;
+          currentHalfY += gap;
+          currentBack  += gap;
 
-            const G4double outerHalfX = currentHalfX + t;
-            const G4double outerHalfY = currentHalfY + t;
-            const G4double outerBack  = currentBack  + t;
+          const G4double outerHalfX = currentHalfX + t;
+          const G4double outerHalfY = currentHalfY + t;
+          const G4double outerBack  = currentBack  + t;
 
-            const G4String base = "Shield_" + std::to_string(i);
+          const G4String base = "Shield_" + std::to_string(i);
 
-            // back
-            {
-                auto* solid = new G4Box(base + "_Back_Solid",
-                                        outerHalfX, outerHalfY, t / 2.0);
-                auto* logic = new G4LogicalVolume(solid, mat, base + "_Back_LV");
-                auto* vis   = new G4VisAttributes(colourFor(layer.material));
-                vis->SetVisibility(true);
-                logic->SetVisAttributes(vis);
+          auto* outerSolid = new G4Box(base + "_Outer_Solid",
+                         outerHalfX,
+                         outerHalfY,
+                         (currentBack + t) / 2.0);
+          auto* innerSolid = new G4Box(base + "_Inner_Solid",
+                         currentHalfX,
+                         currentHalfY,
+                         currentBack / 2.0);
 
-                G4ThreeVector localPos(0, 0, -(detHalfT + currentBack + t / 2.0));
-                G4ThreeVector globalPos = detCenter + rot0 * localPos;
+          auto* shieldSolid = new G4SubtractionSolid(
+            base + "_Shell_Solid",
+            outerSolid,
+            innerSolid,
+            nullptr,
+            G4ThreeVector(0.0, 0.0, t / 2.0)
+          );
 
-                new G4PVPlacement(new G4RotationMatrix(shieldRot),
-                                  globalPos,
-                                  logic,
-                                  base + "_Back_PV",
-                                  logicWorld,
-                                  false,
-                                  static_cast<G4int>(1000 + i * 10 + 0),
-                                  true);
-            }
+          auto* logic = new G4LogicalVolume(shieldSolid, mat, base + "_LV");
+          auto* vis   = new G4VisAttributes(colourFor(layer.material));
+          vis->SetVisibility(true);
+          logic->SetVisAttributes(vis);
 
-            // left
-            {
-                auto* solid = new G4Box(base + "_Left_Solid",
-                                        t / 2.0, outerHalfY, outerBack);
-                auto* logic = new G4LogicalVolume(solid, mat, base + "_Left_LV");
-                auto* vis   = new G4VisAttributes(colourFor(layer.material));
-                vis->SetVisibility(true);
-                logic->SetVisAttributes(vis);
+          G4ThreeVector localPos(
+            0.0,
+            0.0,
+            -(detHalfT + (currentBack + t) / 2.0)
+          );
+          G4ThreeVector globalPos = detCenter + rot0 * localPos;
 
-                G4ThreeVector localPos(
-                    -(currentHalfX + t / 2.0),
-                    0,
-                    -(detHalfT + outerBack / 2.0)
-                );
-                G4ThreeVector globalPos = detCenter + rot0 * localPos;
+          new G4PVPlacement(new G4RotationMatrix(shieldRot),
+                    globalPos,
+                    logic,
+                    base + "_PV",
+                    logicWorld,
+                    false,
+                    static_cast<G4int>(1000 + i),
+                    true);
 
-                new G4PVPlacement(new G4RotationMatrix(shieldRot),
-                                  globalPos,
-                                  logic,
-                                  base + "_Left_PV",
-                                  logicWorld,
-                                  false,
-                                  static_cast<G4int>(1000 + i * 10 + 1),
-                                  true);
-            }
+          currentHalfX = outerHalfX;
+          currentHalfY = outerHalfY;
+          currentBack  = outerBack;
+        }
 
-            // right
-            {
-                auto* solid = new G4Box(base + "_Right_Solid",
-                                        t / 2.0, outerHalfY, outerBack);
-                auto* logic = new G4LogicalVolume(solid, mat, base + "_Right_LV");
-                auto* vis   = new G4VisAttributes(colourFor(layer.material));
-                vis->SetVisibility(true);
-                logic->SetVisAttributes(vis);
-
-                G4ThreeVector localPos(
-                    +(currentHalfX + t / 2.0),
-                    0,
-                    -(detHalfT + outerBack / 2.0)
-                );
-                G4ThreeVector globalPos = detCenter + rot0 * localPos;
-
-                new G4PVPlacement(new G4RotationMatrix(shieldRot),
-                                  globalPos,
-                                  logic,
-                                  base + "_Right_PV",
-                                  logicWorld,
-                                  false,
-                                  static_cast<G4int>(1000 + i * 10 + 2),
-                                  true);
-            }
-
-            // bottom
-            {
-                auto* solid = new G4Box(base + "_Bottom_Solid",
-                                        currentHalfX, t / 2.0, outerBack);
-                auto* logic = new G4LogicalVolume(solid, mat, base + "_Bottom_LV");
-                auto* vis   = new G4VisAttributes(colourFor(layer.material));
-                vis->SetVisibility(true);
-                logic->SetVisAttributes(vis);
-
-                G4ThreeVector localPos(
-                    0,
-                    -(currentHalfY + t / 2.0),
-                    -(detHalfT + outerBack / 2.0)
-                );
-                G4ThreeVector globalPos = detCenter + rot0 * localPos;
-
-                new G4PVPlacement(new G4RotationMatrix(shieldRot),
-                                  globalPos,
-                                  logic,
-                                  base + "_Bottom_PV",
-                                  logicWorld,
-                                  false,
-                                  static_cast<G4int>(1000 + i * 10 + 3),
-                                  true);
-            }
-
-            // top
-            {
-                auto* solid = new G4Box(base + "_Top_Solid",
-                                        currentHalfX, t / 2.0, outerBack);
-                auto* logic = new G4LogicalVolume(solid, mat, base + "_Top_LV");
-                auto* vis   = new G4VisAttributes(colourFor(layer.material));
-                vis->SetVisibility(true);
-                logic->SetVisAttributes(vis);
-
-                G4ThreeVector localPos(
-                    0,
-                    +(currentHalfY + t / 2.0),
-                    -(detHalfT + outerBack / 2.0)
-                );
-                G4ThreeVector globalPos = detCenter + rot0 * localPos;
-
-                new G4PVPlacement(new G4RotationMatrix(shieldRot),
-                                  globalPos,
-                                  logic,
-                                  base + "_Top_PV",
-                                  logicWorld,
-                                  false,
-                                  static_cast<G4int>(1000 + i * 10 + 4),
-                                  true);
-            }
-
-            currentHalfX = outerHalfX;
-            currentHalfY = outerHalfY;
-            currentBack  = outerBack;
-        
-    }
-  }
+      }
 
   return physWorld;
 }

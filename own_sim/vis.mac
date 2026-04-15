@@ -1,7 +1,22 @@
+/control/verbose 2
+/run/verbose 1
+/event/verbose 0
+/tracking/verbose 0
+/run/initialize
 /vis/open OGL
 /vis/drawVolume
-/vis/viewer/set/style surface
+
+# hide world if still visible
+/vis/geometry/set/visibility World 0 false
+
+# make objects easier to inspect
+/vis/viewer/set/style wireframe
+/vis/scene/add/axes 0 0 0 30 mm
 /vis/viewer/set/autoRefresh true
-/vis/scene/add/axes 0 0 0 10 cm
-/run/initialize
-/vis/viewer/flush
+/vis/viewer/set/viewpointThetaPhi 70 30
+/vis/viewer/zoom 20
+
+# trajectories
+/tracking/storeTrajectory 1
+/vis/scene/add/trajectories smooth
+/vis/scene/endOfEventAction accumulate 10

@@ -4,7 +4,9 @@
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
+
 #include <string>
+#include <map>
 #include <vector>
 
 class DetectorConstruction;
@@ -30,6 +32,8 @@ class RunAction : public G4UserRunAction
     void ResetAll();
     void ScorePhoton(G4int detId, G4double energy);
     void WriteCheckpoint(long long cumulativeEvents) const;
+    void ResetShieldLayerDebug();
+    void RecordShieldLayerEntry(G4int layer, G4double edep);
     void SyncWithDetectorLayout();
 
   private:
@@ -40,7 +44,7 @@ class RunAction : public G4UserRunAction
 
     G4int fNBins = 2048;
     G4double fEmin = 0.0;
-    G4double fEmax = 50.0*keV;
+    G4double fEmax = 50.0 * keV;
     G4double fBinWidth = 0.0;
 
     std::vector<std::vector<G4double>> fSpectra;
@@ -50,6 +54,9 @@ class RunAction : public G4UserRunAction
     std::vector<G4double> SumSpectrum(const std::vector<G4int>& detIds) const;
     void WriteComboCheckpoint(long long cumulativeEvents) const;
     std::string BuildComboFilename(long long cumulativeEvents) const;
+
+    std::map<G4int, G4long> fShieldLayerEntries;
+    std::map<G4int, G4double> fShieldLayerEdep;
 };
 
 #endif

@@ -7,8 +7,8 @@
 /xrf/setSourceDistance 60 mm
 /xrf/setDetectorDistance 30 mm
 /xrf/setNominalTakeoff 47 deg
-/xrf/setSpread 6 deg
-/xrf/setStep 2 deg
+/xrf/setSpread 8 deg
+/xrf/setStep 1 deg
 /xrf/setTotalEvents 10000
 /xrf/setChunkSize 1000
 

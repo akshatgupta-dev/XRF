@@ -2,6 +2,7 @@
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
+#include "SteppingAction.hh"
 #include "SimulationConfig.hh"       // <-- Added to include the config structure
 
 // Updated constructor to take the config pointer
@@ -13,17 +14,15 @@ ActionInitialization::ActionInitialization(const DetectorConstruction* det,
 {
 }
 
-void ActionInitialization::BuildForMaster() const
-{
-  // Pass the config pointer to RunAction
-  SetUserAction(new RunAction(fDet, fConfig));
-}
-
 void ActionInitialization::Build() const
 {
-  // Pass the config pointer to both RunAction and PrimaryGeneratorAction
+  auto* runAction = new RunAction(fDet, fConfig);
+  SetUserAction(runAction);
+  SetUserAction(new PrimaryGeneratorAction(fDet, fConfig));
+  SetUserAction(new SteppingAction(runAction));
+}
+
+void ActionInitialization::BuildForMaster() const
+{
   SetUserAction(new RunAction(fDet, fConfig));
-  
-  // Change to "new PMPrimaryGenerator(fDet, fConfig)" if that is your class name
-  SetUserAction(new PrimaryGeneratorAction(fDet, fConfig)); 
 }

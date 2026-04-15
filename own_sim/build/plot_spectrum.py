@@ -90,7 +90,8 @@ def main():
         raise FileNotFoundError(f"CSV file not found: {csv_path}")
 
     x, y = load_spectrum(csv_path)
-
+    print("Max x (keV):", max(x))
+    print("Max y (counts):", max(y))
     out_path = Path(args.output).expanduser().resolve() if args.output else csv_path.with_name(csv_path.stem + "_spectrum.png")
 
     plt.figure(figsize=(10, 5))

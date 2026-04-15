@@ -5,11 +5,11 @@
 /xrf/setBeamEnergy 20 keV
 /xrf/setIncidentAngle 50 deg
 /xrf/setSourceDistance 60 mm
-/xrf/setDetectorDistance 150 mm
+/xrf/setDetectorDistance 30 mm
 /xrf/setNominalTakeoff 47 deg
-/xrf/setSpread 4 deg
+/xrf/setSpread 8 deg
 /xrf/setStep 2 deg
-/xrf/setTotalEvents 10000
-/xrf/setChunkSize 1000
+/xrf/setTotalEvents 100000
+/xrf/setChunkSize 100000
 
 /xrf/run
