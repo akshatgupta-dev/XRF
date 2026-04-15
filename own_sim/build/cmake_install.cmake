@@ -1,4 +1,4 @@
-# Install script for directory: /home/akshatgg/ROBOAI/XRF/own_sim
+# Install script for directory: /home/minmyatngwe/geant_4_xrf/XRF/own_sim
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/akshatgg/ROBOAI/XRF/own_sim/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/minmyatngwe/geant_4_xrf/XRF/own_sim/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -65,9 +65,15 @@ void DetectorConstruction::SetDetectorStepDeg(G4double val)
 G4double DetectorConstruction::GetDetectorCapRadius() const
 {
   const G4double D = fConfig->detectorDistance;
-  const G4double spreadDeg = std::max(0.0, fConfig->detectorSpreadDeg);
-  return D * std::tan(spreadDeg * deg);
+  const G4double spreadDeg = std::max(0.0, fConfig->detectorSpreadDeg)*deg;
+  G4double rest_angle=(180-(90+spreadDeg))*deg ;
+  
+  G4double radius=std::sin(spreadDeg)*D/std::sin(rest_angle);
+
+  return radius;
+
 }
+
 
 G4double DetectorConstruction::GetDetectorPixelSize() const
 {
@@ -153,7 +159,6 @@ void DetectorConstruction::RebuildDetectorElements()
             elem.width = pixelSize;
             elem.height = pixelSize;
             elem.enabled = true;
-
             fDetectorElements.push_back(elem);
         }
     }
@@ -176,8 +181,7 @@ void DetectorConstruction::RebuildDetectorElements()
 }
 
 G4double DetectorConstruction::ComputeThetaDeg(const G4ThreeVector& p) const {
-    const G4double rho = std::sqrt(p.x()*p.x() + p.y()*p.y());
-    return std::atan2(p.z(), rho) / deg;
+    return std::atan2(p.z(), p.x()) / deg;
 }
 
 G4double DetectorConstruction::ComputePhiDeg(const G4ThreeVector& p) const {
