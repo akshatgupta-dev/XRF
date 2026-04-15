@@ -2,12 +2,13 @@
 /run/verbose 1
 /event/verbose 0
 /tracking/verbose 0
+/det/setWorldMaterial G4_WATER
 /run/initialize
 /vis/open OGL
 /vis/drawVolume
 
 # hide world if still visible
-/vis/geometry/set/visibility World 0 false
+/vis/geometry/set/visibility World 0 true
 
 # make objects easier to inspect
 /vis/viewer/set/style wireframe

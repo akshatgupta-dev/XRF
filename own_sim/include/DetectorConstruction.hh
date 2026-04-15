@@ -5,6 +5,8 @@
 #include "G4ThreeVector.hh"
 #include "SimulationConfig.hh"
 #include "globals.hh"
+#include "G4GenericMessenger.hh"
+
 
 #include <string>
 #include <vector>
@@ -79,13 +81,16 @@ void AddShieldLayer(const std::string& material,
     G4double ComputeThetaDeg(const G4ThreeVector& p) const;
     G4double ComputePhiDeg(const G4ThreeVector& p) const;
 
-    // NEW: keep geometry formulas consistent in one place
     G4double GetDetectorCapRadius() const;
     G4double GetDetectorPixelSize() const;
+    void SetWorldMaterial(const G4String &name);
 
     SimulationConfig* fConfig = nullptr;
     std::vector<DetectorElement> fDetectorElements;
     G4LogicalVolume* fDetectorLV = nullptr;
+    G4GenericMessenger *fMessenger=nullptr;
+    G4String fworldmaterialname="G4_Air";
+
 };
 
 #endif

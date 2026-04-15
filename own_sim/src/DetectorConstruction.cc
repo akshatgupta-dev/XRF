@@ -13,6 +13,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
+#include "G4RunManager.hh"
 
 #include <algorithm>
 #include <cmath>
@@ -22,6 +23,15 @@ DetectorConstruction::DetectorConstruction(SimulationConfig* config)
   : fConfig(config)
 {
   RebuildDetectorElements();
+  fMessenger=new G4GenericMessenger(this,"/det/","Detector control");
+  fMessenger->DeclareMethod("setWorldMaterial",&DetectorConstruction::SetWorldMaterial,"Set world material by NIST name");
+
+}
+
+void DetectorConstruction::SetWorldMaterial(const G4String &name){
+  fworldmaterialname=name;
+  G4RunManager::GetRunManager()->ReinitializeGeometry(true);
+
 }
 
 // Setters now update fConfig directly without updating the old angle list
@@ -207,11 +217,14 @@ G4ThreeVector DetectorConstruction::GetSourceDirection() const
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
   RebuildDetectorElements();
+
   
   auto* nist = G4NistManager::Instance();
 
-  auto* worldMat  = nist->FindOrBuildMaterial("G4_Galactic");
-  
+  auto* worldMat  = nist->FindOrBuildMaterial(fworldmaterialname);
+  G4cout << "Requested world material = " << fworldmaterialname << G4endl;
+G4cout << "Built world material = "
+       << (worldMat ? worldMat->GetName() : "NULL") << G4endl;
   // Reading sample material from fConfig
   auto* sampleMat = nist->FindOrBuildMaterial(fConfig->sampleMaterial);
   auto* detMat    = nist->FindOrBuildMaterial("G4_Si");
