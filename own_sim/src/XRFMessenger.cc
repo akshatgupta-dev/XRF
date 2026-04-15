@@ -32,6 +32,9 @@ XRFMessenger::XRFMessenger(SimulationConfig* config,
   fSetMaterialCmd->SetGuidance("Set sample material, e.g. G4_Fe.");
   fSetMaterialCmd->SetParameterName("material", false);
 
+  fSetMaterialCompositionCmd = new G4UIcmdWithAString("/xrf/setMaterialComposition", this);
+  fSetMaterialCompositionCmd->SetGuidance("Set a custom sample material: <name> <density> <unit> <element> <fraction> ... . Fractions are normalized.");
+
   fComboSizesCmd = new G4UIcmdWithAString("/xrf/comboSizes", this);
   fComboSizesCmd->SetGuidance("Set automatic combo sizes, e.g. '1 3 5 9'");
 
@@ -113,6 +116,7 @@ XRFMessenger::~XRFMessenger()
 {
   delete fRunCmd;
   delete fReplaceEmPhysicsCmd;
+  delete fSetMaterialCompositionCmd;
   
   // 3. Added missing deletions for the new commands to prevent memory leaks
   delete fSetSourceDistanceCmd;
@@ -146,6 +150,49 @@ void XRFMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 
   if (command == fSetMaterialCmd) {
     fDetector->SetSampleMaterial(newValue);
+    refreshGeometry();
+  }
+  else if (command == fSetMaterialCompositionCmd) {
+    std::istringstream iss(newValue);
+
+    std::string name;
+    G4double densityValue = 0.0;
+    std::string densityUnit;
+
+    if (!(iss >> name >> densityValue >> densityUnit)) {
+      G4cerr << "Usage: /xrf/setMaterialComposition <name> <density> <unit> <element> <fraction> ..." << G4endl;
+      return;
+    }
+
+    const G4double density = densityValue * G4UIcommand::ValueOf(densityUnit.c_str());
+    if (density <= 0.0) {
+      G4cerr << "Custom sample material density must be positive." << G4endl;
+      return;
+    }
+
+    std::vector<MaterialComponent> components;
+    while (true) {
+      std::string element;
+      G4double fraction = 0.0;
+
+      if (!(iss >> element)) {
+        break;
+      }
+      if (!(iss >> fraction)) {
+        G4cerr << "Each element symbol must be followed by a fraction value." << G4endl;
+        return;
+      }
+
+      components.emplace_back(element, fraction);
+    }
+
+    if (components.empty()) {
+      G4cerr << "Custom sample material requires at least one element/fraction pair." << G4endl;
+      return;
+    }
+
+    fDetector->SetCustomSampleMaterial(name, density, components);
+    refreshGeometry();
   }
   else if (command == fSetBeamEnergyCmd) {
     fConfig->beamEnergy = fSetBeamEnergyCmd->GetNewDoubleValue(newValue);

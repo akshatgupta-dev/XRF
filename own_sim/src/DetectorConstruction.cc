@@ -4,7 +4,9 @@
 #include "SimulationConfig.hh"
 
 #include "G4Box.hh"
+#include "G4Element.hh"
 #include "G4LogicalVolume.hh"
+#include "G4Material.hh"
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 #include "G4RotationMatrix.hh"
@@ -38,6 +40,57 @@ void DetectorConstruction::SetWorldMaterial(const G4String &name){
 void DetectorConstruction::SetSampleMaterial(const std::string& name)
 {
   fConfig->sampleMaterial = name;
+  fConfig->sampleMaterialIsCustom = false;
+  fConfig->sampleMaterialDensity = 0.0;
+  fConfig->sampleMaterialComponents.clear();
+}
+
+void DetectorConstruction::SetCustomSampleMaterial(const std::string& name,
+                                                   G4double density,
+                                                   const std::vector<MaterialComponent>& components)
+{
+  if (name.empty() || density <= 0.0 || components.empty()) {
+    G4cerr << "Invalid custom sample material configuration." << G4endl;
+    return;
+  }
+
+  std::vector<MaterialComponent> canonical = components;
+  std::sort(canonical.begin(), canonical.end(), [](const MaterialComponent& a, const MaterialComponent& b) {
+    return a.element < b.element;
+  });
+
+  std::vector<MaterialComponent> merged;
+  for (const auto& component : canonical) {
+    if (component.element.empty() || component.fraction <= 0.0) {
+      continue;
+    }
+
+    if (!merged.empty() && merged.back().element == component.element) {
+      merged.back().fraction += component.fraction;
+    }
+    else {
+      merged.push_back(component);
+    }
+  }
+
+  G4double totalFraction = 0.0;
+  for (const auto& component : merged) {
+    totalFraction += component.fraction;
+  }
+
+  if (merged.empty() || totalFraction <= 0.0) {
+    G4cerr << "Custom sample material must contain at least one positive component." << G4endl;
+    return;
+  }
+
+  for (auto& component : merged) {
+    component.fraction /= totalFraction;
+  }
+
+  fConfig->sampleMaterial = name;
+  fConfig->sampleMaterialIsCustom = true;
+  fConfig->sampleMaterialDensity = density;
+  fConfig->sampleMaterialComponents = merged;
 }
 
 void DetectorConstruction::SetIncidentAngleDeg(G4double val)
@@ -221,12 +274,42 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   
   auto* nist = G4NistManager::Instance();
 
-  auto* worldMat  = nist->FindOrBuildMaterial(fworldmaterialname);
-  G4cout << "Requested world material = " << fworldmaterialname << G4endl;
-G4cout << "Built world material = "
-       << (worldMat ? worldMat->GetName() : "NULL") << G4endl;
-  // Reading sample material from fConfig
-  auto* sampleMat = nist->FindOrBuildMaterial(fConfig->sampleMaterial);
+  auto* worldMat  = nist->FindOrBuildMaterial("G4_Galactic");
+
+  auto* sampleMat = static_cast<G4Material*>(nullptr);
+  if (fConfig->sampleMaterialIsCustom && !fConfig->sampleMaterialComponents.empty()) {
+    const auto materialTag = fConfig->BuildSampleMaterialTag();
+    sampleMat = G4Material::GetMaterial(materialTag, false);
+
+    if (!sampleMat) {
+      sampleMat = new G4Material(materialTag,
+                                 fConfig->sampleMaterialDensity,
+                                 static_cast<G4int>(fConfig->sampleMaterialComponents.size()));
+
+      for (const auto& component : fConfig->sampleMaterialComponents) {
+        auto* element = nist->FindOrBuildElement(component.element);
+        if (!element) {
+          G4cerr << "Unknown element in custom sample material: "
+                 << component.element << G4endl;
+          continue;
+        }
+
+        sampleMat->AddElement(element, component.fraction);
+      }
+
+      G4cout << "Using custom sample material: " << materialTag << G4endl;
+    }
+  }
+
+  if (!sampleMat) {
+    sampleMat = nist->FindOrBuildMaterial(fConfig->sampleMaterial);
+  }
+
+  if (!sampleMat) {
+    G4cerr << "Could not resolve sample material '" << fConfig->sampleMaterial
+           << "'; falling back to G4_Fe." << G4endl;
+    sampleMat = nist->FindOrBuildMaterial("G4_Fe");
+  }
   auto* detMat    = nist->FindOrBuildMaterial("G4_Si");
 
   // World

@@ -35,6 +35,9 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     void ConstructSDandField() override;
 
     void SetSampleMaterial(const std::string& name);
+    void SetCustomSampleMaterial(const std::string& name,
+                   G4double density,
+                   const std::vector<MaterialComponent>& components);
     void SetIncidentAngleDeg(G4double val);
     void SetSourceDistance(G4double val);
     void SetDetectorDistance(G4double val);

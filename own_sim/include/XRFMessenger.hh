@@ -34,6 +34,7 @@ class XRFMessenger : public G4UImessenger
     G4UIdirectory* fXrfDir = nullptr;
 
     G4UIcmdWithAString* fSetMaterialCmd = nullptr;
+    G4UIcmdWithAString* fSetMaterialCompositionCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* fSetBeamEnergyCmd = nullptr;
     G4UIcmdWithAString* fSetTotalEventsCmd = nullptr;
     G4UIcmdWithAnInteger* fSetChunkSizeCmd = nullptr;

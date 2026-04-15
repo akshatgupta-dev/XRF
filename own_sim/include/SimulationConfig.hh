@@ -11,6 +11,14 @@ struct NamedComboConfig {
   std::vector<G4int> detIds;
 };
 
+struct MaterialComponent {
+    std::string element;
+    G4double fraction;
+
+    MaterialComponent(const std::string& sym = "", G4double frac = 0.0)
+      : element(sym), fraction(frac) {}
+};
+
 struct ShieldLayerConfig {
     std::string material;
     G4double thickness;
@@ -41,6 +49,9 @@ struct ShieldConfig {
 struct SimulationConfig
 {
   std::string sampleMaterial = "G4_Fe";
+  G4bool sampleMaterialIsCustom = false;
+  G4double sampleMaterialDensity = 0.0;
+  std::vector<MaterialComponent> sampleMaterialComponents;
 
   G4double beamEnergy        = 20.0 * keV;
 
@@ -59,6 +70,7 @@ std::vector<NamedComboConfig> customCombos;
 
   ShieldConfig shield;
   
+  std::string BuildSampleMaterialTag() const;
   std::string BuildRunLabel() const;
   std::string BuildCheckpointFilename(long long processedEvents) const;
 };

@@ -24,12 +24,38 @@ namespace
     oss << std::fixed << std::setprecision(1) << v;
     return oss.str();
   }
+
+  std::string Format2(double v)
+  {
+    std::ostringstream oss;
+    oss << std::fixed << std::setprecision(2) << v;
+    return oss.str();
+  }
+}
+
+std::string SimulationConfig::BuildSampleMaterialTag() const
+{
+  if (!sampleMaterialIsCustom || sampleMaterialComponents.empty()) {
+    return Sanitize(sampleMaterial);
+  }
+
+  std::ostringstream oss;
+  oss << Sanitize(sampleMaterial)
+      << "_mix"
+      << "_rho" << Sanitize(Format2(sampleMaterialDensity / (g/cm3))) << "gcm3";
+
+  for (const auto& component : sampleMaterialComponents) {
+    oss << "_" << Sanitize(component.element)
+        << Sanitize(Format2(component.fraction * 100.0)) << "pct";
+  }
+
+  return oss.str();
 }
 
 std::string SimulationConfig::BuildRunLabel() const
 {
   std::ostringstream oss;
-  oss << Sanitize(sampleMaterial)
+  oss << BuildSampleMaterialTag()
       << "_E"    << Sanitize(Format1(beamEnergy / keV)) << "keV"
       << "_In"   << Sanitize(Format1(incidentAngleDeg)) << "deg"
       << "_Src"  << Sanitize(Format1(sourceDistance / mm)) << "mm"
@@ -57,7 +83,7 @@ std::string SimulationConfig::BuildRunLabel() const
 std::string SimulationConfig::BuildCheckpointFilename(long long processedEvents) const
 {
   std::ostringstream oss;
-  oss << "output/" << sampleMaterial << "/"
+  oss << "output/" << BuildSampleMaterialTag() << "/"
       << BuildRunLabel() << "_N" << processedEvents << ".csv";
   return oss.str();
 }
