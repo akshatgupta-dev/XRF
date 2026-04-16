@@ -128,12 +128,15 @@ void DetectorConstruction::SetDetectorStepDeg(G4double val)
 G4double DetectorConstruction::GetDetectorCapRadius() const
 {
   const G4double D = fConfig->detectorDistance;
-  const G4double spreadDeg = std::max(0.0, fConfig->detectorSpreadDeg);
-  G4double rest_angle=(180-(90+spreadDeg))*deg ;
-  
-  G4double radius=std::sin(spreadDeg)*D/std::sin(rest_angle);
 
+  const G4double spreadDeg = std::max(0.0, fConfig->detectorSpreadDeg);
+  const G4double radius = D * std::tan(spreadDeg * deg);
   return radius;
+
+  //const G4double spreadDeg = std::max(0.0, fConfig->detectorSpreadDeg) * deg;
+  //G4double rest_angle = (180 - (90 + spreadDeg)) * deg;
+  //G4double radius = std::sin(spreadDeg) * D / std::sin(rest_angle);
+  //return radius;
 
 }
 
