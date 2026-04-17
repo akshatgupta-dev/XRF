@@ -20,36 +20,72 @@
 #include <algorithm>
 #include <string>
 #include <vector>
+#include "G4Timer.hh"
+#include <chrono>
 
 namespace
 {
   void RunOneCheckpointedJob(G4RunManager* runManager,
-                           DetectorConstruction* detector,
-                           RunAction* runAction,
-                           const SimulationConfig& config)
-    {
+                            DetectorConstruction* detector,
+                            RunAction* runAction,
+                            const SimulationConfig& config)
+  {
     detector->RefreshDetectorLayout();
     runAction->SyncWithDetectorLayout();
     runAction->ResetAll();
 
     long long processed = 0;
-    // Update: Use config.totalEvents
+
     while (processed < config.totalEvents) {
-      // Update: Use config.chunkSize and config.totalEvents
       const int thisChunk =
-          static_cast<int>(std::min<long long>(config.chunkSize, config.totalEvents - processed));
+          static_cast<int>(std::min<long long>(config.chunkSize,
+                                              config.totalEvents - processed));
 
       G4cout << "Starting chunk with " << thisChunk
-             << " events. Processed so far = " << processed << G4endl;
+            << " events. Processed so far = " << processed << G4endl;
+
+      // total wall-clock time for this chunk
+      auto chunkWallStart = std::chrono::steady_clock::now();
+
+      // pure simulation time for this chunk
+      G4Timer simTimer;
+      simTimer.Start();
 
       runManager->BeamOn(thisChunk);
+
+      simTimer.Stop();
+
       processed += thisChunk;
 
-      G4cout << "Finished chunk. Total processed = "
-             << processed << G4endl;
-
+      auto writeStart = std::chrono::steady_clock::now();
       runAction->WriteCheckpoint(processed);
-      G4cout << "Wrote " << config.BuildCheckpointFilename(processed) << G4endl;
+      auto writeEnd = std::chrono::steady_clock::now();
+
+      auto chunkWallEnd = std::chrono::steady_clock::now();
+
+      const double simReal =
+          simTimer.GetRealElapsed();
+
+      const double writeWall =
+          std::chrono::duration<double>(writeEnd - writeStart).count();
+
+      const double chunkWall =
+          std::chrono::duration<double>(chunkWallEnd - chunkWallStart).count();
+
+      G4cout << "\n=== Chunk timing summary ===" << G4endl;
+      G4cout << "Events simulated in chunk : " << thisChunk << G4endl;
+      G4cout << "Pure simulation time      : " << simReal << " s" << G4endl;
+      G4cout << "Checkpoint write time     : " << writeWall << " s" << G4endl;
+      G4cout << "Total chunk wall time     : " << chunkWall << " s" << G4endl;
+      if (thisChunk > 0) {
+        G4cout << "Sim time / event          : " << simReal / thisChunk << " s" << G4endl;
+        G4cout << "Chunk time / event        : " << chunkWall / thisChunk << " s" << G4endl;
+      }
+      G4cout << "============================\n" << G4endl;
+
+      if (processed >= config.totalEvents) {
+        runAction->FinalizeRun(processed);
+      }
     }
   }
 

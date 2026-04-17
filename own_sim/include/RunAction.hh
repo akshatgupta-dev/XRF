@@ -4,10 +4,14 @@
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4AnalysisManager.hh"
 
 #include <string>
 #include <map>
 #include <vector>
+
+#include "G4Timer.hh"
+#include <chrono>
 
 class DetectorConstruction;
 class SimulationConfig;
@@ -35,6 +39,13 @@ class RunAction : public G4UserRunAction
     void ResetShieldLayerDebug();
     void RecordShieldLayerEntry(G4int layer, G4double edep);
     void SyncWithDetectorLayout();
+    void FinalizeRun(long long cumulativeEvents) const;
+
+    // NEW: ROOT helper methods
+    std::string BuildRootFilename(long long cumulativeEvents) const;
+    void BookRootOutput();
+    void OpenRootFile();
+    void CloseRootFile() const;
 
   private:
     static RunAction* fgInstance;
@@ -57,6 +68,11 @@ class RunAction : public G4UserRunAction
 
     std::map<G4int, G4long> fShieldLayerEntries;
     std::map<G4int, G4double> fShieldLayerEdep;
+
+    // NEW: track whether ROOT file is open
+    mutable G4bool fRootOpen = false;
+    mutable G4Timer fCpuTimer;
+    std::chrono::steady_clock::time_point fWallStart;
 };
 
 #endif

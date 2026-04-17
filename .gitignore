@@ -2,7 +2,8 @@
 
 spek.ipynb
 
-build/output/
+build/
+macro/
 CMakeCache.txt
 CMakeFiles/
 Makefile

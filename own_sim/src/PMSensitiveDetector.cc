@@ -29,18 +29,18 @@ void PMSensitiveDetector::Initialize(G4HCofThisEvent*)
 
 void PMSensitiveDetector::EndOfEvent(G4HCofThisEvent*)
 {
-    G4cout << "Detected fluorescence energy: " << fTotalDetectedEnergy / keV << " keV" << G4endl;
+    //G4cout << "Detected fluorescence energy: " << fTotalDetectedEnergy / keV << " keV" << G4endl;
 
-    if (fFluorescenceCountsByBin.empty()) {
-        G4cout << "Fluorescence spectrum: no gamma entries in detector." << G4endl;
-        return;
-    }
+    //if (fFluorescenceCountsByBin.empty()) {
+     //   G4cout << "Fluorescence spectrum: no gamma entries in detector." << G4endl;
+     //   return;
+    //}
 
-    G4cout << "Fluorescence spectrum (bin center in keV, photons):" << G4endl;
-    for (const auto& [binIdx, count] : fFluorescenceCountsByBin) {
-        const G4double centerKeV = (binIdx + 0.5) * kBinWidthKeV;
-        G4cout << "  " << centerKeV << " keV : " << count << G4endl;
-    }
+    //G4cout << "Fluorescence spectrum (bin center in keV, photons):" << G4endl;
+    //for (const auto& [binIdx, count] : fFluorescenceCountsByBin) {
+    //    const G4double centerKeV = (binIdx + 0.5) * kBinWidthKeV;
+    //    G4cout << "  " << centerKeV << " keV : " << count << G4endl;
+    //}
 }
 
 G4bool PMSensitiveDetector::ProcessHits(G4Step* aStep, G4TouchableHistory*)

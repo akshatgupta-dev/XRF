@@ -15,6 +15,180 @@
 #include <sstream>
 
 RunAction* RunAction::fgInstance = nullptr;
+namespace
+{
+  G4double ThetaDegFromVector(const G4ThreeVector& p);
+  G4double PhiDegFromVector(const G4ThreeVector& p);
+  std::string JoinIds(const std::vector<G4int>& ids);
+}
+
+
+std::string RunAction::BuildRootFilename(long long cumulativeEvents) const
+{
+  std::filesystem::path csvPath(fConfig->BuildCheckpointFilename(cumulativeEvents));
+  const std::string stem = csvPath.stem().string();
+  return (csvPath.parent_path() / (stem + ".root")).string();
+}
+
+void RunAction::BookRootOutput()
+{
+  auto* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->SetDefaultFileType("root");
+  analysisManager->SetNtupleMerging(true);
+  analysisManager->SetVerboseLevel(0);
+
+  // Histograms like your project
+  analysisManager->CreateH1("Edep", "Energy deposited in detector per event", 500, 0., fEmax / keV);
+  analysisManager->CreateH1("GammaInAll", "Gamma energy entering detector", 500, 0., fEmax / keV);
+
+  // Detector-bin ntuple (same information as detector CSV)
+  analysisManager->CreateNtuple("DetectorBins", "Detector spectra by pixel");
+  analysisManager->CreateNtupleIColumn("det_id");
+  analysisManager->CreateNtupleDColumn("theta_deg");
+  analysisManager->CreateNtupleDColumn("phi_deg");
+  analysisManager->CreateNtupleDColumn("x_mm");
+  analysisManager->CreateNtupleDColumn("y_mm");
+  analysisManager->CreateNtupleDColumn("z_mm");
+  analysisManager->CreateNtupleIColumn("bin_idx");
+  analysisManager->CreateNtupleDColumn("bin_low_keV");
+  analysisManager->CreateNtupleDColumn("bin_high_keV");
+  analysisManager->CreateNtupleDColumn("count");
+  analysisManager->FinishNtuple(0);
+
+  // Combo-bin ntuple (same information as combo CSV)
+  analysisManager->CreateNtuple("ComboBins", "Summed spectra by combo");
+  analysisManager->CreateNtupleSColumn("combo_name");
+  analysisManager->CreateNtupleIColumn("combo_size");
+  analysisManager->CreateNtupleSColumn("detector_ids");
+  analysisManager->CreateNtupleDColumn("theta_eff_deg");
+  analysisManager->CreateNtupleDColumn("phi_eff_deg");
+  analysisManager->CreateNtupleDColumn("theta_min_deg");
+  analysisManager->CreateNtupleDColumn("theta_max_deg");
+  analysisManager->CreateNtupleDColumn("phi_min_deg");
+  analysisManager->CreateNtupleDColumn("phi_max_deg");
+  analysisManager->CreateNtupleIColumn("bin_idx");
+  analysisManager->CreateNtupleDColumn("bin_low_keV");
+  analysisManager->CreateNtupleDColumn("bin_high_keV");
+  analysisManager->CreateNtupleDColumn("count");
+  analysisManager->FinishNtuple(1);
+}
+
+void RunAction::OpenRootFile()
+{
+  if (fRootOpen) {
+    return;
+  }
+
+  auto* analysisManager = G4AnalysisManager::Instance();
+  const std::string filename = BuildRootFilename(fConfig->totalEvents);
+  analysisManager->OpenFile(filename);
+  fRootOpen = true;
+
+  G4cout << "Opened ROOT file: " << filename << G4endl;
+}
+
+void RunAction::CloseRootFile() const
+{
+  if (!fRootOpen) {
+    return;
+  }
+
+  auto* analysisManager = G4AnalysisManager::Instance();
+  const auto& elements = fDet->GetDetectorElements();
+
+  // --------------------------------------------------
+  // Fill DetectorBins ntuple (same as detector CSV)
+  // --------------------------------------------------
+  const G4int nDet = std::min<G4int>(fSpectra.size(), elements.size());
+
+  for (G4int detId = 0; detId < nDet; ++detId) {
+    const auto& elem = elements.at(detId);
+
+    for (G4int b = 0; b < fNBins; ++b) {
+      const G4double eLow  = (fEmin + b * fBinWidth) / keV;
+      const G4double eHigh = (fEmin + (b + 1) * fBinWidth) / keV;
+
+      analysisManager->FillNtupleIColumn(0, 0, detId);
+      analysisManager->FillNtupleDColumn(0, 1, elem.thetaDeg);
+      analysisManager->FillNtupleDColumn(0, 2, elem.phiDeg);
+      analysisManager->FillNtupleDColumn(0, 3, elem.center.x() / mm);
+      analysisManager->FillNtupleDColumn(0, 4, elem.center.y() / mm);
+      analysisManager->FillNtupleDColumn(0, 5, elem.center.z() / mm);
+      analysisManager->FillNtupleIColumn(0, 6, b);
+      analysisManager->FillNtupleDColumn(0, 7, eLow);
+      analysisManager->FillNtupleDColumn(0, 8, eHigh);
+      analysisManager->FillNtupleDColumn(0, 9, fSpectra[detId][b]);
+      analysisManager->AddNtupleRow(0);
+    }
+  }
+
+  // --------------------------------------------------
+  // Fill ComboBins ntuple (same as combo CSV)
+  // --------------------------------------------------
+  for (const auto& combo : fCombos) {
+    if (combo.detIds.empty()) {
+      continue;
+    }
+
+    auto comboSpec = SumSpectrum(combo.detIds);
+
+    G4double thetaMin = std::numeric_limits<G4double>::max();
+    G4double thetaMax = -std::numeric_limits<G4double>::max();
+    G4double phiMin   = std::numeric_limits<G4double>::max();
+    G4double phiMax   = -std::numeric_limits<G4double>::max();
+
+    G4ThreeVector sumDir(0, 0, 0);
+
+    for (G4int detId : combo.detIds) {
+      if (detId < 0 || detId >= static_cast<G4int>(elements.size())) {
+        continue;
+      }
+
+      const auto& elem = elements.at(detId);
+
+      thetaMin = std::min(thetaMin, elem.thetaDeg);
+      thetaMax = std::max(thetaMax, elem.thetaDeg);
+      phiMin   = std::min(phiMin, elem.phiDeg);
+      phiMax   = std::max(phiMax, elem.phiDeg);
+
+      sumDir += elem.center.unit();
+    }
+
+    G4double thetaEff = 0.0;
+    G4double phiEff   = 0.0;
+    if (sumDir.mag() > 0.0) {
+      thetaEff = ThetaDegFromVector(sumDir.unit());
+      phiEff   = PhiDegFromVector(sumDir.unit());
+    }
+
+    const std::string detIdList = JoinIds(combo.detIds);
+
+    for (G4int b = 0; b < fNBins; ++b) {
+      const G4double eLow  = (fEmin + b * fBinWidth) / keV;
+      const G4double eHigh = (fEmin + (b + 1) * fBinWidth) / keV;
+
+      analysisManager->FillNtupleSColumn(1, 0, combo.name);
+      analysisManager->FillNtupleIColumn(1, 1, combo.detIds.size());
+      analysisManager->FillNtupleSColumn(1, 2, detIdList);
+      analysisManager->FillNtupleDColumn(1, 3, thetaEff);
+      analysisManager->FillNtupleDColumn(1, 4, phiEff);
+      analysisManager->FillNtupleDColumn(1, 5, thetaMin);
+      analysisManager->FillNtupleDColumn(1, 6, thetaMax);
+      analysisManager->FillNtupleDColumn(1, 7, phiMin);
+      analysisManager->FillNtupleDColumn(1, 8, phiMax);
+      analysisManager->FillNtupleIColumn(1, 9, b);
+      analysisManager->FillNtupleDColumn(1, 10, eLow);
+      analysisManager->FillNtupleDColumn(1, 11, eHigh);
+      analysisManager->FillNtupleDColumn(1, 12, comboSpec[b]);
+      analysisManager->AddNtupleRow(1);
+    }
+  }
+
+  analysisManager->Write();
+  analysisManager->CloseFile();
+  fRootOpen = false;
+
+}
 
 namespace
 {
@@ -48,6 +222,7 @@ RunAction::RunAction(const DetectorConstruction* det,
   fgInstance = this;
   fBinWidth = (fEmax - fEmin) / fNBins;
   SyncWithDetectorLayout();
+  BookRootOutput();
 }
 
 RunAction::~RunAction()
@@ -202,6 +377,11 @@ void RunAction::ResetAll()
   for (auto& detSpec : fSpectra) {
     std::fill(detSpec.begin(), detSpec.end(), 0.0);
   }
+
+  fCpuTimer.Start();
+  fWallStart = std::chrono::steady_clock::now();
+
+  OpenRootFile();
 }
 
 std::vector<G4double> RunAction::SumSpectrum(const std::vector<G4int>& detIds) const
@@ -347,6 +527,33 @@ void RunAction::WriteComboCheckpoint(long long cumulativeEvents) const
   }
 }
 
+void RunAction::FinalizeRun(long long cumulativeEvents) const
+{
+  fCpuTimer.Stop();
+
+  const auto wallEnd = std::chrono::steady_clock::now();
+  const double wallSec =
+      std::chrono::duration<double>(wallEnd - fWallStart).count();
+
+  G4cout << G4endl;
+  G4cout << "Run Summary" << G4endl;
+  G4cout << "  Number of events processed : " << cumulativeEvents << G4endl;
+  G4cout << "  " << fCpuTimer << G4endl;
+  G4cout << G4endl;
+  G4cout << "===================================================" << G4endl;
+  G4cout << "  Run 0 finished." << G4endl;
+  G4cout << "  Events simulated : " << cumulativeEvents << G4endl;
+  G4cout << "  Wall-clock time  : " << wallSec << " s" << G4endl;
+  if (cumulativeEvents > 0) {
+    G4cout << "  Time / event     : " << wallSec / cumulativeEvents << " s" << G4endl;
+  }
+  G4cout << "===================================================" << G4endl;
+  G4cout << G4endl;
+
+  CloseRootFile();
+}
+
+
 void RunAction::WriteCheckpoint(long long cumulativeEvents) const
 {
   const auto& elements = fDet->GetDetectorElements();
@@ -361,7 +568,7 @@ void RunAction::WriteCheckpoint(long long cumulativeEvents) const
            << " elements.size()=" << elements.size()
            << G4endl;
   }
-
+  /*
   const std::string filename = fConfig->BuildCheckpointFilename(cumulativeEvents);
 
   std::filesystem::path outPath(filename);
@@ -408,5 +615,8 @@ void RunAction::WriteCheckpoint(long long cumulativeEvents) const
           << fSpectra[detId][b] << "\n";
     }
   }
-  WriteComboCheckpoint(cumulativeEvents);
+  */
+  // WriteComboCheckpoint(cumulativeEvents);
+
+
 }
