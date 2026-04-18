@@ -9,6 +9,11 @@
 /xrf/detectorStepDeg 5 deg
 /xrf/worldMaterial G4_AIR
 /xrf/detectorThickness 0.5 mm
+/xrf/setShieldEnabled true
+/xrf/setShieldGap 2 mm
+/xrf/clearShieldLayers
+/xrf/addShieldLayer G4_Pb 1.0 mm 0.0 mm
+/xrf/addShieldLayer G4_Al 0.5 mm 0.5 mm
 
 /run/numberOfThreads 20
 /run/initialize

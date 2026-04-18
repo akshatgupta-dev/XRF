@@ -260,6 +260,7 @@ CMakeFiles/sim.dir/src/SimulationMessenger.cpp.o: \
  /home/minmyatngwe/geant4_learning/geant4-v11.4.0-install/include/Geant4/G4UImessenger.hh \
  /home/minmyatngwe/geant4_learning/geant4-v11.4.0-install/include/Geant4/G4UnitsTable.hh \
  /home/minmyatngwe/geant4_learning/geant4-v11.4.0-install/include/Geant4/G4UnitsTable.icc \
+ /home/minmyatngwe/geant4_learning/geant4-v11.4.0-install/include/Geant4/G4UIcommand.hh \
  /home/minmyatngwe/geant_4_xrf/XRF_SIMULATION/include/primaryGenerator.hh \
  /home/minmyatngwe/geant4_learning/geant4-v11.4.0-install/include/Geant4/G4VUserPrimaryGeneratorAction.hh \
  /home/minmyatngwe/geant4_learning/geant4-v11.4.0-install/include/Geant4/G4ParticleDefinition.hh \

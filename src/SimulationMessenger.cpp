@@ -5,6 +5,26 @@
 
 SimulationMessenger::SimulationMessenger(SimulationConfig& config):fConfig(&config){
 
+
+    fAddShieldLayerCmd = new G4UIcommand("/xrf/addShieldLayer", this);
+    fAddShieldLayerCmd->SetGuidance("Add shield layer: material thickness unit gapbefore unit");
+
+    auto* p1 = new G4UIparameter("material", 's', false);
+    fAddShieldLayerCmd->SetParameter(p1);
+
+    auto* p2 = new G4UIparameter("thickness", 'd', false);
+    fAddShieldLayerCmd->SetParameter(p2);
+
+    auto* p3 = new G4UIparameter("thicknessUnit", 's', false);
+    fAddShieldLayerCmd->SetParameter(p3);
+
+    auto* p4 = new G4UIparameter("gapBefore", 'd', false);
+    fAddShieldLayerCmd->SetParameter(p4);
+
+    auto* p5 = new G4UIparameter("gapUnit", 's', false);
+    fAddShieldLayerCmd->SetParameter(p5);
+
+
     fMessenger=new G4GenericMessenger(this,"/xrf/","Simulation control commands");
     fMessenger->DeclareProperty("sampleMaterial",fConfig->sampleMaterial,"Set sample material");
 
@@ -68,7 +88,6 @@ fMessenger->DeclarePropertyWithUnit("sampleSize",
                                     "mm",
                                     fConfig->sampleMaterialSize,
                                     "Set the sample size");
-    fMessenger->DeclareMethod("addShieldLayer",&SimulationMessenger::AddShieldLayer,"Add a layer to the shield, usage: /xrf/addShieldLayer material thickness(mm) gapbefore(mm)");
 
     fMessenger->DeclareMethod("clearShieldLayers",&SimulationMessenger::ClearShieldLayers,"Clear all shield layers");
 
@@ -103,25 +122,37 @@ void SimulationMessenger::SetSampleSize(const G4String& value){
            << fConfig->sampleMaterialSize.y()/mm << " "
            << fConfig->sampleMaterialSize.z()/mm << " mm" << G4endl;
 }
-void SimulationMessenger::AddShieldLayer(const G4String& value){
-    std::istringstream iss(value);
-    std::string material;
-    G4double thickness = 0.0, gapbefore = 0.0;
-    std::string thicknessUnit, gapUnit;
 
-    if (!(iss >> material >> thickness >> thicknessUnit >> gapbefore >> gapUnit)) {
-        G4cerr << "Usage: /xrf/addShieldLayer material thickness unit gapbefore unit" << G4endl;
+void SimulationMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+    if (command == fAddShieldLayerCmd) {
+        std::istringstream iss(newValue);
+
+        std::string material;
+        G4double thickness = 0.0, gapBefore = 0.0;
+        std::string thicknessUnit, gapUnit;
+
+        if (!(iss >> material >> thickness >> thicknessUnit >> gapBefore >> gapUnit)) {
+            G4cerr << "Usage: /xrf/addShieldLayer material thickness unit gapbefore unit" << G4endl;
+            return;
+        }
+
+        G4double thicknessValue = G4UnitDefinition::GetValueOf(thicknessUnit.c_str());
+        G4double gapValue = G4UnitDefinition::GetValueOf(gapUnit.c_str());
+
+        fConfig->shield.layers.emplace_back(
+            material,
+            thickness * thicknessValue,
+            gapBefore * gapValue
+        );
+
         return;
     }
 
-    G4double thicknessValue = G4UnitDefinition::GetValueOf(thicknessUnit.c_str());
-    G4double gapValue = G4UnitDefinition::GetValueOf(gapUnit.c_str());
-
-    fConfig->shield.layers.emplace_back(material,
-                                        thickness * thicknessValue,
-                                        gapbefore * gapValue);
+    if (fMessenger) {
+        fMessenger->SetNewValue(command, newValue);
+    }
 }
-
 void SimulationMessenger::ClearShieldLayers(){
     fConfig->shield.layers.clear();
 }
@@ -144,6 +175,7 @@ void SimulationMessenger::ClearMaterialComponents(){
 }
 
 SimulationMessenger::~SimulationMessenger() {
-    delete fMessenger;
+    delete fAddShieldLayerCmd;
+    delete fMessenger;    
 }
 

@@ -23,7 +23,7 @@ G4double MultiDetectorConstruction::ComputeDetectorTheta(const G4ThreeVector& po
 MultiDetectorConstruction::MultiDetectorConstruction(G4double detectorDistance, G4double takeoffAngle, G4double detectorSpreadDeg, G4double detectorStepDeg): groupAngle(takeoffAngle)
 {
 
-    G4double capRadius=GetDetectorCapRadius(detectorDistance, detectorSpreadDeg);
+    capRadius=GetDetectorCapRadius(detectorDistance, detectorSpreadDeg);
     G4double width=GetDetectorWidth(detectorDistance, detectorStepDeg);
 
     G4ThreeVector detectorCenter(

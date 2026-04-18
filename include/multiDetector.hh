@@ -16,6 +16,9 @@ class MultiDetectorConstruction{
         G4double ComputeDetectorTheta(const G4ThreeVector& pos);
         std::vector<DetectorElement> detectorElements;
         G4double groupAngle;
+        G4double capRadius;
+
+        
     
 };
 
