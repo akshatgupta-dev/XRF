@@ -61,6 +61,8 @@ MultiDetectorConstruction::MultiDetectorConstruction(G4double detectorDistance, 
             element.height=width;
             detectorElements.push_back(element);
 
+            G4cout<<"Detector "<<element.id<<" at "<<globalPos<<" with theta "<<element.thetadeg<<" degrees"<<G4endl;
+
         }  
     }
     if (detectorElements.empty()){

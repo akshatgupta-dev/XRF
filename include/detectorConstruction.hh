@@ -30,6 +30,39 @@
 
 
 
+struct DetectorMeta {
+    G4int detId;
+    G4String material;
+    G4double samplewidth, sampleheight, samplethickness;
+    G4double incidentAngle;
+    G4double sourceDistance;
+    G4double detectorDistance;
+    G4double takeoffAngle;
+    G4double detectorx, detectory, detectorz;
+    G4double width, thickness, height;
+    G4String worldMat;
+    G4String detectorType;
+
+    DetectorMeta(
+        G4int id,
+        G4String mat,
+        G4double sw, G4double sh, G4double st,
+        G4double incAngle,
+        G4double srcDist,
+        G4double detDist,
+        G4double takeoff,
+        G4double detX, G4double detY, G4double detZ,
+        G4double w, G4double t, G4double h,
+        G4String worldMaterial,
+        G4String detType
+    ) : detId(id), material(mat), samplewidth(sw), sampleheight(sh), samplethickness(st),
+        incidentAngle(incAngle), sourceDistance(srcDist), detectorDistance(detDist), takeoffAngle(takeoff),
+        detectorx(detX), detectory(detY), detectorz(detZ),
+        width(w), thickness(t), height(h),
+        worldMat(worldMaterial),
+        detectorType(detType) {}
+};
+
 class DetectorConstruction:public G4VUserDetectorConstruction{
 
     public:
@@ -40,6 +73,15 @@ class DetectorConstruction:public G4VUserDetectorConstruction{
         std::vector<MultiDetectorConstruction> allDetectors ; 
         G4LogicalVolume *fDetectorLV{nullptr};
         void ConstructSDandField() override;
+        const std::vector<DetectorMeta>& GetDetectorMetadata() const {
+            return detectorMetadata;
+        }
+
+
+    
+    private:
+        std::vector<DetectorMeta> detectorMetadata;
+
 
 
 

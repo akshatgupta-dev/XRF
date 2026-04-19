@@ -43,7 +43,7 @@ void SensitiveDetector::EndOfEvent(G4HCofThisEvent *hce){
 
         auto* analysisManager = G4AnalysisManager::Instance();
         analysisManager->FillH1(0, energy / keV);
-        analysisManager->FillNtupleIColumn(0, G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID());
+        analysisManager->FillNtupleIColumn(0, detId);
         analysisManager->FillNtupleDColumn(1, energy / keV);
         analysisManager->AddNtupleRow(0);
     }

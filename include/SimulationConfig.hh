@@ -10,7 +10,7 @@
 class MaterialComponent{
 
     public:
-        std::string element;
+        G4String element;
         G4double fraction;
         MaterialComponent(const std::string& name, G4double frac):element(name),fraction(frac){}
 
@@ -37,7 +37,7 @@ class ShieldConfig{
 class SimulationConfig{
 
     public:
-        std::string sampleMaterial;
+        G4String sampleMaterial;
         G4bool sampleMaterialIsCustom = false;
         G4double sampleMaterialDensity = 0.0;
 

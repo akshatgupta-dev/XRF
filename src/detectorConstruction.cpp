@@ -3,11 +3,7 @@
 
 #include "detectorType.hh"
 
-
 DetectorConstruction::DetectorConstruction(SimulationConfig& config):fConfig(&config){}
-
-
-
 
 G4VPhysicalVolume* DetectorConstruction::Construct(){
 
@@ -30,7 +26,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct(){
 
     G4int upperCounter=0;
     G4int lowerCounter=0;
-    G4double offset=spreaddeg+7*deg;
+    G4double offset=(2*spreaddeg)+7*deg;
 
     for (int i=1;detectorangles.size()<maxdetectors;++i){
 
@@ -61,7 +57,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct(){
 
         MultiDetectorConstruction multiDetector(fConfig->detectorDistance,angle,fConfig->detectorSpreadDeg,fConfig->detectorStepDeg);
         G4cout << "Created multi-detector with group angle: " << angle/deg << " degrees, number of elements: " << multiDetector.detectorElements.size() << G4endl;
-
         allDetectors.emplace_back(multiDetector);
     }
 
@@ -73,27 +68,23 @@ G4VPhysicalVolume* DetectorConstruction::Construct(){
 
     G4Material *sampleMat=nullptr;
 
+    G4String sampleMatString;
 
     if (fConfig->sampleMaterialIsCustom && !fConfig->sampleMaterialComponents.empty() && !sampleMat){
 
         sampleMat=new G4Material("samplemat",fConfig->sampleMaterialDensity,fConfig->sampleMaterialComponents.size());
-
-
         for(const auto& component:fConfig->sampleMaterialComponents){
-
             G4Element *element=nist->FindOrBuildElement(component.element);
-
             if(element){
                 sampleMat->AddElement(element,component.fraction);
+                sampleMatString+=component.element+" "+std::to_string(component.fraction)+" ";
             }
         }
-
-
     }
-
     if(!sampleMat){
 
         sampleMat=nist->FindOrBuildMaterial(fConfig->sampleMaterial);
+        sampleMatString=fConfig->sampleMaterial;
     }
 
 
@@ -127,8 +118,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct(){
   fDetectorLV->SetVisAttributes(detVis);
 
 
-    int copynumber=0;
     auto &shield=fConfig->shield;
+
+    G4int copynumber=0;
 for (const auto& multiDetector : allDetectors) {
         
         G4RotationMatrix rotation;
@@ -137,12 +129,32 @@ for (const auto& multiDetector : allDetectors) {
         G4RotationMatrix inverseRotation = rotation.inverse();
 
         for (const auto& element : multiDetector.detectorElements) {
-            G4String detName = "detectorPhys_g" + std::to_string(copynumber);
-            
-            new G4PVPlacement(new G4RotationMatrix(inverseRotation), element.center, fDetectorLV, detName, worldLogic, false, element.id, true);
+            G4String detName = "detectorPhys_g" + std::to_string(element.id);
+            DetectorMeta meta(
+                copynumber,
+                sampleMatString,
+                fConfig->sampleMaterialSize.x(),
+                fConfig->sampleMaterialSize.y(),
+                fConfig->sampleMaterialSize.z(),
+                fConfig->incidentAngle,
+                fConfig->sourceDistance,
+                fConfig->detectorDistance,
+                element.thetadeg,
+                element.center.x(),
+                element.center.y(),
+                element.center.z(),
+                element.width,
+                detectorThickness,
+                element.width,
+                fConfig->worldMaterial,
+                fConfig->detectorType
+            );
+            G4cout<<"Adding detector metadata for detector ID " << meta.detId << ": "
+                   <<element.thetadeg<< G4endl;
+            detectorMetadata.emplace_back(meta);
+            new G4PVPlacement(new G4RotationMatrix(inverseRotation), element.center, fDetectorLV, detName, worldLogic, false, copynumber, true);
             copynumber++;
         }
-
         if (shield.enable && shield.layers.size() > 0) {
             G4double capRadius = multiDetector.capRadius;
 

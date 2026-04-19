@@ -1,4 +1,0 @@
-/home/minmyatngwe/geant_4_xrf/XRF_SIMULATION/build/CMakeFiles/sim.dir
-/home/minmyatngwe/geant_4_xrf/XRF_SIMULATION/build/CMakeFiles/XRF_SIMULATION.dir
-/home/minmyatngwe/geant_4_xrf/XRF_SIMULATION/build/CMakeFiles/edit_cache.dir
-/home/minmyatngwe/geant_4_xrf/XRF_SIMULATION/build/CMakeFiles/rebuild_cache.dir
