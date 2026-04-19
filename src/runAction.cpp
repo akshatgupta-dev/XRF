@@ -34,7 +34,7 @@ RunAction::RunAction()
 
     analysismanager->CreateNtuple("hits", "Raw detector hits");
 
-    analysismanager->CreateNtupleIColumn("eventID");
+    // analysismanager->CreateNtupleIColumn("eventID");
     analysismanager->CreateNtupleIColumn("detID");
     analysismanager->CreateNtupleDColumn("energy");
 
@@ -56,17 +56,22 @@ void RunAction::BeginOfRunAction(const G4Run*)
     G4cout << "Opening output file: output.root" << G4endl;
     analysismanager->OpenFile("output.root");
 
-    if (G4Threading::IsMasterThread()) return;
 
-    G4AutoLock lock(&fMetadataMutex);
 
-    if (fMetadataWritten) return;
 
     auto* detConst = static_cast<const DetectorConstruction*>(
         G4RunManager::GetRunManager()->GetUserDetectorConstruction()
     );
 
     const auto& metadata = detConst->GetDetectorMetadata();
+
+    G4int ndetectors= static_cast<G4int>(metadata.size());
+
+    CreateDedectorHistogram(ndetectors);
+    if (G4Threading::IsMasterThread()) return;
+    G4AutoLock lock(&fMetadataMutex);
+
+    if (fMetadataWritten) return;
 
     for (const auto& meta : metadata) {
         FillDetectorMetadata(
@@ -100,14 +105,19 @@ void RunAction::EndOfRunAction(const G4Run*)
     analysismanager->CloseFile(false);
 }
 
-void RunAction::CreateDedectorHistogram(G4int nDetectors){
-
+void RunAction::CreateDedectorHistogram(G4int nDetectors)
+{
     auto* analysisManager = G4AnalysisManager::Instance();
 
-    for(G4int i=0;i<nDetectors;i++){
-        analysisManager->CreateH1("det_"+std::to_string(i)+"_spectrum","Energy spectrum for detector "+std::to_string(i),5000,0,120);
-    }
+    if (analysisManager->GetNofH1s() > 0) return;
 
+    for (G4int i = 0; i < nDetectors; i++) {
+        analysisManager->CreateH1(
+            "det_" + std::to_string(i) + "_spectrum",
+            "Energy spectrum for detector " + std::to_string(i),
+            5000, 0, 120
+        );
+    }
 }
 
 void RunAction::FillDetectorMetadata(G4int detId, G4String material, G4double samplesizeX, G4double samplesizeY, G4double samplesizeZ, G4double incidentAngle, G4double sourceDistance, G4double detectorDistance, G4double takeoffAngle, G4double detectorLocationX, G4double detectorLocationY, G4double detectorLocationZ, G4double detectorWidth, G4double detectorThickness, G4double detectorHeight, G4String worldMat, G4String detectorType)const{
@@ -134,4 +144,12 @@ void RunAction::FillDetectorMetadata(G4int detId, G4String material, G4double sa
     analysisManager->AddNtupleRow(0);
 
 }
+
+
+void RunAction::FillDetectorHistogram(G4int detId,G4double energy){
+    auto* analysisManager = G4AnalysisManager::Instance();
+    analysisManager->FillH1(detId, energy);
+}
+
+
 
