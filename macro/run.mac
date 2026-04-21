@@ -9,9 +9,9 @@
 /xrf/detectorStepDeg 20 deg
 /xrf/worldMaterial G4_AIR
 /xrf/detectorThickness 0.5 mm
-/xrf/setShieldEnabled false 
+/xrf/setShieldEnabled true 
 /xrf/setShieldGap 2 mm
-/xrf/numberOfDetectorGroups 2
+/xrf/numberOfDetectorGroups 1
 /xrf/clearShieldLayers
 /xrf/addShieldLayer G4_Pb 1.0 mm 0.0 mm
 /xrf/addShieldLayer G4_Al 0.5 mm 0.5 mm
@@ -21,4 +21,4 @@
 /gps/particle gamma
 /gps/energy 20 keV
 
-/run/beamOn 1000000
+/run/beamOn 10000000

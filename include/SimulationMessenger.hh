@@ -20,15 +20,17 @@ class SimulationMessenger:public G4UImessenger
 
     explicit  SimulationMessenger(SimulationConfig& config);
     ~SimulationMessenger();
-void SetSampleSize(const G4String& value);
-void AddShieldLayer(const G4String& value);
-void ClearShieldLayers();
+    void SetSampleSize(const G4String& value);
+    void AddShieldLayer(const G4String& value);
+    void ClearShieldLayers();
     void SetNewValue(G4UIcommand* command, G4String newValue) override;
 
-void AddMaterialComponent(const G4String& value);
-void ClearMaterialComponents();
+    void AddMaterialComponent(const G4String& value);
+    void ClearMaterialComponents();
 
-void CalculateSourcePositionAndDirection();
+    void CalculateSourcePositionAndDirection();
+
+    void SetShieldEnabled(G4bool enable);
     private:
         SimulationConfig * fConfig{nullptr};
         G4GenericMessenger *fMessenger{nullptr};

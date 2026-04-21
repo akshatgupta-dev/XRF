@@ -3,7 +3,9 @@
 
 #include "detectorType.hh"
 
-DetectorConstruction::DetectorConstruction(SimulationConfig& config):fConfig(&config){}
+DetectorConstruction::DetectorConstruction(SimulationConfig& config):fConfig(&config){
+    G4cout << "Initial shield.enable = " << std::boolalpha << fConfig->shield.enable << G4endl;
+}
 
 G4VPhysicalVolume* DetectorConstruction::Construct(){
 
@@ -26,13 +28,15 @@ G4VPhysicalVolume* DetectorConstruction::Construct(){
 
     G4int upperCounter=0;
     G4int lowerCounter=0;
-    G4double offset=(2*spreaddeg)+7*deg;
+    G4double offset=(2*spreaddeg)+50*deg;
 
-    for (int i=1;detectorangles.size()<maxdetectors;++i){
+    if (maxdetectors>1){
+        G4int trial=1000;
+        for (int i=1;i<trial;++i){
 
         G4double upperangle=currenttakeoffangle+i*offset;
         G4double lowerangle=currenttakeoffangle-i*offset;
-
+        G4cout<<"Iteration "<<i<<": upperangle="<<upperangle/deg<<" deg, lowerangle="<<lowerangle/deg<<" deg"<<G4endl;
         if(upperangle<upperanglelimit && upperCounter<maxdetectors/2){
 
             detectorangles.push_back(upperangle);
@@ -49,6 +53,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct(){
 
             break;
         }
+
+    }
+
 
     }
 
@@ -121,121 +128,146 @@ G4VPhysicalVolume* DetectorConstruction::Construct(){
     auto &shield=fConfig->shield;
 
     G4int copynumber=0;
-for (const auto& multiDetector : allDetectors) {
-        
-        G4RotationMatrix rotation;
-        rotation.rotateY(-(90 * deg + multiDetector.groupAngle));
+    for (const auto& multiDetector : allDetectors) {
+            
+            G4RotationMatrix rotation;
+            rotation.rotateY(-(90 * deg + multiDetector.groupAngle));
 
-        G4RotationMatrix inverseRotation = rotation.inverse();
+            G4RotationMatrix inverseRotation = rotation.inverse();
 
-        for (const auto& element : multiDetector.detectorElements) {
-            G4String detName = "detectorPhys_g" + std::to_string(element.id);
-            DetectorMeta meta(
-                copynumber,
-                sampleMatString,
-                fConfig->sampleMaterialSize.x(),
-                fConfig->sampleMaterialSize.y(),
-                fConfig->sampleMaterialSize.z(),
-                fConfig->incidentAngle,
-                fConfig->sourceDistance,
-                fConfig->detectorDistance,
-                element.thetadeg,
-                element.center.x(),
-                element.center.y(),
-                element.center.z(),
-                element.width,
-                detectorThickness,
-                element.width,
-                fConfig->worldMaterial,
-                fConfig->detectorType
+            for (const auto& element : multiDetector.detectorElements) {
+                G4String detName = "detectorPhys_g" + std::to_string(element.id);
+                DetectorMeta meta(
+                    copynumber,
+                    sampleMatString,
+                    fConfig->sampleMaterialSize.x(),
+                    fConfig->sampleMaterialSize.y(),
+                    fConfig->sampleMaterialSize.z(),
+                    fConfig->incidentAngle,
+                    fConfig->sourceDistance,
+                    fConfig->detectorDistance,
+                    element.thetadeg,
+                    element.center.x(),
+                    element.center.y(),
+                    element.center.z(),
+                    element.width,
+                    detectorThickness,
+                    element.width,
+                    fConfig->worldMaterial,
+                    fConfig->detectorType
+                );
+                G4cout<<"Adding detector metadata for detector ID " << meta.detId << ": "
+                    <<element.thetadeg<< G4endl;
+                detectorMetadata.emplace_back(meta);
+                new G4PVPlacement(new G4RotationMatrix(inverseRotation), element.center, fDetectorLV, detName, worldLogic, false, copynumber, true);
+                copynumber++;
+            }
+                
+    if (shield.enable && !shield.layers.empty()) {
+
+        const G4double capRadius = multiDetector.capRadius;
+        const G4double detHalfZ  = detectorThickness/2;
+
+        G4ThreeVector detectorcenter(
+            std::cos(multiDetector.groupAngle) * fConfig->detectorDistance,
+            0.0,
+            std::sin(multiDetector.groupAngle) * fConfig->detectorDistance
+        );
+
+        G4double currentHalfX = capRadius;
+        G4double currentHalfY = capRadius;
+        G4double currentHalfZ = detHalfZ;
+
+        G4double currentCenterShiftZ = 0.0;
+
+        const G4int shieldCopyBase = 100000 + copynumber * 100;
+
+        for (size_t i = 0; i < shield.layers.size(); ++i) {
+
+            const auto& layer = shield.layers[i];
+            const G4double gap = std::max(0.001*mm, layer.gapbefore);
+            const G4double wall = layer.thickness;
+
+            const G4double innerHalfX = currentHalfX + gap;
+            const G4double innerHalfY = currentHalfY + gap;
+            const G4double innerHalfZ = currentHalfZ + gap;
+
+            const G4double outerHalfX = innerHalfX + wall/2;
+            const G4double outerHalfY = innerHalfY + wall/2;
+            const G4double outerHalfZ = innerHalfZ + wall / 2.0;
+
+            const G4double cavityShiftZ = outerHalfZ - innerHalfZ;
+
+                const G4double shellCenterShiftZ = currentCenterShiftZ -cavityShiftZ;
+
+            const G4String base =
+                "Shield_g" + std::to_string(shieldCopyBase) + "_L" + std::to_string(i);
+
+            auto* outerSolid = new G4Box(
+                base + "_Outer_Solid",
+                outerHalfX,
+                outerHalfY,
+                outerHalfZ
             );
-            G4cout<<"Adding detector metadata for detector ID " << meta.detId << ": "
-                   <<element.thetadeg<< G4endl;
-            detectorMetadata.emplace_back(meta);
-            new G4PVPlacement(new G4RotationMatrix(inverseRotation), element.center, fDetectorLV, detName, worldLogic, false, copynumber, true);
-            copynumber++;
+
+            auto* innerSolid = new G4Box(
+                base + "_Inner_Solid",
+                innerHalfX,
+                innerHalfY,
+                innerHalfZ
+            );
+
+            auto* shieldSolid = new G4SubtractionSolid(
+                base + "_Shell_Solid",
+                outerSolid,
+                innerSolid,
+                nullptr,
+                G4ThreeVector(0.0, 0.0, cavityShiftZ)
+            );
+
+            G4Material* layerMat = nist->FindOrBuildMaterial(layer.material);
+
+            auto* logic = new G4LogicalVolume(
+                shieldSolid,
+                layerMat,
+                base + "_LV"
+            );
+
+            auto* shieldVis = new G4VisAttributes(
+                (i == 0) ? G4Colour(0.7, 0.2, 0.2, 1)
+                        : G4Colour(0.7, 0.2, 0.2, 1)
+            );
+            shieldVis->SetForceSolid(true);
+            logic->SetVisAttributes(shieldVis);
+
+            G4ThreeVector localPos(0.0, 0.0, shellCenterShiftZ);
+            G4ThreeVector globalPos = detectorcenter + rotation * localPos;
+
+            G4cout << "Placing shield layer " << i
+                << " at global position: " << globalPos / mm << " mm"
+                << "  innerHalfZ=" << innerHalfZ / mm
+                << " mm  outerHalfZ=" << outerHalfZ / mm
+                << " mm  cavityShiftZ=" << cavityShiftZ / mm
+                << " mm" << G4endl;
+
+            new G4PVPlacement(
+                new G4RotationMatrix(inverseRotation),
+                globalPos,
+                logic,
+                base + "_PV",
+                worldLogic,
+                false,
+                shieldCopyBase + static_cast<G4int>(i),
+                true
+            );
+
+            currentHalfX = outerHalfX;
+            currentHalfY = outerHalfY;
+            currentHalfZ = outerHalfZ;
+            currentCenterShiftZ = shellCenterShiftZ;
         }
-        if (shield.enable && shield.layers.size() > 0) {
-            G4double capRadius = multiDetector.capRadius;
-
-            const G4double gap = shield.detectorAndFirstLayerGap;
-            const G4double innerHalfX = capRadius + 0.5 * detectorwidth + gap;
-            const G4double innerHalfY = capRadius + 0.5 * detectorwidth + gap;
-
-            G4ThreeVector detectorcenter(
-                std::cos(multiDetector.groupAngle) * fConfig->detectorDistance,
-                0,
-                std::sin(multiDetector.groupAngle) * fConfig->detectorDistance
-            );
-
-            G4double currentHalfX = innerHalfX;
-            G4double currentHalfY = innerHalfY;
-            G4double currentBack  = gap;
-
-            for (size_t i = 0; i < shield.layers.size(); ++i) {
-
-                const auto& layer = shield.layers[i];
-                G4Material* layerMat = nist->FindOrBuildMaterial(layer.material);
-                
-                const G4double currentGap = std::max(0.0, layer.gapbefore); // Renamed to avoid shadowing outer 'gap'
-                const G4double t   = layer.thickness;
-
-                currentHalfX += currentGap;
-                currentHalfY += currentGap;
-                currentBack  += currentGap;
-                
-                const G4double outerHalfX = currentHalfX + t;
-                const G4double outerHalfY = currentHalfY + t;
-                const G4double outerBack  = currentBack  + t;
-
-                const G4String base = "Shield_" + std::to_string(i);
-
-                auto* outerSolid = new G4Box(base + "_Outer_Solid",
-                     outerHalfX,
-                     outerHalfY,
-                     (currentBack + t) / 2.0);
-                
-                auto* innerSolid = new G4Box(base + "_Inner_Solid",
-                     currentHalfX,
-                     currentHalfY,
-                     currentBack / 2.0);
-
-                auto* shieldSolid = new G4SubtractionSolid(
-                    base + "_Shell_Solid",
-                    outerSolid,
-                    innerSolid,
-                    nullptr,
-                    G4ThreeVector(0.0, 0.0, t / 2.0)
-                );
-
-                auto* logic = new G4LogicalVolume(shieldSolid, layerMat, base + "_LV");
-                auto* shieldVis = new G4VisAttributes(G4Colour(0.5, 0.5, 0.5, 0.4)); 
-                shieldVis->SetForceSolid(true);
-                logic->SetVisAttributes(shieldVis);
-                G4ThreeVector localPos(
-                    0.0,
-                    0.0,
-                    -(fConfig->detectorthickness + (currentBack + t) / 2.0)
-                );
-
-                G4ThreeVector globalPos = detectorcenter + rotation * localPos;
-
-                new G4PVPlacement(new G4RotationMatrix(inverseRotation),
-                        globalPos,
-                        logic,
-                        base + "_PV",
-                        worldLogic,
-                        false,
-                        static_cast<G4int>(1000 + i),
-                        true);
-
-                currentHalfX = outerHalfX;
-                currentHalfY = outerHalfY;
-                currentBack  = outerBack;
-            } // Ends layer loop
-        } // Ends if(shield.enable) statement
-        
-        // FIX: Removed the extra closing brace that was floating here
+        }        
+    //     // FIX: Removed the extra closing brace that was floating here
     } // Ends allDetectors loop
 
     return worldPhys;

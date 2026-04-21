@@ -74,8 +74,9 @@ SimulationMessenger::SimulationMessenger(SimulationConfig& config):fConfig(&conf
     fMessenger->DeclareProperty("totalEvents",fConfig->totalEvents,"Set the total number of events to simulate");
     fMessenger->DeclareProperty("chunkSize",fConfig->chunkSize,"Set the number of events to simulate in each chunk");
 
-    fMessenger->DeclareProperty("setShieldEnabled",fConfig->shield.enable,"Enable or disable the shield");
-
+    fMessenger->DeclareMethod("setShieldEnabled",
+                            &SimulationMessenger::SetShieldEnabled,
+                            "Enable or disable the shield");
     fMessenger->DeclareProperty("numberOfDetectorGroups",fConfig->numDetectorGroups,"Set the number of detector groups (multi-detectors) to construct");
 
 
@@ -179,3 +180,8 @@ SimulationMessenger::~SimulationMessenger() {
     delete fMessenger;    
 }
 
+void SimulationMessenger::SetShieldEnabled(G4bool value) {
+    fConfig->shield.enable = value;
+    G4cout << "SetShieldEnabled called, shield.enable = "
+           << std::boolalpha << fConfig->shield.enable << G4endl;
+}

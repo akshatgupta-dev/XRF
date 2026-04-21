@@ -24,13 +24,14 @@ G4bool SensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *hist)
 {
     G4double edep = step->GetTotalEnergyDeposit();
 
-    if (edep < 0) {
+    if (edep <= 0) {
         return true; 
     }
 
     auto touchable=step->GetPreStepPoint()->GetTouchableHandle();
     G4int detId=touchable->GetCopyNumber();
     fDetectorEnergyMap[detId] += edep;
+
 
     return true;
 }
@@ -42,6 +43,7 @@ void SensitiveDetector::EndOfEvent(G4HCofThisEvent *hce){
         G4double energy = entry.second;
 
         auto* analysisManager = G4AnalysisManager::Instance();
+
         analysisManager->FillH1(detId, energy / keV);
         analysisManager->FillNtupleIColumn(1,0, detId);
         analysisManager->FillNtupleDColumn(1,1, energy / keV);

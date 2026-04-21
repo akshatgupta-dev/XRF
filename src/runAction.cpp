@@ -56,9 +56,6 @@ void RunAction::BeginOfRunAction(const G4Run*)
     G4cout << "Opening output file: output.root" << G4endl;
     analysismanager->OpenFile("output.root");
 
-
-
-
     auto* detConst = static_cast<const DetectorConstruction*>(
         G4RunManager::GetRunManager()->GetUserDetectorConstruction()
     );
@@ -97,14 +94,15 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
     fMetadataWritten = true;
 }
-
 void RunAction::EndOfRunAction(const G4Run*)
 {
     auto* analysismanager = G4AnalysisManager::Instance();
+    G4cout << "Writing ROOT file..." << G4endl;
     analysismanager->Write();
-    analysismanager->CloseFile(false);
+    G4cout << "Closing ROOT file..." << G4endl;
+    analysismanager->CloseFile();
+    G4cout << "ROOT file closed." << G4endl;
 }
-
 void RunAction::CreateDedectorHistogram(G4int nDetectors)
 {
     auto* analysisManager = G4AnalysisManager::Instance();
