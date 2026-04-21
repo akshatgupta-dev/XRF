@@ -27,7 +27,6 @@ G4bool SensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *hist)
     if (edep <= 0) {
         return true; 
     }
-
     auto touchable=step->GetPreStepPoint()->GetTouchableHandle();
     G4int detId=touchable->GetCopyNumber();
     fDetectorEnergyMap[detId] += edep;

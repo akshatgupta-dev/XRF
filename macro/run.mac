@@ -5,8 +5,8 @@
 /xrf/detectorDistance 5 mm
 /xrf/takeoffAngle 45 deg
 /xrf/sampleSize 5 5 0.005 mm
-/xrf/detectorSpreadDeg 30 deg
-/xrf/detectorStepDeg 20 deg
+/xrf/detectorSpreadDeg 50 deg
+/xrf/detectorStepDeg 50 deg
 /xrf/worldMaterial G4_AIR
 /xrf/detectorThickness 0.5 mm
 /xrf/setShieldEnabled true 

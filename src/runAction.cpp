@@ -28,7 +28,10 @@ RunAction::RunAction()
     analysismanager->CreateNtupleSColumn("WorldMaterial");
     analysismanager->CreateNtupleSColumn("DetectorType");
 
+    analysismanager->CreateH1("totalEnergyDeposited", "Total energy deposited in the detector", 1000, 0, 100);
+
     analysismanager->FinishNtuple(0);
+    
 
 
 

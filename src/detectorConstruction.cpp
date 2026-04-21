@@ -174,8 +174,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct(){
             std::sin(multiDetector.groupAngle) * fConfig->detectorDistance
         );
 
-        G4double currentHalfX = capRadius;
-        G4double currentHalfY = capRadius;
+        G4double currentHalfX = capRadius+detectorwidth/2;
+        G4double currentHalfY = capRadius+detectorwidth/2;
         G4double currentHalfZ = detHalfZ;
 
         G4double currentCenterShiftZ = 0.0;
@@ -192,13 +192,13 @@ G4VPhysicalVolume* DetectorConstruction::Construct(){
             const G4double innerHalfY = currentHalfY + gap;
             const G4double innerHalfZ = currentHalfZ + gap;
 
-            const G4double outerHalfX = innerHalfX + wall/2;
-            const G4double outerHalfY = innerHalfY + wall/2;
+            const G4double outerHalfX = innerHalfX + wall;
+            const G4double outerHalfY = innerHalfY + wall;
             const G4double outerHalfZ = innerHalfZ + wall / 2.0;
 
             const G4double cavityShiftZ = outerHalfZ - innerHalfZ;
 
-                const G4double shellCenterShiftZ = currentCenterShiftZ -cavityShiftZ;
+            const G4double shellCenterShiftZ = currentCenterShiftZ -cavityShiftZ;
 
             const G4String base =
                 "Shield_g" + std::to_string(shieldCopyBase) + "_L" + std::to_string(i);
@@ -234,8 +234,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct(){
             );
 
             auto* shieldVis = new G4VisAttributes(
-                (i == 0) ? G4Colour(0.7, 0.2, 0.2, 1)
-                        : G4Colour(0.7, 0.2, 0.2, 1)
+                (i == 0) ? G4Colour(1, 0, 0, 1)
+                        : G4Colour(0.7, 0.2, 0.2, 0.5)
             );
             shieldVis->SetForceSolid(true);
             logic->SetVisAttributes(shieldVis);
