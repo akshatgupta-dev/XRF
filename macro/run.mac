@@ -9,7 +9,7 @@
 /xrf/detectorStepDeg 50 deg
 /xrf/worldMaterial G4_AIR
 /xrf/detectorThickness 0.5 mm
-/xrf/setShieldEnabled true 
+/xrf/setShieldEnabled false 
 /xrf/setShieldGap 2 mm
 /xrf/numberOfDetectorGroups 1
 /xrf/clearShieldLayers

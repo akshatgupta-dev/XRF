@@ -123,7 +123,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct(){
   auto* detVis = new G4VisAttributes(G4Colour(0.0, 1.0, 0.0));
   detVis->SetVisibility(true);
   fDetectorLV->SetVisAttributes(detVis);
-
+G4cout << "Sample material = "
+       << sampleLogic->GetMaterial()->GetName()
+       << G4endl;
 
     auto &shield=fConfig->shield;
 

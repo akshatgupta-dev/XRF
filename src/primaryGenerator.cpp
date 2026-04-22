@@ -21,13 +21,18 @@ void PrimaryGenerator::CalulateSourcePositionAndDirection(){
 
     SourcePosition = -SourceDirection;
 }
-
-void PrimaryGenerator::GeneratePrimaries(G4Event *event){
+void PrimaryGenerator::GeneratePrimaries(G4Event *event)
+{
     CalulateSourcePositionAndDirection();
 
-    fgun->GetCurrentSource()->SetParticlePosition(SourcePosition);
-    fgun->GetCurrentSource()->GetAngDist()->SetParticleMomentumDirection(SourceDirection.unit());
+    auto* source = fgun->GetCurrentSource();
 
+    source->GetPosDist()->SetPosDisType("Point");
+    source->GetPosDist()->SetCentreCoords(SourcePosition);
+    source->GetAngDist()->SetParticleMomentumDirection(SourceDirection.unit());
+
+    // G4cout << "SourcePosition = " << SourcePosition/mm << " mm, "
+    //        << "Direction = " << SourceDirection.unit() << G4endl;
 
     fgun->GeneratePrimaryVertex(event);
 }

@@ -110,7 +110,7 @@ void RunAction::CreateDedectorHistogram(G4int nDetectors)
 {
     auto* analysisManager = G4AnalysisManager::Instance();
 
-    if (analysisManager->GetNofH1s() > 0) return;
+        if (analysisManager->GetNofH1s() > 1) return;
 
     for (G4int i = 0; i < nDetectors; i++) {
         analysisManager->CreateH1(
