@@ -369,6 +369,15 @@ G4cout << "Sample material = "
             }
         }
     }
+    for(auto & virtualdetector:allVirtualDetectors){
+        G4cout << "Virtual Detector - Center: " << virtualdetector.center / mm << " mm, Width: " << virtualdetector.width / mm
+               << " mm, Height: " << virtualdetector.height / mm << " mm, Thickness: " << virtualdetector.thickness / mm
+               << " mm, Theta: " << virtualdetector.thetadeg << " degrees, Copy Numbers: ";
+        for (const auto& copyNum : virtualdetector.copyNumbersVec) {
+            G4cout << copyNum << " ";
+        }
+        G4cout << G4endl;
+    }
 
 
 
@@ -425,9 +434,9 @@ VirtualDetector DetectorConstruction::makeVirtualDetectors(
     vdet.thickness = fConfig->detectorthickness; 
     vdet.thetadeg = ComputeDetectorTheta(center);
     vdet.incidentAngle = fConfig->incidentAngle;
-    G4cout << "Created virtual detector with center: " << vdet.center / mm << " mm, width: " << vdet.width / mm
-           << " mm, height: " << vdet.height / mm << " mm, thickness: " << vdet.thickness / mm
-           << " mm, theta: " << vdet.thetadeg << " degrees, copy numbers: ";
+    // G4cout << "Created virtual detector with center: " << vdet.center / mm << " mm, width: " << vdet.width / mm
+    //        << " mm, height: " << vdet.height / mm << " mm, thickness: " << vdet.thickness / mm
+    //        << " mm, theta: " << vdet.thetadeg << " degrees, copy numbers: ";
     for (const auto& copyNum : vdet.copyNumbersVec) {
         G4cout << copyNum << " "<<G4endl;
     }

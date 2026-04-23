@@ -23,11 +23,11 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
         auto* birthLV = track->GetLogicalVolumeAtVertex();
         G4String birthName = birthLV ? birthLV->GetName() : "Unknown";
 
-        G4cout << "NEW GAMMA BORN: "
-               << "E=" << track->GetKineticEnergy()/keV << " keV "
-               << "birthVol=" << birthName << " "
-               << "birthPos=" << track->GetVertexPosition()
-               << G4endl;
+        // G4cout << "NEW GAMMA BORN: "
+        //        << "E=" << track->GetKineticEnergy()/keV << " keV "
+        //        << "birthVol=" << birthName << " "
+        //        << "birthPos=" << track->GetVertexPosition()
+        //        << G4endl;
     }
         
     auto* preVol = step->GetPreStepPoint()->GetTouchableHandle()->GetVolume();

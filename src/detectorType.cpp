@@ -17,7 +17,6 @@ void SensitiveDetector::Initialize(G4HCofThisEvent *hce){
 
     fTotalEnergyDeposited=0.0;
     fDetectorEnergyMap.clear();
-
 }
 
 G4bool SensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *hist)
@@ -47,23 +46,32 @@ void SensitiveDetector::EndOfEvent(G4HCofThisEvent *hce){
         analysisManager->FillNtupleDColumn(1,1, energy / keV);
         analysisManager->AddNtupleRow(1);
     }
+    G4double energy=0.0;
+
 
     for (const auto& virtualdetector:allvirtualDetectors){
         G4int detId=virtualdetector.copyNumbers;
-        G4double energy=0.0;
-
+        energy=0.0;
         for (const auto& copyNum : virtualdetector.copyNumbersVec) {
+
             if (fDetectorEnergyMap.find(copyNum) != fDetectorEnergyMap.end()) {
                 energy += fDetectorEnergyMap[copyNum];
             }
         }
 
-        auto* analysisManager = G4AnalysisManager::Instance();
+        if (energy>0){
+            
+            auto* analysisManager = G4AnalysisManager::Instance();
 
-        analysisManager->FillH1(detId+1, energy / keV);
-        analysisManager->FillNtupleIColumn(1,0, detId);
-        analysisManager->FillNtupleDColumn(1,1, energy / keV);
-        analysisManager->AddNtupleRow(1);
+            analysisManager->FillH1(detId+1, energy / keV);
+            analysisManager->FillNtupleIColumn(1,0, detId);
+            analysisManager->FillNtupleDColumn(1,1, energy / keV);
+            analysisManager->AddNtupleRow(1);
+
+
+        }
+
+        
     }
 
 }
