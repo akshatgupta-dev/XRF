@@ -17,9 +17,21 @@
 /xrf/addShieldLayer G4_Al 0.5 mm 0.2 mm
 /xrf/addShieldLayer G4_Al 0.5 mm 0.3 mm
 
+
+
+
+
+/process/em/fluo true
+/process/em/auger true
+/process/em/pixe true
+/process/em/deexcitationIgnoreCut true
+
+
 /run/initialize
 /gps/particle gamma
 /gps/energy 20 keV
+
+
 
 /vis/open OGLSQt
 /vis/drawVolume

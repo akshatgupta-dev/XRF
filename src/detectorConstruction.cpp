@@ -108,8 +108,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct(){
     auto *sampleLogic=new G4LogicalVolume(sampleSolid,sampleMat,"sampleLogic");
     auto *samplePhys=new G4PVPlacement(nullptr,G4ThreeVector(0,0,0),sampleLogic,"samplePhys",worldLogic,false,1,true);
 
-
-
     auto *detectorMat=nist->FindOrBuildMaterial("G4_Si");
 
     const G4double detectorThickness=fConfig->detectorthickness;
@@ -129,16 +127,27 @@ G4cout << "Sample material = "
 
     auto &shield=fConfig->shield;
 
+    
+    std::map<int,std::map<int,std::vector<DetectorElement>>>rowmap;
+    std::map<int,std::map<int,std::vector<DetectorElement>>>columnmap;
+
+
+
     G4int copynumber=0;
+    G4int groupId=0;
     for (const auto& multiDetector : allDetectors) {
             
             G4RotationMatrix rotation;
             rotation.rotateY(-(90 * deg + multiDetector.groupAngle));
-
             G4RotationMatrix inverseRotation = rotation.inverse();
-
             for (const auto& element : multiDetector.detectorElements) {
                 G4String detName = "detectorPhys_g" + std::to_string(element.id);
+
+                rowmap[groupId][element.row].push_back(element);
+                columnmap[groupId][element.col].push_back(element);
+                
+                element.copynumber=copynumber;
+                element.groupId=groupId;
                 DetectorMeta meta(
                     copynumber,
                     sampleMatString,
@@ -268,9 +277,29 @@ G4cout << "Sample material = "
             currentHalfZ = outerHalfZ;
             currentCenterShiftZ = shellCenterShiftZ;
         }
-        }        
-    //     // FIX: Removed the extra closing brace that was floating here
-    } // Ends allDetectors loop
+        }    
+        
+        groupId++;
+    } 
+
+    // for(auto & [groupId,row]:rowmap){
+    //     for(auto &[rowNum,detectorvec]:row){
+    //         sortDetectorsRow(detectorvec);
+
+    //         for(int start=0;start<detectorvec.size();++start){
+
+
+    //         }
+
+            
+            
+
+    //     }
+
+
+    // }
+
+
 
     return worldPhys;
 }
@@ -281,4 +310,14 @@ void DetectorConstruction::ConstructSDandField(){
     auto *sd=new SensitiveDetector("XRF_SensitiveDetector",*fConfig);
     G4SDManager::GetSDMpointer()->AddNewDetector(sd);
     fDetectorLV->SetSensitiveDetector(sd);
+}
+
+void DetectorConstruction::sortDetectorsRow(std::vector<DetectorElement>& detectors){
+
+    std::sort(detectors.begin(),detectors.end(),[](const DetectorElement& a,const DetectorElement& b){
+
+        return a.center.y()<b.center.y();
+
+    });
+
 }

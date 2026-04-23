@@ -16,6 +16,14 @@
 /xrf/addShieldLayer G4_Pb 1.0 mm 0.0 mm
 /xrf/addShieldLayer G4_Al 0.5 mm 0.5 mm
 
+
+
+
+/process/em/fluo true
+/process/em/auger true
+/process/em/pixe true
+/process/em/deexcitationIgnoreCut true
+
 /run/numberOfThreads 20
 /run/initialize
 /gps/particle gamma

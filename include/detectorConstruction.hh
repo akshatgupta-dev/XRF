@@ -63,6 +63,17 @@ struct DetectorMeta {
         detectorType(detType) {}
 };
 
+struct VirtualDetectorMeta{
+
+    G4VThreeVector center;
+    G4double width, height, thickness;
+    G4double thetadeg;
+    G4double incidentAngle;
+    std::vector <G4double> copyNumbersVec;
+
+
+}
+
 class DetectorConstruction:public G4VUserDetectorConstruction{
 
     public:
@@ -76,6 +87,10 @@ class DetectorConstruction:public G4VUserDetectorConstruction{
         const std::vector<DetectorMeta>& GetDetectorMetadata() const {
             return detectorMetadata;
         }
+
+        void sortDetectorsRow(std::vector<DetectorElement>& detectors);
+
+        
 
 
     

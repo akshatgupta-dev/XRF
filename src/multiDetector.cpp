@@ -59,6 +59,9 @@ MultiDetectorConstruction::MultiDetectorConstruction(G4double detectorDistance, 
             element.thetadeg=ComputeDetectorTheta(globalPos);
             element.width=width;
             element.height=width;
+            element.row=ix;
+            element.col=iy;
+
             detectorElements.push_back(element);
 
             G4cout<<"Detector "<<element.id<<" at "<<globalPos<<" with theta "<<element.thetadeg<<" degrees"<<G4endl;

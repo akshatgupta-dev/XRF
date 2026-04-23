@@ -14,8 +14,6 @@ SteppingAction::~SteppingAction() {}
 void SteppingAction::UserSteppingAction(const G4Step* step)
 {
     auto* track = step->GetTrack();
-
-    // ---- Check newly born gamma tracks ----
     if (track->GetDefinition() == G4Gamma::GammaDefinition() &&
         track->GetCurrentStepNumber() == 1 &&
         track->GetParentID() > 0 &&
@@ -31,8 +29,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
                << "birthPos=" << track->GetVertexPosition()
                << G4endl;
     }
-
-    // ---- Optional: also print photoelectric events in sample ----
+        
     auto* preVol = step->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
     if (!preVol) return;
 
