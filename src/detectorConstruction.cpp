@@ -135,19 +135,20 @@ G4cout << "Sample material = "
 
     G4int copynumber=0;
     G4int groupId=0;
-    for (const auto& multiDetector : allDetectors) {
+    for (auto& multiDetector : allDetectors) {
             
             G4RotationMatrix rotation;
             rotation.rotateY(-(90 * deg + multiDetector.groupAngle));
             G4RotationMatrix inverseRotation = rotation.inverse();
-            for (const auto& element : multiDetector.detectorElements) {
+            for (auto& element : multiDetector.detectorElements) {
                 G4String detName = "detectorPhys_g" + std::to_string(element.id);
 
+                
+                element.copynumber=copynumber;
+                element.groupId=groupId;
                 rowmap[groupId][element.row].push_back(element);
                 columnmap[groupId][element.col].push_back(element);
-                
-                // element.copynumber=copynumber;
-                // element.groupId=groupId;
+
                 DetectorMeta meta(
                     copynumber,
                     sampleMatString,
@@ -282,22 +283,92 @@ G4cout << "Sample material = "
         groupId++;
     } 
 
-    // for(auto & [groupId,row]:rowmap){
-    //     for(auto &[rowNum,detectorvec]:row){
-    //         sortDetectorsRow(detectorvec);
+    for(auto & [groupId,row]:rowmap){
+        for(auto &[rowNum,detectorvec]:row){
+            sortDetectorsRow(detectorvec);
 
-    //         for(int start=0;start<detectorvec.size();++start){
+            for(int start=0;start<detectorvec.size();++start){
+                std::vector<DetectorElement>currentCombo;
+
+                currentCombo.push_back(detectorvec[start]);
+
+                for (int end=start+1;end<detectorvec.size();++end){
+
+                    currentCombo.push_back(detectorvec[end]);
+
+                    VirtualDetector virtualdetector=makeVirtualDetectors(currentCombo,true);
+                    virtualdetector.copyNumbers=copynumber;
+                    allVirtualDetectors.push_back(virtualdetector);
+
+                    DetectorMeta meta(
+                    virtualdetector.copyNumbers,
+                    sampleMatString,
+                    fConfig->sampleMaterialSize.x(),
+                    fConfig->sampleMaterialSize.y(),
+                    fConfig->sampleMaterialSize.z(),
+                    fConfig->incidentAngle,
+                    fConfig->sourceDistance,
+                    fConfig->detectorDistance,
+                    virtualdetector.thetadeg,
+                    virtualdetector.center.x(),
+                    virtualdetector.center.y(),
+                    virtualdetector.center.z(),
+                    virtualdetector.width,
+                    detectorThickness,
+                    virtualdetector.height,
+                    fConfig->worldMaterial,
+                    fConfig->detectorType
+                );
+                detectorMetadata.emplace_back(meta);
+                copynumber++;
 
 
-    //         }
+                }
+            }
+        }
+    }
+    for(auto &[groupId,column]:columnmap){
+        for(auto &[colNum,detectorvec]:column){
+            sortDetectorsColumn(detectorvec);
 
-            
-            
+            for(int start=0;start<detectorvec.size();++start){
+                std::vector<DetectorElement>currentCombo;
 
-    //     }
+                currentCombo.push_back(detectorvec[start]);
 
+                for (int end=start+1;end<detectorvec.size();++end){
 
-    // }
+                    currentCombo.push_back(detectorvec[end]);
+
+                    VirtualDetector virtualdetector=makeVirtualDetectors(currentCombo,false);
+                    virtualdetector.copyNumbers=copynumber;
+                    allVirtualDetectors.push_back(virtualdetector);
+                    DetectorMeta meta(
+                    virtualdetector.copyNumbers,
+                    sampleMatString,
+                    fConfig->sampleMaterialSize.x(),
+                    fConfig->sampleMaterialSize.y(),
+                    fConfig->sampleMaterialSize.z(),
+                    fConfig->incidentAngle,
+                    fConfig->sourceDistance,
+                    fConfig->detectorDistance,
+                    virtualdetector.thetadeg,
+                    virtualdetector.center.x(),
+                    virtualdetector.center.y(),
+                    virtualdetector.center.z(),
+                    virtualdetector.width,
+                    detectorThickness,
+                    virtualdetector.height,
+                    fConfig->worldMaterial,
+                    fConfig->detectorType
+                );
+                detectorMetadata.emplace_back(meta);
+                copynumber++;
+
+                }
+            }
+        }
+    }
 
 
 
@@ -307,7 +378,7 @@ G4cout << "Sample material = "
 DetectorConstruction::~DetectorConstruction() = default;
 
 void DetectorConstruction::ConstructSDandField(){
-    auto *sd=new SensitiveDetector("XRF_SensitiveDetector",*fConfig);
+    auto *sd=new SensitiveDetector("XRF_SensitiveDetector",*fConfig,allVirtualDetectors);
     G4SDManager::GetSDMpointer()->AddNewDetector(sd);
     fDetectorLV->SetSensitiveDetector(sd);
 }
@@ -316,8 +387,70 @@ void DetectorConstruction::sortDetectorsRow(std::vector<DetectorElement>& detect
 
     std::sort(detectors.begin(),detectors.end(),[](const DetectorElement& a,const DetectorElement& b){
 
-        return a.center.y()<b.center.y();
+        return a.col<b.col;
 
     });
 
+}
+
+VirtualDetector DetectorConstruction::makeVirtualDetectors(
+    const std::vector<DetectorElement>& detectors,bool row)
+{
+    VirtualDetector vdet{};
+
+    if (detectors.empty()) {
+        return vdet;
+    }
+
+    G4double width = 0.0;
+    G4double height = 0.0;
+    G4ThreeVector center(0, 0, 0);
+
+    for (const auto& element : detectors) {
+        if (row) {
+            width += element.width;
+            height = std::max(height, element.height);
+        } else {
+            height += element.height;
+            width = std::max(width, element.width);
+        }
+        center += element.center;
+        vdet.copyNumbersVec.push_back(element.copynumber);
+    }
+    center /= detectors.size();
+
+    vdet.center = center;
+    vdet.width = width;
+    vdet.height = height;
+    vdet.thickness = fConfig->detectorthickness; 
+    vdet.thetadeg = ComputeDetectorTheta(center);
+    vdet.incidentAngle = fConfig->incidentAngle;
+    G4cout << "Created virtual detector with center: " << vdet.center / mm << " mm, width: " << vdet.width / mm
+           << " mm, height: " << vdet.height / mm << " mm, thickness: " << vdet.thickness / mm
+           << " mm, theta: " << vdet.thetadeg << " degrees, copy numbers: ";
+    for (const auto& copyNum : vdet.copyNumbersVec) {
+        G4cout << copyNum << " "<<G4endl;
+    }
+    return vdet;
+}
+
+
+
+
+G4double DetectorConstruction::ComputeDetectorTheta(const G4ThreeVector& pos){
+
+    // return std::atan2(pos.z(),pos.x())/deg;
+
+    G4double mag=std::sqrt(pos.x()*pos.x()+pos.z()*pos.z()+pos.y()*pos.y());
+    return std::acos(pos.z()/mag)/deg;
+
+}
+
+void DetectorConstruction::sortDetectorsColumn(std::vector<DetectorElement>& detectors){
+
+    std::sort(detectors.begin(),detectors.end(),[](const DetectorElement& a,const DetectorElement& b){
+
+        return a.row<b.row;
+
+    });
 }

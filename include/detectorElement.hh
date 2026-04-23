@@ -3,7 +3,7 @@
 
 #include "G4ThreeVector.hh"
 #include "globals.hh"
-
+#include "vector"
 struct DetectorElement {
     G4int id;
     G4ThreeVector center;
@@ -14,6 +14,18 @@ struct DetectorElement {
     G4double height;
     G4int copynumber;
     G4int groupId;
+};
+
+struct VirtualDetector{
+
+    G4ThreeVector center;
+    G4double width, height, thickness;
+    G4double thetadeg;
+    G4double incidentAngle;
+    std::vector <G4double> copyNumbersVec;
+    G4int copyNumbers;
+
+
 };
 
 #endif

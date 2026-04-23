@@ -9,11 +9,12 @@
 #include <map>
 #include "G4AnalysisManager.hh"
 #include "SimulationConfig.hh"
+#include "detectorElement.hh"
 
 class SensitiveDetector:public G4VSensitiveDetector{
 
 public:
-    SensitiveDetector(G4String name,SimulationConfig &config);
+    SensitiveDetector(G4String name,SimulationConfig &config,std::vector<VirtualDetector>& virtualDetectors);
     ~SensitiveDetector();
 private:
     G4double fTotalEnergyDeposited;
@@ -24,6 +25,8 @@ private:
     virtual void EndOfEvent(G4HCofThisEvent*)override;
     virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
     std::map<G4int, G4double> fDetectorEnergyMap;
+
+    std::vector<VirtualDetector> allvirtualDetectors;
 
 };
 
