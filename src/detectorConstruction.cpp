@@ -146,8 +146,8 @@ G4cout << "Sample material = "
                 rowmap[groupId][element.row].push_back(element);
                 columnmap[groupId][element.col].push_back(element);
                 
-                element.copynumber=copynumber;
-                element.groupId=groupId;
+                // element.copynumber=copynumber;
+                // element.groupId=groupId;
                 DetectorMeta meta(
                     copynumber,
                     sampleMatString,
