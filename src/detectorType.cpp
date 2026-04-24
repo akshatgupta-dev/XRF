@@ -17,6 +17,7 @@ void SensitiveDetector::Initialize(G4HCofThisEvent *hce){
 
     fTotalEnergyDeposited=0.0;
     fDetectorEnergyMap.clear();
+    fEnergyMap.clear();
 }
 
 G4bool SensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *hist)

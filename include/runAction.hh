@@ -40,8 +40,6 @@ class RunAction:public G4UserRunAction{
             G4String detectorType
         ) const;
     private:
-    static G4bool fMetadataWritten;
-    static G4Mutex fMetadataMutex;
 
 
 };

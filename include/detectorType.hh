@@ -25,6 +25,7 @@ private:
     virtual void EndOfEvent(G4HCofThisEvent*)override;
     virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
     std::map<G4int, G4double> fDetectorEnergyMap;
+    std::map<G4int, G4double> fEnergyMap;
 
     std::vector<VirtualDetector> allvirtualDetectors;
 

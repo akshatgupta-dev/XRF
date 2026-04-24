@@ -38,7 +38,8 @@ int main(int argc,char **argv){
     manager->SetUserInitialization(new ActionInitialization(config));
 
 
-    G4VisManager *vismanger=new G4VisExecutive();
+    G4VisManager *vismanger=new G4VisExecutive();   
+    
     vismanger->Initialize();
 
 

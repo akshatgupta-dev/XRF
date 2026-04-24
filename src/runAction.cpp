@@ -3,8 +3,6 @@
 #include "G4Threading.hh"
 #include "G4AutoLock.hh"
 
-G4bool RunAction::fMetadataWritten = false;
-G4Mutex RunAction::fMetadataMutex = G4MUTEX_INITIALIZER;
 RunAction::RunAction()
 {
     auto* analysismanager = G4AnalysisManager::Instance();
@@ -68,12 +66,8 @@ void RunAction::BeginOfRunAction(const G4Run*)
     G4int ndetectors= static_cast<G4int>(metadata.size());
 
     CreateDedectorHistogram(ndetectors);
-    if (G4Threading::IsMasterThread()) return;
-    G4AutoLock lock(&fMetadataMutex);
-
-    if (fMetadataWritten) return;
-
-    for (const auto& meta : metadata) {
+    if (G4Threading::G4GetThreadId() == 0){
+            for (const auto& meta : metadata) {
         FillDetectorMetadata(
             meta.detId,
             meta.material,
@@ -95,7 +89,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
         );
     }
 
-    fMetadataWritten = true;
+    };
 }
 void RunAction::EndOfRunAction(const G4Run*)
 {
