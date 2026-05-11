@@ -8,11 +8,12 @@
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 #include "detectorConstruction.hh"
+#include "SimulationConfig.hh"
 
 class RunAction:public G4UserRunAction{
 
     public:
-        RunAction();
+        RunAction(SimulationConfig &config);
         ~RunAction() override;
         void BeginOfRunAction(const G4Run* run) override;
         void EndOfRunAction(const G4Run* run) override;
@@ -37,10 +38,12 @@ class RunAction:public G4UserRunAction{
             G4double detectorThickness,
             G4double detectorHeight,
             G4String worldMat,
-            G4String detectorType
+            G4String detectorType,
+            G4bool isVirtualDetector
         ) const;
     private:
-
+    SimulationConfig *fConfig{nullptr};
+    std::vector<int> virtualDetectorItsRealDetectorIds;
 
 };
 

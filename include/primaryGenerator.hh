@@ -11,8 +11,11 @@
 #include "G4Gamma.hh"
 #include "G4ParticleGun.hh"
 #include "G4SystemOfUnits.hh"
-
+#include "Randomize.hh"
+#include <cmath>
 #include "SimulationConfig.hh"
+#include "G4AutoLock.hh"
+
 class PrimaryGenerator:public G4VUserPrimaryGeneratorAction{
 
     public:

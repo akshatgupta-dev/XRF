@@ -53,6 +53,8 @@ class SimulationConfig{
         G4double detectorStepDeg = 0.0;
         G4double detectorthickness = 0.0 * mm;
 
+        G4double focalspot = 0.0 * mm;
+
         long long totalEvents = 0;
         int chunkSize = 0;
 
@@ -62,9 +64,14 @@ class SimulationConfig{
 
         G4int numDetectorGroups;
 
+        G4double pileupTimeWindow = 0.0 * ns;
+
+        G4double explambda = 0.0;
 
 
         ShieldConfig shield;
+
+        G4String outputFileName= "output.root";
 
 };
 

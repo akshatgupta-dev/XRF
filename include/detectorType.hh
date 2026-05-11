@@ -10,6 +10,9 @@
 #include "G4AnalysisManager.hh"
 #include "SimulationConfig.hh"
 #include "detectorElement.hh"
+#include <vector>
+#include <algorithm>
+#include <unordered_map>
 struct RecordingInfo
 {
     G4int detId;
@@ -37,12 +40,14 @@ private:
     virtual void Initialize (G4HCofThisEvent *)override;
     virtual void EndOfEvent(G4HCofThisEvent*)override;
     virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-    std::map<G4int, G4double> fDetectorEnergyMap;
-    std::map<G4int, G4double> fEnergyMap;
 
     std::vector<VirtualDetector> allvirtualDetectors;
     std::map<G4int,std::map<G4int,RecordingInfo>> recordingInfos;
 
+    std::unordered_map<G4int,std::unordered_map<G4int,G4int>> fDetectorPhotonRootId;
+
+    G4int GetDetectorPhotonRootId(G4int detId,const G4Track *track);
+    
 };
 
 #endif 

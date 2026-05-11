@@ -3,7 +3,7 @@
 #include "G4Threading.hh"
 #include "G4AutoLock.hh"
 
-RunAction::RunAction()
+RunAction::RunAction(SimulationConfig &config):fConfig(&config)
 {
     auto* analysismanager = G4AnalysisManager::Instance();
     analysismanager->SetNtupleMerging(true);
@@ -25,21 +25,20 @@ RunAction::RunAction()
     analysismanager->CreateNtupleDColumn("DetectorHeight_mm");
     analysismanager->CreateNtupleSColumn("WorldMaterial");
     analysismanager->CreateNtupleSColumn("DetectorType");
+    analysismanager->CreateNtupleIColumn("IsVirtualDetector");
+    analysismanager->CreateNtupleIColumn("VirtualDetectorCopyNumbers",virtualDetectorItsRealDetectorIds);
 
     analysismanager->CreateH1("totalEnergyDeposited", "Total energy deposited in the detector", 1000, 0, 100);
 
     analysismanager->FinishNtuple(0);
-    
-
-
 
     analysismanager->CreateNtuple("hits", "Raw detector hits");
-
     // analysismanager->CreateNtupleIColumn("eventID");
     analysismanager->CreateNtupleIColumn("detID");
-    analysismanager->CreateNtupleDColumn("energy");
-
-    analysismanager->FinishNtuple(1); 
+    analysismanager->CreateNtupleIColumn("trackID");
+    analysismanager->CreateNtupleDColumn("energy_keV");
+    analysismanager->CreateNtupleDColumn("time_ns");
+    analysismanager->FinishNtuple(1);
 
     analysismanager->CreateNtuple("shieldInformation", "Information about shield layers");
     analysismanager->CreateNtupleIColumn("layerID");
@@ -47,6 +46,11 @@ RunAction::RunAction()
     analysismanager->CreateNtupleDColumn("thickness_mm");
     analysismanager->CreateNtupleDColumn("gapBefore_mm");
     analysismanager->FinishNtuple(2);
+
+
+
+
+    
 }
 
 RunAction::~RunAction() {}
@@ -55,7 +59,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
 {
     auto* analysismanager = G4AnalysisManager::Instance();
     G4cout << "Opening output file: output.root" << G4endl;
-    analysismanager->OpenFile("output.root");
+    analysismanager->OpenFile(fConfig->outputFileName);
 
     auto* detConst = static_cast<const DetectorConstruction*>(
         G4RunManager::GetRunManager()->GetUserDetectorConstruction()
@@ -67,28 +71,42 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
     CreateDedectorHistogram(ndetectors);
     if (G4Threading::G4GetThreadId() == 0){
-            for (const auto& meta : metadata) {
-        FillDetectorMetadata(
-            meta.detId,
-            meta.material,
-            meta.samplewidth,
-            meta.sampleheight,
-            meta.samplethickness,
-            meta.incidentAngle,
-            meta.sourceDistance,
-            meta.detectorDistance,
-            meta.takeoffAngle,
-            meta.detectorx,
-            meta.detectory,
-            meta.detectorz,
-            meta.width,
-            meta.thickness,
-            meta.height,
-            meta.worldMat,
-            meta.detectorType
-        );
-    }
+            const auto & virtualdetectors=detConst->GetAllVirtualDetectors();
 
+            for (const auto& meta : metadata) {
+                virtualDetectorItsRealDetectorIds.clear();
+
+                for (const auto &virt:virtualdetectors){
+
+                    if (virt.copyNumbers==meta.detId){
+                        for(const auto& copyNum:virt.copyNumbersVec){
+                            virtualDetectorItsRealDetectorIds.push_back(copyNum);
+                        }                        
+                    }
+
+                }
+                FillDetectorMetadata(
+                    meta.detId,
+                    meta.material,
+                    meta.samplewidth,
+                    meta.sampleheight,
+                    meta.samplethickness,
+                    meta.incidentAngle,
+                    meta.sourceDistance,
+                    meta.detectorDistance,
+                    meta.takeoffAngle,
+                    meta.detectorx,
+                    meta.detectory,
+                    meta.detectorz,
+                    meta.width,
+                    meta.thickness,
+                    meta.height,
+                    meta.worldMat,
+                    meta.detectorType,
+                    meta.isVirtualDetector
+                );
+           } 
+           
     };
 }
 void RunAction::EndOfRunAction(const G4Run*)
@@ -115,7 +133,12 @@ void RunAction::CreateDedectorHistogram(G4int nDetectors)
     }
 }
 
-void RunAction::FillDetectorMetadata(G4int detId, G4String material, G4double samplesizeX, G4double samplesizeY, G4double samplesizeZ, G4double incidentAngle, G4double sourceDistance, G4double detectorDistance, G4double takeoffAngle, G4double detectorLocationX, G4double detectorLocationY, G4double detectorLocationZ, G4double detectorWidth, G4double detectorThickness, G4double detectorHeight, G4String worldMat, G4String detectorType)const{
+void RunAction::FillDetectorMetadata(G4int detId, G4String material,
+     G4double samplesizeX, G4double samplesizeY, G4double samplesizeZ,
+      G4double incidentAngle, G4double sourceDistance, G4double detectorDistance,
+       G4double takeoffAngle, G4double detectorLocationX, G4double detectorLocationY,
+        G4double detectorLocationZ, G4double detectorWidth, G4double detectorThickness,
+         G4double detectorHeight, G4String worldMat, G4String detectorType,G4bool isVirtualDetector)const{
 
     auto* analysisManager = G4AnalysisManager::Instance();
     analysisManager->FillNtupleIColumn(0,0, detId);
@@ -123,9 +146,9 @@ void RunAction::FillDetectorMetadata(G4int detId, G4String material, G4double sa
     analysisManager->FillNtupleDColumn(0,2, samplesizeX);
     analysisManager->FillNtupleDColumn(0,3, samplesizeY);
     analysisManager->FillNtupleDColumn(0,4, samplesizeZ);
-    analysisManager->FillNtupleDColumn(0,5, incidentAngle);
-    analysisManager->FillNtupleDColumn(0,6, sourceDistance);
-    analysisManager->FillNtupleDColumn(0,7, detectorDistance);
+    analysisManager->FillNtupleDColumn(0,5, incidentAngle/deg);
+    analysisManager->FillNtupleDColumn(0,6, sourceDistance/mm);
+    analysisManager->FillNtupleDColumn(0,7, detectorDistance/mm);
     analysisManager->FillNtupleDColumn(0,8, takeoffAngle);
     analysisManager->FillNtupleDColumn(0, 9, detectorLocationX);
     analysisManager->FillNtupleDColumn(0,10, detectorLocationY);
@@ -135,7 +158,7 @@ void RunAction::FillDetectorMetadata(G4int detId, G4String material, G4double sa
     analysisManager->FillNtupleDColumn(0,14, detectorHeight);
     analysisManager->FillNtupleSColumn(0,15, worldMat);
     analysisManager->FillNtupleSColumn(0,16, detectorType);
-
+    analysisManager->FillNtupleIColumn(0, 17, isVirtualDetector ? 1 : 0);
     analysisManager->AddNtupleRow(0);
 
 }

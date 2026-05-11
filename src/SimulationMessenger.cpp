@@ -70,7 +70,10 @@ SimulationMessenger::SimulationMessenger(SimulationConfig& config):fConfig(&conf
                                         "Set the angular step between adjacent detectors in degrees");
 
 
-
+    fMessenger->DeclarePropertyWithUnit("pileupTimeWindow",
+                                        "ns",
+                                        fConfig->pileupTimeWindow,
+                                        "Set the time window for pileup in the detector");
     fMessenger->DeclareProperty("totalEvents",fConfig->totalEvents,"Set the total number of events to simulate");
     fMessenger->DeclareProperty("chunkSize",fConfig->chunkSize,"Set the number of events to simulate in each chunk");
 
@@ -84,6 +87,8 @@ SimulationMessenger::SimulationMessenger(SimulationConfig& config):fConfig(&conf
                                         "mm",
                                         fConfig->shield.detectorAndFirstLayerGap,
                                         "Set the gap between the detector and the first layer of the shield");
+    fMessenger->DeclareProperty("focalspot",fConfig->focalspot,"Set the focal spot size of the source in mm");
+    
 
 fMessenger->DeclarePropertyWithUnit("sampleSize",
                                     "mm",
@@ -99,8 +104,13 @@ fMessenger->DeclarePropertyWithUnit("sampleSize",
     fMessenger->DeclareProperty("worldMaterial",fConfig->worldMaterial,"Set the material of the world volume");
 
     fMessenger->DeclareProperty("detectorType",fConfig->detectorType,"Set the type of the detector (e.g., Si, Ge)");
+
+    fMessenger->DeclareProperty("explambda",fConfig->explambda,"Set the lambda value for exponential distribution of the source");
+
     fMessenger->DeclarePropertyWithUnit("detectorThickness","mm",fConfig->detectorthickness,"Set the thickness of the detector in mm");
 
+    fMessenger->DeclareProperty("outputFileName",fConfig->outputFileName,"Set the name of the output file (e.g., output.root)");
+    
 }
 
 void SimulationMessenger::SetSampleSize(const G4String& value){

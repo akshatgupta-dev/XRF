@@ -42,6 +42,7 @@ struct DetectorMeta {
     G4double width, thickness, height;
     G4String worldMat;
     G4String detectorType;
+    G4bool isVirtualDetector;
 
     DetectorMeta(
         G4int id,
@@ -54,13 +55,14 @@ struct DetectorMeta {
         G4double detX, G4double detY, G4double detZ,
         G4double w, G4double t, G4double h,
         G4String worldMaterial,
-        G4String detType
+        G4String detType,
+        G4bool isVirtual 
     ) : detId(id), material(mat), samplewidth(sw), sampleheight(sh), samplethickness(st),
         incidentAngle(incAngle), sourceDistance(srcDist), detectorDistance(detDist), takeoffAngle(takeoff),
         detectorx(detX), detectory(detY), detectorz(detZ),
         width(w), thickness(t), height(h),
         worldMat(worldMaterial),
-        detectorType(detType) {}
+        detectorType(detType),isVirtualDetector(isVirtual) {}
 };
 
 
@@ -77,6 +79,11 @@ class DetectorConstruction:public G4VUserDetectorConstruction{
         void ConstructSDandField() override;
         const std::vector<DetectorMeta>& GetDetectorMetadata() const {
             return detectorMetadata;
+        }
+
+
+        const std::vector<VirtualDetector>& GetAllVirtualDetectors() const {
+            return allVirtualDetectors;
         }
 
         void sortDetectorsRow(std::vector<DetectorElement>& detectors);

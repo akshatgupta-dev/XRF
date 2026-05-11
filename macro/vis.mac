@@ -16,6 +16,7 @@
 /xrf/addShieldLayer G4_Pb 1.0 mm 0.1 mm
 /xrf/addShieldLayer G4_Al 0.5 mm 0.2 mm
 /xrf/addShieldLayer G4_Al 0.5 mm 0.3 mm
+/xrf/focalspot 0.5 mm
 
 
 
@@ -46,5 +47,5 @@
 /vis/scene/add/trajectories smooth
 /vis/scene/endOfEventAction accumulate 10
 
-/run/beamOn 100
 /vis/viewer/flush
+

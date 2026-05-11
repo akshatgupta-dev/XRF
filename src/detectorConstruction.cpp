@@ -166,7 +166,8 @@ G4cout << "Sample material = "
                     detectorThickness,
                     element.width,
                     fConfig->worldMaterial,
-                    fConfig->detectorType
+                    fConfig->detectorType,
+                    false
                 );
                 G4cout<<"Adding detector metadata for detector ID " << meta.detId << ": "
                     <<element.thetadeg<< G4endl;
@@ -317,7 +318,8 @@ G4cout << "Sample material = "
                     detectorThickness,
                     virtualdetector.height,
                     fConfig->worldMaterial,
-                    fConfig->detectorType
+                    fConfig->detectorType,
+                    true
                 );
                 detectorMetadata.emplace_back(meta);
                 copynumber++;
@@ -360,7 +362,8 @@ G4cout << "Sample material = "
                     detectorThickness,
                     virtualdetector.height,
                     fConfig->worldMaterial,
-                    fConfig->detectorType
+                    fConfig->detectorType,
+                    true 
                 );
                 detectorMetadata.emplace_back(meta);
                 copynumber++;

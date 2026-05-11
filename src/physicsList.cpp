@@ -1,6 +1,7 @@
 #include "physicsList.hh"
 #include "G4EmParameters.hh"
 #include "G4EmLivermorePhysics.hh"
+#include "G4EmLivermorePolarizedPhysics.hh"
 #include "G4ios.hh"
 
 PhysicsList::PhysicsList()
